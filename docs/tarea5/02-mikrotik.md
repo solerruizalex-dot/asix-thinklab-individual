@@ -3,7 +3,7 @@
 ## Instalación y versión
 
 - Imagen: `mikrotik-7.24.6.iso` (RouterOS x86, canal *long-term*). MikroTik no publica un fichero de sumas para esta ISO que pudiera descargar, así que su integridad queda como **N/C**: la forma de comprobarla sería bajarla otra vez de `download.mikrotik.com` y comparar el SHA-256 (ver [01-imagenes](01-imagenes-y-requisitos.md)).
-- VM: 2 vCPU, disco IDE de 10 GB, dos tarjetas: `ether1` en NAT (WAN) y `ether2` en `lan_grupo3` (LAN).
+- VM: 2 vCPU, disco IDE de 10 GB, dos tarjetas: `ether1` en NAT (WAN) y `ether2` en `lan_grupo3` (LAN). Las tarjetas eran AMD PCnet-FAST III emuladas; las cambié a Intel PRO/1000 (ver abajo).
 - Versión comprobada: `/system resource print` → `version: 7.24.6 (long-term)`, arquitectura x86_64.
 - Actualizaciones: en el canal *stable* había una 7.25.1, pero para un router prefiero *long-term* (menos cambios, más probado). En ese canal `check-for-updates` dice **System is already up to date**.
 - Licencia: es la ISO x86 sin clave, que funciona en modo demo (en la consola avisa *ROUTER HAS NO SOFTWARE KEY, you have 16h49m*). El contador solo corre con el router encendido. Para el laboratorio vale; para algo permanente usaría CHR con licencia gratuita (limitada a 1 Mbit/s) o compraría una licencia nivel 4.
@@ -105,3 +105,5 @@ Simulé el peor caso razonable: el router pierde toda la configuración.
 ## Optimización aplicada
 
 Tenía 4 GB de RAM asignados y RouterOS usaba unos 350 MB. Lo bajé a **256 MB**: arranca y enruta igual, y el proceso de VirtualBox pasa a ocupar 135 MB en el anfitrión. Detalle en la [Tarea 7](../tarea7-rendimiento.md).
+
+Y la que más se nota: las dos tarjetas de la VM eran **AMD PCnet-FAST III (Am79C973)**, una tarjeta antigua de 100 Mbit/s muy costosa de emular. Todo lo que salía por el MikroTik iba a 1,4–4 MB/s, mientras que por el router Debian la misma descarga iba a 36 MB/s. Guardé un backup, apagué el router y las cambié a **Intel PRO/1000 (82540EM)**. RouterOS mantiene `ether1`/`ether2` con sus MAC y su configuración, y ahora las VMs descargan a 18–36 MB/s a través de él (de ×9 a ×12). Medidas en la [Tarea 7](../tarea7-rendimiento.md).

@@ -20,10 +20,12 @@ Todas las salidas están en [evidencias/tasca7](../evidencias/tasca7/).
 
 | Bloque | VMs encendidas | RAM usada en el anfitrión | CPU libre (media) | Disco USB ocupado (media / máx.) | Observaciones |
 |---|---|---|---|---|---|
+| **Línea base: ninguna VM** | — | **2,9 GB** (13 GB disponibles) | 98,5 % | 0,4 % / 1 % | Lo que gasta el escritorio solo ([linea-base-sin-vms.txt](../evidencias/tasca7/linea-base-sin-vms.txt)) |
 | Virtualización, en reposo | MikroTik, Debian, TrueNAS, pve1-3 (+ serveis, dades y un contenedor dentro) | **13,4 GB** (2,5 GB disponibles) | 91,8 % | 5 % / 21 % | Estable |
 | Virtualización, **con carga** (serveis y dades al 100 % de CPU + escritura + descarga) | Igual | 13,4 GB | 81,0 % | 14 % / **81 %** | Picos de **124 MB/s de escritura**; carga media del sistema 1,8–2,3 |
 | Dominio, en reposo | MikroTik, Debian, TrueNAS, DC | 10,9 GB | 90,2 % | 16 % / 46 % | El DC acababa de arrancar (picos de lectura de 88 MB/s) |
 | Dominio, copia nocturna del DC | Igual | 10,9 GB | 90,4 % | 13 % / 57 % | El disco no se satura: lo que frena la copia es Defender dentro del DC |
+| Dominio + cliente: Windows 11 instalando la acumulativa | MikroTik, Debian, DC, Windows 11 | 12,8 GB (3 GB disponibles) | 79,6 % | 28 % / 49 % | Carga del sistema 2,8: la instalación de parches es la tarea más pesada del bloque |
 | Comunicaciones (descarga por cada router) | MikroTik, OPNsense, Debian, TrueNAS, DC | 13,3 GB | 83–85 % | hasta 37 % | La red llega a 178 Mb/s en el anfitrión |
 
 Ficheros: [bloque-virtualizacion.txt](../evidencias/tasca7/bloque-virtualizacion.txt), [bloque-dominio.txt](../evidencias/tasca7/bloque-dominio.txt), [bloque-comunicaciones.txt](../evidencias/tasca7/bloque-comunicaciones.txt).

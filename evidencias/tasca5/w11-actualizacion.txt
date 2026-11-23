@@ -1,0 +1,29 @@
+### Windows Update en PC-ADMIN01 (Windows 11) - script scripts/windows-actualizar.ps1
+(el registro de Windows llama "Windows 10 Pro" a ProductName también en Windows 11: es un fallo conocido de Microsoft; la versión real es la de DisplayVersion/compilación)
+2026-11-23 02:33:12  ANTES: Windows 10 Pro 23H2 compilación 22631.2861
+2026-11-23 02:33:28  PENDIENTE: Actualización de Windows Security platform: KB5007651 (versión 10.0.29680.1000)  [22 MB]
+2026-11-23 02:33:28  PENDIENTE: Herramienta de eliminación de software malintencionado de Windows x64, v5.147 (KB890830)  [87 MB]
+2026-11-23 02:33:28  PENDIENTE: Actualización de inteligencia de seguridad para Microsoft Defender Antivirus - KB2267602 (versión 1.463.424.0) - Canal actual (ampliado)  [1509 MB]
+2026-11-23 02:33:28  PENDIENTE: 2025-11 Actualización acumulativa para Windows 11 Version 23H2 para sistemas basados en x64 (KB5068865)  [131332 MB]
+2026-11-23 02:33:32  Descarga terminada: código 2 (2 = correcto) en 0 min
+2026-11-23 02:45:38    Actualización de Windows Security platform: KB5007651 (versión 10.0.29680.1000) -> 2
+2026-11-23 02:45:38    Herramienta de eliminación de software malintencionado de Windows x64, v5.147 (KB890830) -> 2
+2026-11-23 02:45:38    Actualización de inteligencia de seguridad para Microsoft Defender Antivirus - KB2267602 (versión 1.463.424.0) - Canal actual (ampliado) -> 2
+2026-11-23 02:45:38    2025-11 Actualización acumulativa para Windows 11 Version 23H2 para sistemas basados en x64 (KB5068865) -> 2
+2026-11-23 02:45:38  Instalación terminada: código 2 en 12 min · necesita reiniciar: True
+2026-11-23 02:45:38  FIN
+2026-11-23 02:51:12  DESPUÉS DEL REINICIO: Windows 11 23H2 compilación 22631.6199
+2026-11-23 02:53:18  DESPUÉS DEL REINICIO: Windows 11 23H2 compilación 22631.6199
+2026-11-23 02:53:45  Nueva búsqueda: 2 pendientes
+    2025-10 Actualización acumulativa de .NET Framework 3.5 y 4.8.1 para Windows 11, version 23H2 para x64 (KB5066133)
+    Windows 11, version 25H2
+2026-11-23 02:53:57  ANTES: Windows 10 Pro 23H2 compilación 22631.6199
+2026-11-23 02:54:03  PENDIENTE: 2025-10 Actualización acumulativa de .NET Framework 3.5 y 4.8.1 para Windows 11, version 23H2 para x64 (KB5066133)  [145 MB]
+2026-11-23 02:54:03  OMITIDA (cambio de versión): Windows 11, version 25H2
+2026-11-23 02:54:11  Descarga terminada: código 2 (2 = correcto) en 0 min
+2026-11-23 02:55:15    2025-10 Actualización acumulativa de .NET Framework 3.5 y 4.8.1 para Windows 11, version 23H2 para x64 (KB5066133) -> 2
+2026-11-23 02:55:15  Instalación terminada: código 2 en 1 min · necesita reiniciar: True
+2026-11-23 02:55:15  FIN
+2026-11-23 02:56:58  DESPUÉS DEL REINICIO: Windows 11 23H2 compilación 22631.6199
+2026-11-23 02:57:05  Nueva búsqueda: 1 pendientes
+    Windows 11, version 25H2

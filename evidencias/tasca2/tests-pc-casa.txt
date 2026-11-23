@@ -1,0 +1,45 @@
+### Tests de AlexSolerRuiz - 2026-11-23 03:39:43
+Equipo: Gigabyte Technology Co., Ltd. H470M DS3H
+CPU:  Intel(R) Core(TM) i5-10400F CPU @ 2.90GHz · 12 hilos
+VMs de VirtualBox encendidas: 0
+Carga al empezar: 0.17 0.60 1.06
+
+=== 1. MEMORIA ===
+               total       usado       libre  compartido   búf/caché  disponible
+Mem:           15907        2881       10811          74        2626       13026
+Inter:         12168         436       11732
+--- errores de memoria en el registro del kernel (MCE/EDAC)
+(si no sale nada arriba: ninguno)
+--- prueba de patrones y ancho de banda (Python, 2 GB)
+patrones 00/FF/55/AA sobre 2 GB: 0 bloques con error · escritura+verificación a 3.4 GB/s en 5.0 s
+(esto detecta fallos gordos; el test completo es memtest86+ desde el arranque)
+
+=== 2. DISCO ===
+Disco de $HOME: /dev/sdb3 en /dev/sdb · usb  KINGSTON SA400S37480G 447,1G
+Espacio:   381G   226G  136G  63%
+--- escritura secuencial 1 GB sin caché (dd oflag=direct)
+1073741824 bytes (1,1 GB, 1,0 GiB) copied, 3,44051 s, 312 MB/s
+--- lectura secuencial 1 GB sin caché (dd iflag=direct)
+1073741824 bytes (1,1 GB, 1,0 GiB) copied, 2,77237 s, 387 MB/s
+--- escritura de bloques pequeños: 4000 x 4 KB con sincronización (como una base de datos)
+16384000 bytes (16 MB, 16 MiB) copied, 6,43076 s, 2,5 MB/s
+--- errores de disco/USB en el registro
+(si no sale nada arriba: ninguno)
+
+=== 3. RED ===
+Interfaz eno1 · enlace 1000 Mbit/s · dúplex full · puerta 192.168.1.1
+--- latencia a la puerta de enlace (20 pings)
+20 packets transmitted, 20 received, 0% packet loss, time 3951ms
+rtt min/avg/max/mdev = 0.551/0.602/0.647/0.019 ms
+--- latencia a Internet (1.1.1.1, 20 pings)
+20 packets transmitted, 20 received, 0% packet loss, time 3811ms
+rtt min/avg/max/mdev = 10.015/10.212/10.566/0.148 ms
+--- descarga de 100 MB (cdimage.debian.org)
+104857600 bytes en 2.748851 s = 38145974 B/s
+--- errores de la tarjeta
+    RX:  bytes packets errors dropped  missed   mcast           
+    9273637337 6263949      0       0       0    3918 
+    TX:  bytes packets errors dropped carrier collsns           
+     100675466  915240      0       0       0       0 
+
+### Fin 03:40:11

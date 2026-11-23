@@ -1,0 +1,27 @@
+### Windows Update en DC01-ALEX (Windows Server 2025) - script scripts/windows-actualizar.ps1
+2026-11-23 02:57:17  ANTES: Windows Server 2025 Standard Evaluation 24H2 compilación 26100.32230
+2026-11-23 02:57:23  PENDIENTE: Actualización de Windows Security platform: KB5007651 (versión 10.0.29680.1000)  [22 MB]
+2026-11-23 02:57:23  PENDIENTE: Herramienta de eliminación de software malintencionado de Windows x64, v5.147 (KB890830)  [87 MB]
+2026-11-23 02:57:23  PENDIENTE: Actualización de inteligencia de seguridad para Microsoft Defender Antivirus - KB2267602 (versión 1.463.424.0) - Canal actual (ampliado)  [1509 MB]
+2026-11-23 02:57:23  PENDIENTE: 2026-10 .NET Framework Actualización de seguridad (KB5127690)  [185 MB]
+2026-11-23 02:57:23  PENDIENTE: 2026-11 Actualización de seguridad (KB5131080) (26100.33822)  [22269 MB]
+2026-11-23 02:57:27  Descarga terminada: código 2 (2 = correcto) en 0 min
+2026-11-23 03:18:44    Actualización de Windows Security platform: KB5007651 (versión 10.0.29680.1000) -> 2
+2026-11-23 03:18:44    Herramienta de eliminación de software malintencionado de Windows x64, v5.147 (KB890830) -> 2
+2026-11-23 03:18:44    Actualización de inteligencia de seguridad para Microsoft Defender Antivirus - KB2267602 (versión 1.463.424.0) - Canal actual (ampliado) -> 2
+2026-11-23 03:18:44    2026-10 .NET Framework Actualización de seguridad (KB5127690) -> 2
+2026-11-23 03:18:44    2026-11 Actualización de seguridad (KB5131080) (26100.33822) -> 2
+2026-11-23 03:18:44  Instalación terminada: código 2 en 21 min · necesita reiniciar: True
+2026-11-23 03:18:44  FIN
+2026-11-23 03:23:22  DESPUÉS DEL REINICIO: Windows Server 24H2 compilación 26100.33822
+2026-11-23 03:25:07  DESPUÉS DEL REINICIO: Windows Server 24H2 compilación 26100.33822
+2026-11-23 03:25:31  Nueva búsqueda: 0 pendientes
+
+--- comprobación del dominio tras el reinicio
+DFSR: Running
+DNS: Running
+Kdc: Running
+Netlogon: Running
+NTDS: Running
+dcdiag /test:services,advertising,netlogons,fsmocheck /q: sin errores
+dades.alexsoler.lan -> 192.168.30.23

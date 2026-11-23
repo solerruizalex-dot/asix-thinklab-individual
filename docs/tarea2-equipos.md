@@ -48,7 +48,19 @@ El script [tests-equipo.sh](../scripts/tests-equipo.sh) hace los tres tests con 
 
 ### Resultados en el PC de casa
 
-RESULTADOS_CASA
+Condiciones: 23/11/2026 a las 03:39, **ninguna VM encendida**, carga del sistema 0,17, 13 GB de RAM disponibles. Salida completa: [tests-pc-casa.txt](../evidencias/tasca2/tests-pc-casa.txt).
+
+| Test | Resultado | Cómo lo interpreto |
+|---|---|---|
+| Errores de memoria en el kernel (MCE/EDAC) | **Ninguno** en este arranque ni en los 33 del historial | Sin indicios de RAM defectuosa |
+| Patrones 00/FF/55/AA sobre 2 GB | **0 bloques con error**, 3,4 GB/s escribiendo y verificando | Correcto. No sustituye a memtest86+, que no está instalado y necesita reiniciar; lo haría si apareciera algún error |
+| Disco: escritura secuencial 1 GB sin caché | **312 MB/s** | Cerca del máximo práctico de USB 3.0 (~400 MB/s) |
+| Disco: lectura secuencial 1 GB sin caché | **387 MB/s** | El SSD SATA podría dar ~500 MB/s: el límite es el USB 3.0 |
+| Disco: 4000 escrituras de 4 KB con sincronización | **2,5 MB/s (~620 operaciones/s)** | **Muy bajo.** Es lo que hacen las VMs (sistemas de ficheros, bases de datos, Windows Update): muchas escrituras pequeñas que esperan confirmación. El puente USB + un SSD SATA de gama baja sin DRAM (el SA400) lo hacen mal |
+| Errores de disco/USB en el registro | **Ninguno** | La caja JMicron funciona bien |
+| Red: enlace | 1000 Mbit/s full dúplex, 0 errores en la tarjeta | Correcto |
+| Red: latencia | 0,60 ms a la puerta de enlace, 10,2 ms a 1.1.1.1, 0 % de pérdida | Correcto y muy estable (desviación 0,02 ms y 0,15 ms) |
+| Red: descarga de 100 MB | **38,1 MB/s (305 Mbit/s)** en 2,7 s | Es la velocidad de la conexión a Internet de casa, no de la tarjeta (1 Gbit/s) |
 
 ### Portátil de clase
 
@@ -80,7 +92,13 @@ El precio de la solución es velocidad: la caja nueva es USB 3.0 (5 Gbit/s) en v
 
 ## ¿Se confirman los cuellos de botella?
 
-DATOS_CONFIRMACION
+| Cuello de botella previsto | ¿Se confirma? | Dato que lo demuestra |
+|---|---|---|
+| **Disco** por USB | **Sí, y es el principal** | 312/387 MB/s en secuencial está bien, pero las escrituras pequeñas sincronizadas caen a **2,5 MB/s**. Con VMs, el disco llega al **81 %** de ocupación con picos de 124 MB/s (Tarea 7), y el único bloqueo total del PC fue con dos VMs escribiendo a la vez |
+| **RAM** en casa | **Sí** | 13,4 GB usados de 15,5 con el bloque Proxmox; el DC y el Windows 11 no caben a la vez que ese bloque |
+| CPU | **No** | La CPU libre media nunca ha bajado del 79 %, ni con dos VMs al 100 % |
+| Red del equipo | **No** | Enlace de 1 Gbit/s sin errores; el límite es la conexión de casa (305 Mbit/s). El cuello de botella de red que sí apareció estaba **dentro** del laboratorio: la tarjeta emulada del MikroTik (Tarea 7) |
+| Disco en clase | Previsto igual que en casa (mismo SSD y misma caja) | Lo confirmaré con el script en clase. Lo que sí está demostrado con el registro es que la **caja Ugreen** daba errores |
 
 ## Soluciones con el material que tengo
 

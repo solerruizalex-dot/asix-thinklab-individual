@@ -7,9 +7,22 @@ El enunciado pide los cinco departamentos; con uno de cada sistema unido al domi
 | | |
 |---|---|
 | VM | `administracion-AlexSoler`: 2 vCPU, 4 GB, 80 GB, `lan_grupo3` |
-| SO | Windows 11 Pro 23H2, compilación **22631.2861** (de diciembre de 2023) |
+| SO | Windows 11 Pro 23H2: estaba en la compilación 22631.2861 (diciembre de 2023), **actualizado a 22631.6199** |
 | Origen | `w11.iso` (SHA-256 calculado; integridad N/C, ver [01-imagenes](01-imagenes-y-requisitos.md)) |
 | Requisitos | TPM 2.0, arranque seguro, 4 GB, 64 GB: la VM los cumple con el TPM virtual y EFI de VirtualBox 7 (`Get-Tpm` → presente y listo; `Confirm-SecureBootUEFI` → True) |
+
+### Actualización
+
+Estaba casi dos años sin parches. Lo actualicé con [windows-actualizar.ps1](../../scripts/windows-actualizar.ps1), que usa la API de Windows Update que trae el propio sistema (sin módulos externos) y se lanza como tarea programada de SYSTEM ([w11-actualizacion.txt](../../evidencias/tasca5/w11-actualizacion.txt)):
+
+| Pasada | Qué instaló | Tiempo |
+|---|---|---|
+| 1 | Acumulativa **KB5068865** (2025-11, la última de 23H2), plataforma de seguridad, firmas de Defender y la herramienta de software malintencionado | 12 min + reinicio (4 min 43 s) |
+| 2 | Acumulativa de .NET Framework **KB5066133** | 1 min + reinicio |
+
+Resultado: **22631.2861 → 22631.6199**, y el equipo sigue en el dominio (`Test-ComputerSecureChannel` → True; `nltest /sc_query` → `NERR_Success`).
+
+Lo único que queda pendiente es **Windows 11 25H2**, y el script lo omite a propósito: es un cambio de versión, no un parche. Hay que tenerlo en cuenta porque la 23H2 Pro dejó de recibir actualizaciones en noviembre de 2025 (la KB5068865 es la última). Antes de pasar los puestos a 25H2 lo probaría en una VM clonada, comprobando el dominio y las aplicaciones.
 
 ### Usuarios
 

@@ -5,7 +5,7 @@ Son las dos máquinas que me faltaban del esquema. Las monté como **VMs dentro 
 | | serveis | dades |
 |---|---|---|
 | Función | Servidor de infraestructura (servicios de red en tareas posteriores) | Servidor de datos: RAID y espejo |
-| SO | Debian 13.8 sin entorno gráfico, kernel 6.12.117 | Igual |
+| SO | Debian 13.8 sin entorno gráfico, kernel 6.12.118 | Igual |
 | Dónde | VM 122, ahora en pve1 | VM 123 en pve3 |
 | Recursos | 1 vCPU, 384 MB, disco de 6 GB + 1 GB | 1 vCPU, 384 MB, disco de 6 GB + 8 × 1 GB |
 | IP | 192.168.30.22/24 | 192.168.30.23/24 |
@@ -33,7 +33,7 @@ Tardé 23 s en crear serveis y unos 2 minutos y medio en actualizarla e instalar
 ```
 apt-get update && apt-get full-upgrade      → Debian 13.7 → 13.8
 cat /etc/debian_version                      → 13.8
-uname -r                                     → 6.12.117+deb13-amd64
+uname -r                                     → 6.12.118+deb13-amd64 (tras la comprobación final de las 03:30)
 systemctl is-active qemu-guest-agent         → active
 ```
 

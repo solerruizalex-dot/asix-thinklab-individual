@@ -6,6 +6,7 @@
 - Requisitos: x64 con SLAT, 2 GB de RAM mínimo para la versión con escritorio y 32 GB de disco. La VM tiene 2 vCPU, 4 GB (bajados desde 8) y 50 GB.
 - La VM estaba creada pero **vacía** (el disco ocupaba 404 KB). La instalé de forma desatendida con `VBoxManage unattended install` (imagen 2: Standard con experiencia de escritorio).
 - Versión comprobada: **Windows Server 2025 Standard Evaluation, 10.0.26100**, idioma es-ES.
+- **Actualización** con [windows-actualizar.ps1](../../scripts/windows-actualizar.ps1) (API de Windows Update, como tarea de SYSTEM): actualización de seguridad de noviembre de 2026 **KB5131080**, .NET **KB5127690**, plataforma y firmas de Defender. 21 minutos de instalación y un reinicio de unos 4 minutos. Compilación **26100.32230 → 26100.33822**, y una nueva búsqueda da **0 pendientes**. Después del reinicio comprobé que NTDS, DNS, Netlogon, KDC y DFSR están en marcha y que `dcdiag` (servicios, anuncio, netlogons y roles FSMO) no da errores ([dc-actualizacion.txt](../../evidencias/tasca5/dc-actualizacion.txt)).
 
 ### Problemas al instalar
 

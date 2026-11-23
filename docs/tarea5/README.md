@@ -25,7 +25,7 @@ Cada sistema tiene su documento con lo mismo: imagen y versión, actualización,
 | Debian nftables | 13.8 | 13.7 → 13.8 | `alexsoler` + `root` (solo clave) | WAN DHCP / LAN .3 | `/etc` diario | `masquerade` borrado → 8 s |
 | TrueNAS | 24.04.2.5 | 24.04.0 → 24.04.2.5 | `admin`, `alexsoler`, `copias` | .20 fija | Es el destino (+ snapshots) | — |
 | Proxmox ×3 | 9.2.32, kernel 7.0.14 | 9.2.2 → 9.2.32 | `alexsoler@pve` | .32–.34 en vmbr0 | `vzdump` diario + `/etc/pve` | Migraciones medidas |
-| Windows Server | 2025, 10.0.26100 | ver doc. 07 | `adm.alex` | .21 fija | Exportaciones + estado del sistema | — |
+| Windows Server | 2025, 26100.33822 | 26100.32230 → 26100.33822 | `adm.alex` | .21 fija | Exportaciones + estado del sistema | — |
 | serveis / dades | Debian 13.8 | 13.7 → 13.8 | `alexsoler` (sudo) | .22 / .23 fijas | `/etc` + `vzdump` | Caída de serveis → 21 s con DRBD |
-| Windows 11 | 23H2 | ver doc. 09 | Admins. del dominio | DHCP .198 | Perfiles por SMB | — |
+| Windows 11 | 23H2, 22631.6199 | 22631.2861 → 22631.6199 | Admins. del dominio | DHCP .198 | Perfiles por SMB | — |
 | Debian cliente | 13.8 | 13.1 → 13.8 | `alexsoler`, G_Informatica | DHCP reservado .150 | `/etc` | — |
