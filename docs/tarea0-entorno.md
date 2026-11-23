@@ -21,7 +21,7 @@ En VirtualBox las máquinas están en el grupo **ASIX-ThinkLAB Individual**, sep
 
 ![Esquema de red del entorno individual](../diagramas/red-individual.png)
 
-La idea es la misma que en el aula, pero sin hardware:
+Es el esquema del grupo con las IPs de mi red (qué cambia, en la [Tarea 4](tarea4-red.md)). La idea es la misma que en el aula, pero sin hardware:
 
 - La "red del aula" (172.16.222.0/24) la sustituye el **NAT de VirtualBox**: cada router tiene su WAN en NAT y coge IP por DHCP (10.0.2.15). El enunciado lo permite para el entorno individual.
 - El switch del grupo es la **red interna de VirtualBox `lan_grupo3`**. Todo lo que cuelga de ella está en **192.168.36.0/24**, la red que me corresponde en la parte individual. Al principio lo monté en la 192.168.30.0/24 (la del grupo) y el 23/11 lo cambié todo ([Tarea 4](tarea4-red.md)).
@@ -101,10 +101,10 @@ docs/           un Markdown por tarea (la Tarea 5, uno por sistema)
 scripts/        todo lo que he automatizado: PowerShell (DC, Windows 11) y bash (Proxmox, NAS, RAID, DRBD, medidas)
 configs/        configuraciones exportadas de los routers, sin contraseñas
 evidencias/     salidas de comandos y capturas, una carpeta por tarea
-diagramas/      el esquema de red en draw.io (.drawio), su PNG/SVG y el script que lo genera
+diagramas/      el esquema de red en draw.io (.drawio) y su PNG, y el del grupo
 pdf/            el script que genera los PDF de entrega a partir de los Markdown
 ```
 
 - Los PDF de entrega no se escriben aparte: se generan desde estos mismos Markdown ([generar-pdf.py](../pdf/generar-pdf.py)), así nunca hay dos versiones distintas.
 - **Las contraseñas no están en el repositorio.** Los scripts las leen de variables de entorno (`CLAVE`, `CLAVE_INICIAL`, `CLAVE_NAS`) y el `.gitignore` bloquea ficheros de credenciales y claves privadas. Antes de cada commit lo compruebo buscando las contraseñas reales con `grep`.
-- El esquema está en **draw.io** ([red-individual.drawio](../diagramas/red-individual.drawio)): se abre y se edita en app.diagrams.net o en draw.io Desktop. Lo genero con un pequeño script ([generar-diagrama.py](../diagramas/generar-diagrama.py)) que escribe el `.drawio` y un SVG con la misma geometría. Así, cuando cambié la red a 192.168.36.0/24, actualicé las IPs en un solo sitio, y en Git se ve qué cambió de una versión a otra, cosa que con una imagen no pasa.
+- El esquema está en **draw.io** ([red-individual.drawio](../diagramas/red-individual.drawio)) y es el mismo del grupo, con mis direcciones: así se ve de un vistazo que mi entorno reproduce la arquitectura de la empresa. Al ser XML, en Git se ve qué cambió de una versión a otra (por ejemplo, el paso de la red .30 a la .36), cosa que con una imagen no pasa.

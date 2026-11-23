@@ -2,7 +2,16 @@
 
 ![Esquema de red](../diagramas/red-individual.png)
 
-Fuente editable del esquema: [red-individual.drawio](../diagramas/red-individual.drawio) (se abre con draw.io / diagrams.net). El esquema del grupo, para comparar: [arquitectura-grupo3.png](../diagramas/arquitectura-grupo3.png).
+Es **el mismo esquema del grupo** ([arquitectura-grupo3.png](../diagramas/arquitectura-grupo3.png)), con los mismos elementos y estilos, partiendo de su fichero de draw.io. Solo he cambiado las direcciones por las de mi red individual. Fuente editable: [red-individual.drawio](../diagramas/red-individual.drawio) (se abre con draw.io / diagrams.net).
+
+Qué cambia respecto al del grupo y cómo leerlo:
+
+- **LAN 192.168.36.0/24** en lugar de 192.168.30.0/24, con el mismo último octeto para cada equipo: MikroTik .1, OPNsense .2, Debian nftables .3, NAS .20, Windows Server .21, serveis .22, dades .23 y nodos Proxmox .32–.34.
+- **DNS 192.168.36.21** (mi controlador de dominio) en los equipos con IP fija, en lugar del DNS del aula.
+- **WAN de los tres routers: 10.0.2.15/24 por DHCP**, puerta 10.0.2.2 y DNS 10.0.2.3: es el NAT de VirtualBox (ver la tabla siguiente). En el del grupo eran `—` (pendientes).
+- **Anfitrión**: no tiene IP en la LAN (`—`). Las VMs llegan a la LAN por la red interna de VirtualBox, no por un puente con una tarjeta del PC. Su única IP es la de la red del aula, 172.16.222.73/24 por DHCP.
+- En la leyenda, `—` significa *sin IP* (en el del grupo era *pendiente*).
+- Los elementos son los de la arquitectura de la empresa y no los he tocado. En mi entorno, todo lo que es físico en el aula (switches, MikroTik hEX, PC-01, PC-02) es una VM o una red de VirtualBox. El Windows Server, serveis y dades son VMs independientes de VirtualBox, no van dentro de los nodos Proxmox ([Tarea 5](tarea5/06-proxmox.md)). De los seis puestos de trabajo tengo dos clientes, un Windows 11 (Administración, .200) y un Debian (Informática, reserva .150), dentro del mismo rango DHCP .100–.200.
 
 ## Montaje en VirtualBox
 

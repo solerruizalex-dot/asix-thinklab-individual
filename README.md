@@ -29,7 +29,7 @@ scripts/      todo lo que he automatizado (PowerShell y bash), reutilizable
 configs/      configuraciones exportadas de los routers (sin contraseñas)
 evidencias/   salidas de comandos, por tarea
 capturas/     capturas de pantalla de las consolas y las interfaces web
-diagramas/    esquema de red en draw.io (red-individual.drawio, PNG y SVG, con el script que lo genera) y el del grupo
+diagramas/    esquema de red en draw.io (el del grupo con mis IPs: red-individual.drawio y su PNG) y el del grupo
 ```
 
 ## Red en una línea
