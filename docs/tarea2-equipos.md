@@ -62,13 +62,23 @@ Condiciones: 23/11/2026 a las 03:39, **ninguna VM encendida**, carga del sistema
 | Red: latencia | 0,60 ms a la puerta de enlace, 10,2 ms a 1.1.1.1, 0 % de pérdida | Correcto y muy estable (desviación 0,02 ms y 0,15 ms) |
 | Red: descarga de 100 MB | **38,1 MB/s (305 Mbit/s)** en 2,7 s | Es la velocidad de la conexión a Internet de casa, no de la tarjeta (1 Gbit/s) |
 
-### Portátil de clase
+### Resultados en el portátil de clase
 
-No he podido pasar el script en el portátil esta noche porque está en el instituto: lo ejecutaré en la próxima clase con el mismo comando (`bash scripts/tests-equipo.sh > evidencias/tasca2/tests-portatil-clase.txt`). Lo que sí puedo dar con datos del portátil son los diagnósticos que quedaron en el registro:
+Lo pasé en clase el 23/11/2026 a las 08:27, con el mismo SSD y la misma caja JMicron, **ninguna VM encendida**, carga 0,36 y 28 GB de RAM disponibles. Salida completa: [tests-portatil-clase.txt](../evidencias/tasca2/tests-portatil-clase.txt).
 
-- **Red**: en los 26 arranques en el portátil, el enlace sube siempre a **1000 Mbit/s full dúplex**. Ningún problema de cable ni de negociación.
-- **Memoria**: **0 errores de hardware** (MCE) en todos los arranques.
-- **Disco**: aquí sí apareció una avería (siguiente apartado).
+| Test | Resultado | Cómo lo interpreto |
+|---|---|---|
+| Errores de memoria en el kernel | Salen cuatro líneas `EDAC igen6 … HANDLING IBECC MEMORY ERROR` a las 08:12:46, el segundo exacto del arranque | **No son errores**: es el controlador de memoria del Core Ultra (IBECC, ECC integrado) anunciando que se encarga de *gestionar* los errores, una línea por cada canal. Un error real diría `CE` o `UE` con una dirección de memoria, y en todo el arranque no hay ninguno |
+| Patrones 00/FF/55/AA sobre 2 GB | **0 bloques con error**, 3,6 GB/s | Correcto, algo más rápido que en casa (DDR5 frente a DDR4) |
+| Disco: escritura secuencial 1 GB | **406 MB/s** | Mejor que en casa (312 MB/s) con el mismo SSD y la misma caja. El enlace es el mismo en los dos (`lsusb -t`: UAS a **5000M**, USB 3.0), así que la diferencia está en el controlador USB del portátil (Intel Meteor Lake, Thunderbolt 4) frente al de la placa de casa |
+| Disco: lectura secuencial 1 GB | **409 MB/s** | En el límite práctico del SSD a través del puente |
+| Disco: 4000 escrituras de 4 KB con sincronización | **2,9 MB/s (~715 operaciones/s)** | Igual de bajo que en casa: el límite es **el SSD y el puente**, no el ordenador. Confirma que el cuello de botella va conmigo a cualquier equipo |
+| Errores de disco/USB | **Ninguno** | La caja JMicron también va bien en el portátil |
+| Red: enlace | 1000 Mbit/s full dúplex, 0 errores | Correcto |
+| Red: latencia | 0,78 ms a la puerta de enlace del aula. **100 % de pérdida a 1.1.1.1** | La red del instituto **bloquea el ping hacia Internet**: no es un fallo del portátil (la descarga por HTTP sí funciona) |
+| Red: descarga de 100 MB | **1,9 MB/s (15 Mbit/s)** en 55 s | Es la salida a Internet del instituto compartida por toda la clase, no la tarjeta. Lo noté al instalar serveis y dades: las descargas de paquetes iban igual de lentas |
+
+Además, en el registro de los 26 arranques en el portátil el enlace sube siempre a **1000 Mbit/s full dúplex** y no hay ningún error de hardware (MCE).
 
 ## Avería detectada: errores de disco el 10/11
 
@@ -95,10 +105,10 @@ El precio de la solución es velocidad: la caja nueva es USB 3.0 (5 Gbit/s) en v
 | Cuello de botella previsto | ¿Se confirma? | Dato que lo demuestra |
 |---|---|---|
 | **Disco** por USB | **Sí, y es el principal** | 312/387 MB/s en secuencial está bien, pero las escrituras pequeñas sincronizadas caen a **2,5 MB/s**. Con VMs, el disco llega al **81 %** de ocupación con picos de 124 MB/s (Tarea 7). El único bloqueo total del PC coincidió con dos VMs escribiendo a la vez (sin error en el registro, así que es una hipótesis) |
-| **RAM** en casa | **Sí** | 13,4 GB usados de 15,5 con el bloque Proxmox; el DC y el Windows 11 no caben a la vez que ese bloque |
+| **RAM** en casa | **Sí** (en clase **no**: 32 GB) | 13,4 GB usados de 15,5 con el bloque Proxmox; el DC y el Windows 11 no caben a la vez que ese bloque |
 | CPU | **No** | La CPU libre media nunca ha bajado del 79 %, ni con dos VMs al 100 % |
-| Red del equipo | **No** | Enlace de 1 Gbit/s sin errores; el límite es la conexión de casa (305 Mbit/s). El cuello de botella de red que sí apareció estaba **dentro** del laboratorio: la tarjeta emulada del MikroTik (Tarea 7) |
-| Disco en clase | Previsto igual que en casa (mismo SSD y misma caja) | Lo confirmaré con el script en clase. Lo que sí está demostrado con el registro es que la **caja Ugreen** daba errores |
+| Red del equipo | **No** | Enlace de 1 Gbit/s sin errores en los dos; el límite es la conexión a Internet (305 Mbit/s en casa, 15 Mbit/s en el instituto). El cuello de botella de red que sí apareció estaba **dentro** del laboratorio: la tarjeta emulada del MikroTik (Tarea 7) |
+| Disco en clase | **Sí**, igual que en casa | 406/409 MB/s en secuencial, pero **2,9 MB/s** en escrituras pequeñas: el cuello de botella es el SSD por USB, vaya donde vaya. Además el registro demuestra que la **caja Ugreen** daba errores |
 
 ## Soluciones con el material que tengo
 

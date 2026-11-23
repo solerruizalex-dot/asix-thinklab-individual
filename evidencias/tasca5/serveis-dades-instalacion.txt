@@ -1,0 +1,133 @@
+# Instalación y actualización de serveis y dades (VMs independientes de VirtualBox) - 23/11/2026
+# ISO: debian-13.1.0-amd64-netinst.iso (SHA-256 verificado, ver isos-sha256.txt), instalación desatendida (VBoxManage unattended)
+# Salida de scripts/linux-02-paquetes.sh (sin las líneas de descarga y desempaquetado)
+##### serveis (2026-11-23 10:36:31)
+== Antes: Debian 13.8, kernel 6.12.118+deb13-amd64
+== Paquetes pendientes: 0
+Creando árbol de dependencias...
+Calculando la actualización...
+0 actualizados, 0 nuevos se instalarán, 0 para eliminar y 0 no actualizados.
+Creando árbol de dependencias...
+traceroute ya está en su versión más reciente (1:2.1.6-1).
+bind9-dnsutils ya está en su versión más reciente (1:9.20.30-1~deb13u1).
+vim-tiny ya está en su versión más reciente (2:9.1.1230-2+deb13u2).
+Se instalarán los siguientes paquetes adicionales:
+  bsd-mailx exim4-base exim4-config exim4-daemon-light libcurl4t64
+  libevent-2.1-7t64 libgnutls-dane0t64 libidn12 libldap-common libldap2
+  liblockfile1 libnghttp3-9 libnsl2 librtmp1 libsasl2-2 libsasl2-modules
+  libsasl2-modules-db libsensors-config libsensors5 libssh2-1t64 libunbound8
+  psmisc
+Paquetes sugeridos:
+  heartbeat exim4-doc-html | exim4-doc-info eximon4 spf-tools-perl swaks
+  lm-sensors strace dns-root-data libsasl2-modules-gssapi-mit
+  | libsasl2-modules-gssapi-heimdal libsasl2-modules-ldap libsasl2-modules-otp
+  libsasl2-modules-sql python3-braceexpand isag
+Se instalarán los siguientes paquetes NUEVOS:
+  bsd-mailx curl drbd-utils exim4-base exim4-config exim4-daemon-light htop
+  libcurl4t64 libevent-2.1-7t64 libgnutls-dane0t64 libidn12 libldap-common
+  libldap2 liblockfile1 libnghttp3-9 libnsl2 librtmp1 libsasl2-2
+  libsasl2-modules libsasl2-modules-db libsensors-config libsensors5
+  libssh2-1t64 libunbound8 mdadm psmisc rsync sysstat
+0 actualizados, 28 nuevos se instalarán, 0 para eliminar y 0 no actualizados.
+Se necesita descargar 7.703 kB de archivos.
+Se utilizarán 19,0 MB de espacio de disco adicional después de esta operación.
+Preconfigurando paquetes ...
+Descargados 7.703 kB en 11s (703 kB/s)
+Adding system-user for exim (v4)
+Creating config file /etc/default/sysstat with new version
+update-alternatives: utilizando /usr/bin/sar.sysstat para proveer /usr/bin/sar (sar) en modo automático
+Created symlink '/etc/systemd/system/sysstat.service.wants/sysstat-collect.timer' → '/usr/lib/systemd/system/sysstat-collect.timer'.
+Created symlink '/etc/systemd/system/sysstat.service.wants/sysstat-rotate.timer' → '/usr/lib/systemd/system/sysstat-rotate.timer'.
+Created symlink '/etc/systemd/system/sysstat.service.wants/sysstat-summary.timer' → '/usr/lib/systemd/system/sysstat-summary.timer'.
+Created symlink '/etc/systemd/system/multi-user.target.wants/sysstat.service' → '/usr/lib/systemd/system/sysstat.service'.
+Generating mdadm.conf... done.
+update-initramfs: deferring update (trigger activated)
+Generating grub configuration file ...
+Found linux image: /boot/vmlinuz-6.12.118+deb13-amd64
+Found initrd image: /boot/initrd.img-6.12.118+deb13-amd64
+Found linux image: /boot/vmlinuz-6.12.43+deb13-amd64
+Found initrd image: /boot/initrd.img-6.12.43+deb13-amd64
+Warning: os-prober will not be executed to detect other bootable partitions.
+Systems on them will not be added to the GRUB boot configuration.
+Check GRUB_DISABLE_OS_PROBER documentation entry.
+Adding boot menu entry for UEFI Firmware Settings ...
+done
+Created symlink '/etc/systemd/system/mdmonitor.service.wants/mdcheck_continue.timer' → '/usr/lib/systemd/system/mdcheck_continue.timer'.
+Created symlink '/etc/systemd/system/mdmonitor.service.wants/mdcheck_start.timer' → '/usr/lib/systemd/system/mdcheck_start.timer'.
+Created symlink '/etc/systemd/system/mdmonitor.service.wants/mdmonitor-oneshot.timer' → '/usr/lib/systemd/system/mdmonitor-oneshot.timer'.
+rsync.service is a disabled or a static unit, not starting it.
+exim: DB upgrade, deleting hints-db
+Created symlink '/etc/systemd/system/timers.target.wants/exim4-base.timer' → '/usr/lib/systemd/system/exim4-base.timer'.
+exim4-base.service is a disabled or a static unit, not starting it.
+Created symlink '/etc/systemd/system/multi-user.target.wants/exim4.service' → '/usr/lib/systemd/system/exim4.service'.
+update-alternatives: utilizando /usr/bin/bsd-mailx para proveer /usr/bin/mailx (mailx) en modo automático
+update-initramfs: Generating /boot/initrd.img-6.12.118+deb13-amd64
+== Después: Debian 13.8, kernel 6.12.118+deb13-amd64, pendientes: 0
+== Sin entorno gráfico: graphical.target · paquetes instalados: 416
+##### dades (2026-11-23 10:36:55)
+== Antes: Debian 13.8, kernel 6.12.118+deb13-amd64
+== Paquetes pendientes: 0
+Creando árbol de dependencias...
+Calculando la actualización...
+0 actualizados, 0 nuevos se instalarán, 0 para eliminar y 0 no actualizados.
+Creando árbol de dependencias...
+traceroute ya está en su versión más reciente (1:2.1.6-1).
+bind9-dnsutils ya está en su versión más reciente (1:9.20.30-1~deb13u1).
+vim-tiny ya está en su versión más reciente (2:9.1.1230-2+deb13u2).
+Se instalarán los siguientes paquetes adicionales:
+  bsd-mailx exim4-base exim4-config exim4-daemon-light libcurl4t64
+  libevent-2.1-7t64 libgnutls-dane0t64 libidn12 libldap-common libldap2
+  liblockfile1 libnghttp3-9 libnsl2 librtmp1 libsasl2-2 libsasl2-modules
+  libsasl2-modules-db libsensors-config libsensors5 libssh2-1t64 libunbound8
+  psmisc
+Paquetes sugeridos:
+  heartbeat exim4-doc-html | exim4-doc-info eximon4 spf-tools-perl swaks
+  lm-sensors strace dns-root-data libsasl2-modules-gssapi-mit
+  | libsasl2-modules-gssapi-heimdal libsasl2-modules-ldap libsasl2-modules-otp
+  libsasl2-modules-sql python3-braceexpand isag
+Se instalarán los siguientes paquetes NUEVOS:
+  bsd-mailx curl drbd-utils exim4-base exim4-config exim4-daemon-light htop
+  libcurl4t64 libevent-2.1-7t64 libgnutls-dane0t64 libidn12 libldap-common
+  libldap2 liblockfile1 libnghttp3-9 libnsl2 librtmp1 libsasl2-2
+  libsasl2-modules libsasl2-modules-db libsensors-config libsensors5
+  libssh2-1t64 libunbound8 mdadm psmisc rsync sysstat
+0 actualizados, 28 nuevos se instalarán, 0 para eliminar y 0 no actualizados.
+Se necesita descargar 7.703 kB de archivos.
+Se utilizarán 19,0 MB de espacio de disco adicional después de esta operación.
+Preconfigurando paquetes ...
+Descargados 7.703 kB en 11s (721 kB/s)
+Adding system-user for exim (v4)
+Creating config file /etc/default/sysstat with new version
+update-alternatives: utilizando /usr/bin/sar.sysstat para proveer /usr/bin/sar (sar) en modo automático
+Created symlink '/etc/systemd/system/sysstat.service.wants/sysstat-collect.timer' → '/usr/lib/systemd/system/sysstat-collect.timer'.
+Created symlink '/etc/systemd/system/sysstat.service.wants/sysstat-rotate.timer' → '/usr/lib/systemd/system/sysstat-rotate.timer'.
+Created symlink '/etc/systemd/system/sysstat.service.wants/sysstat-summary.timer' → '/usr/lib/systemd/system/sysstat-summary.timer'.
+Created symlink '/etc/systemd/system/multi-user.target.wants/sysstat.service' → '/usr/lib/systemd/system/sysstat.service'.
+Generating mdadm.conf... done.
+update-initramfs: deferring update (trigger activated)
+Generating grub configuration file ...
+Found linux image: /boot/vmlinuz-6.12.118+deb13-amd64
+Found initrd image: /boot/initrd.img-6.12.118+deb13-amd64
+Found linux image: /boot/vmlinuz-6.12.43+deb13-amd64
+Found initrd image: /boot/initrd.img-6.12.43+deb13-amd64
+Warning: os-prober will not be executed to detect other bootable partitions.
+Systems on them will not be added to the GRUB boot configuration.
+Check GRUB_DISABLE_OS_PROBER documentation entry.
+Adding boot menu entry for UEFI Firmware Settings ...
+done
+Created symlink '/etc/systemd/system/mdmonitor.service.wants/mdcheck_continue.timer' → '/usr/lib/systemd/system/mdcheck_continue.timer'.
+Created symlink '/etc/systemd/system/mdmonitor.service.wants/mdcheck_start.timer' → '/usr/lib/systemd/system/mdcheck_start.timer'.
+Created symlink '/etc/systemd/system/mdmonitor.service.wants/mdmonitor-oneshot.timer' → '/usr/lib/systemd/system/mdmonitor-oneshot.timer'.
+rsync.service is a disabled or a static unit, not starting it.
+exim: DB upgrade, deleting hints-db
+Created symlink '/etc/systemd/system/timers.target.wants/exim4-base.timer' → '/usr/lib/systemd/system/exim4-base.timer'.
+exim4-base.service is a disabled or a static unit, not starting it.
+Created symlink '/etc/systemd/system/multi-user.target.wants/exim4.service' → '/usr/lib/systemd/system/exim4.service'.
+update-alternatives: utilizando /usr/bin/bsd-mailx para proveer /usr/bin/mailx (mailx) en modo automático
+update-initramfs: Generating /boot/initrd.img-6.12.118+deb13-amd64
+== Después: Debian 13.8, kernel 6.12.118+deb13-amd64, pendientes: 0
+== Sin entorno gráfico: graphical.target · paquetes instalados: 416
+
+### Después de quitar exim4 (lo trajo mdadm como recomendación) y poner multi-user.target
+serveis: multi-user.target · 406 paquetes · escuchando: 0.0.0.0:22 [::]:22
+dades: multi-user.target · 406 paquetes · escuchando: 0.0.0.0:22 [::]:22

@@ -1,3 +1,6 @@
+# NOTA: salida capturada ANTES del cambio de red del 23/11 (11:15). Entonces la LAN era 192.168.30.0/24; ahora es
+# 192.168.36.0/24 y cada equipo conserva su último octeto (.30.21 -> .36.21...). Ver evidencias/tasca4/cambio-red-192.168.36.txt
+
 ### Ejecución manual de copias-config.sh en TrueNAS - 2026-11-23 01:14:17
 (encendidos ahora: MikroTik, Debian nftables, pve1-3, serveis, dades; OPNsense, DC y clientes apagados)
 ssh: connect to host 192.168.30.2 port 22: No route to host
@@ -73,3 +76,37 @@ total 21
 -rw-r----- 1 root root 42737 Nov 23 03:48 config.xml
 reglas <rule> en el config.xml copiado: 6
 <version>v9</version>
+
+### 23/11/2026 11:10 - serveis y dades reinstaladas como VMs independientes de VirtualBox
+Las máquinas nuevas tienen otras claves de host: las quité del known_hosts del NAS
+(ssh-keygen -R 192.168.30.22 / .23) y la primera conexión las añade sola (StrictHostKeyChecking=accept-new).
+Ejecución manual (real 0m15s). Encendidos: MikroTik, router Debian, pve1, serveis, dades.
+2026-11-23 11:10:34 ---- inicio de copias ----
+2026-11-23 11:10:35 OK    mikrotik
+2026-11-23 11:10:38 FALLO opnsense (codigo 1)
+2026-11-23 11:10:39 OK    debian-nft
+2026-11-23 11:10:39 OK    proxmox-pve1
+2026-11-23 11:10:42 FALLO proxmox-pve2 (codigo 255)
+2026-11-23 11:10:45 FALLO proxmox-pve3 (codigo 255)
+2026-11-23 11:10:46 OK    serveis
+2026-11-23 11:10:47 OK    dades
+2026-11-23 11:10:50 FALLO cliente-linux (codigo 255)
+2026-11-23 11:10:50 ---- fin: 5 correctas, 4 con fallo ----
+(los 4 fallos son equipos apagados: OPNsense, pve2, pve3 y el cliente Linux)
+
+/mnt/copias/configs/serveis/2026-11-23_1110:  etc.tgz 473K · paquetes.txt 11K
+/mnt/copias/configs/dades/2026-11-23_1110:    etc.tgz 472K · paquetes.txt 11K
+Dentro: etc/network/interfaces, etc/drbd.d/espejo.res (los dos) y etc/mdadm/mdadm.conf (dades)
+
+### 23/11/2026 11:26 - primera copia en la red nueva 192.168.36.0/24 (NAS en .36.20)
+2026-11-23 11:26:44 ---- inicio de copias ----
+2026-11-23 11:26:44 OK    mikrotik
+2026-11-23 11:26:44 OK    opnsense
+2026-11-23 11:26:45 OK    debian-nft
+2026-11-23 11:26:45 OK    proxmox-pve1
+2026-11-23 11:26:48 FALLO proxmox-pve2 (codigo 255)      <- apagado en ese momento
+2026-11-23 11:26:51 FALLO proxmox-pve3 (codigo 255)      <- apagado en ese momento
+2026-11-23 11:26:52 OK    serveis
+2026-11-23 11:26:53 OK    dades
+2026-11-23 11:26:56 FALLO cliente-linux (codigo 255)     <- apagado en ese momento (luego, clave cambiada y acceso OK)
+2026-11-23 11:26:56 ---- fin: 6 correctas, 3 con fallo ----

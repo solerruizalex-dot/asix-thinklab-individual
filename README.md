@@ -2,7 +2,9 @@
 
 **Álex Soler Ruiz** · 1º ASIX · FDM e ISO · curso 2026-27
 
-Mi entorno de pruebas individual: la misma empresa que montamos en grupo en el aula (comunicaciones, NAS de copias, clúster Proxmox, dominio y clientes), pero a escala, en VirtualBox y sobre el SSD que llevo a clase.
+Mi entorno de pruebas individual: la misma empresa que montamos en grupo en el aula (comunicaciones, NAS de copias, clúster Proxmox, dominio, servidores Linux y clientes), pero a escala, en VirtualBox y sobre el SSD que llevo a clase.
+
+Todas las máquinas son VMs independientes de VirtualBox en el grupo `ASIX-ThinkLAB Individual`. Los tres nodos Proxmox están solo para demostrar el clúster (red + quórum + una prueba de migración medida); los servidores que dan servicio (DC, serveis y dades) no van dentro de ellos, porque VMs dentro de VMs dentro de VirtualBox son lentas y difíciles de mantener.
 
 ![Esquema de red](diagramas/red-individual.png)
 
@@ -25,13 +27,14 @@ Los PDF de entrega se generan con [pdf/generar-pdf.py](pdf/generar-pdf.py) a par
 docs/         documentación por tarea (Markdown)
 scripts/      todo lo que he automatizado (PowerShell y bash), reutilizable
 configs/      configuraciones exportadas de los routers (sin contraseñas)
-evidencias/   salidas de comandos y capturas, por tarea
-diagramas/    esquema de red (Graphviz) y el del grupo
+evidencias/   salidas de comandos, por tarea
+capturas/     capturas de pantalla de las consolas y las interfaces web
+diagramas/    esquema de red en draw.io (red-individual.drawio, PNG y SVG, con el script que lo genera) y el del grupo
 ```
 
 ## Red en una línea
 
-LAN `192.168.30.0/24` (red interna `lan_grupo3`), dominio `alexsoler.lan`, MikroTik .1 como puerta de enlace y DHCP, OPNsense .2 y Debian/nftables .3 como alternativas, TrueNAS .20, DC .21, serveis .22, dades .23, contenedor de pruebas .30, Proxmox .32-.34.
+LAN `192.168.36.0/24` (red interna `lan_grupo3`), dominio `alexsoler.lan`, MikroTik .1 como puerta de enlace y DHCP, OPNsense .2 y Debian/nftables .3 como alternativas, TrueNAS .20, DC .21, serveis .22, dades .23, Proxmox .32-.34 (durante la prueba de migración: contenedor .30 y VM .40).
 
 ## Credenciales
 

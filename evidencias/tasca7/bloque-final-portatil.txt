@@ -1,0 +1,21 @@
+# Portátil de clase (ASUS ExpertBook B3605CCA, 32 GB) - 23/11/2026, arquitectura final: serveis y dades como VMs independientes, LAN 192.168.36.0/24
+# VMs encendidas: ws-dc-AlexSoler nftables-AlexSoler administracion-AlexSoler Mikrotik-AlexSoler truenas-AlexSoler serveis-AlexSoler dades-AlexSoler 
+# RAM asignada a esas VMs: 13,75 GB
+# Durante la medida el DC está haciendo su copia nocturna (tarea 'Copia DC al NAS', lanzada a las 11:55)
+### servidores + dominio, portatil de clase, con la copia del DC  (2026-11-23 11:56:01, 60 s, disco sda)
+hora       us%   sy%   wa%   id%  RAM MB  libre  swap lee MB/s esc MB/s disco% red Mb/s carga
+11:56:06   3.8   8.0   1.3  86.9   18862  12470     1     23.5      5.9   14.4     0.72  2.56
+11:56:11   3.3   4.9   1.2  90.6   18813  12519     1      7.9      8.7   55.3     0.20  2.51
+11:56:16   6.8   5.4   1.0  86.8   18902  12430     1     10.3      6.5   58.0     0.13  2.47
+11:56:21   5.6   5.1   1.2  88.1   18822  12510     1      7.9      3.2   52.0     0.09  2.51
+11:56:26   3.3   5.1   1.1  90.4   18754  12578     1     10.8     10.2   55.0     0.04  2.39
+11:56:31   3.3   6.1   1.2  89.4   18728  12603     1     14.4     17.6   61.5     0.04  2.52
+11:56:36   3.1   5.8   1.1  89.9   18751  12580     1      8.5      6.1   47.8     0.04  2.72
+11:56:41   3.2   5.4   1.2  90.3   18739  12592     1      7.7      2.6   52.4     0.05  2.66
+11:56:46   3.1   5.2   1.2  90.4   18739  12593     1      9.2      5.0   56.9     0.04  2.53
+11:56:51   3.8   4.7   0.9  90.6   18901  12430     1      9.3      0.4   64.0     0.06  2.57
+11:56:56   1.7   5.1   0.3  92.9   18863  12469     1      9.5      6.0   49.5     0.03  2.52
+11:57:01   8.1   6.4   0.7  84.8   19248  12084     1      9.6      7.1   47.8     1.82  2.48
+MEDIA      4.1   5.6   1.0  89.3   18844  12488     1     10.7      6.6   51.2     0.27  2.54
+MÁXIMO     8.1   8.0   1.3  92.9   19248  12603     1     23.5     17.6   64.0     1.82  2.72
+

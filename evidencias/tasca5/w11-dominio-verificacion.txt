@@ -1,3 +1,6 @@
+# NOTA: salida capturada ANTES del cambio de red del 23/11 (11:15). Entonces la LAN era 192.168.30.0/24; ahora es
+# 192.168.36.0/24 y cada equipo conserva su último octeto (.30.21 -> .36.21...). Ver evidencias/tasca4/cambio-red-192.168.36.txt
+
 ### Desde el cliente PC-ADMIN01, sesión del usuario del dominio
 usuario: alexsoler\administracion
 grupos del dominio:

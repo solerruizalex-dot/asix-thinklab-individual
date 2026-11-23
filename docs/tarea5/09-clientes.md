@@ -30,24 +30,26 @@ Comprobado con `Get-LocalUser` y `Get-LocalGroupMember Administradores`:
 
 | Cuenta | Estado | Administrador del equipo |
 |---|---|---|
-| `Administracion-AlexS` (local, la de la instalación) | Habilitada, **sin contraseña** | Sí |
+| `Administracion-AlexS` (local, la de la instalación) | Habilitada; **sin contraseña hasta el 23/11**, ahora con contraseña obligatoria | Sí |
 | `Administrador` (local integrada) | Habilitada, con contraseña. La activé para administrar el equipo desde el anfitrión | Sí |
 | `ALEXSOLER\Admins. del dominio` (grupo, incluye `adm.alex`) | Del dominio | Sí: es lo que se usa para administrar |
 | `ALEXSOLER\administracion` (G_Administracion) | Del dominio | No: es el usuario de trabajo |
 
-**Riesgo que queda pendiente**: `Administracion-AlexS` es administradora y no tiene contraseña. Cualquiera con acceso físico entra como administrador sin pasar por el dominio. No la he tocado porque es la cuenta con la que se instaló el equipo; lo correcto, ahora que el equipo está en el dominio, es ponerle contraseña o deshabilitarla:
+**Riesgo que encontré y corregí**: `Administracion-AlexS` era administradora y **no tenía contraseña**, así que cualquiera con acceso físico entraba como administrador sin pasar por el dominio. Dudé entre deshabilitarla o ponerle contraseña. Elegí la contraseña porque es la cuenta con la que se instaló el equipo y es la puerta de entrada si un día el equipo pierde la relación de confianza con el dominio (sin red, sin DC). La puse desde el anfitrión con el administrador del dominio y obligué a que la cuenta la exija (`net user … /passwordreq:yes`); caduca a los 42 días como marca la directiva del dominio ([w11-cuenta-local-contrasena.txt](../../evidencias/tasca5/w11-cuenta-local-contrasena.txt)):
 
 ```
-Disable-LocalUser -Name 'Administracion-AlexS'
+Set-LocalUser -Name 'Administracion-AlexS' -Password (ConvertTo-SecureString '…' -AsPlainText -Force)
+net user Administracion-AlexS /passwordreq:yes
+→ PasswordRequired: True · último cambio 23/11/2026 9:47 · expira 04/01/2027
 ```
 
 ### Red
 
 | Parámetro | Valor |
 |---|---|
-| IP | 192.168.30.198/24 por **DHCP** del MikroTik (un puesto de usuario no necesita IP fija) |
-| Puerta | 192.168.30.1 |
-| DNS | **192.168.30.21 (DC)** y 192.168.30.1: los reparte el DHCP, por eso encuentra el dominio sin tocar nada |
+| IP | 192.168.36.200/24 por **DHCP** del MikroTik (un puesto de usuario no necesita IP fija). Con la red anterior tenía la .30.198; al cambiar de red recibió la .36.200 y sigue unido al dominio |
+| Puerta | 192.168.36.1 |
+| DNS | **192.168.36.21 (DC)** y 192.168.36.1: los reparte el DHCP, por eso encuentra el dominio sin tocar nada |
 
 ### Unión al dominio
 
@@ -56,7 +58,7 @@ Disable-LocalUser -Name 'Administracion-AlexS'
 ```
 usuario: alexsoler\administracion     grupos: ALEXSOLER\G_Administracion
 equipo: PC-ADMIN01  dominio: alexsoler.lan  parte del dominio: True
-nltest /dsgetdc:alexsoler.lan  →  DC: \\DC01-ALEX.alexsoler.lan  (192.168.30.21)
+nltest /dsgetdc:alexsoler.lan  →  DC: \\DC01-ALEX.alexsoler.lan  (192.168.36.21)
 ```
 
 Desde el DC el equipo aparece en `OU=Equipos,OU=Empresa` (gracias a `redircmp`). Evidencias: [w11-union-dominio.txt](../../evidencias/tasca5/w11-union-dominio.txt), [w11-dominio-verificacion.txt](../../evidencias/tasca5/w11-dominio-verificacion.txt).
@@ -84,7 +86,7 @@ Instalación desatendida con `VBoxManage unattended`. Me dio dos problemas: con 
 
 ### Red
 
-IP por DHCP con **reserva** en el MikroTik (MAC 08:00:27:AA:51:50 → 192.168.30.150), porque el NAS tiene que encontrarlo para hacerle copias. DNS 192.168.30.21 y 192.168.30.1, búsqueda `alexsoler.lan` (todo por DHCP).
+IP por DHCP con **reserva** en el MikroTik (MAC 08:00:27:AA:51:50 → 192.168.36.150), porque el NAS tiene que encontrarlo para hacerle copias. DNS 192.168.36.21 y 192.168.36.1, búsqueda `alexsoler.lan` (todo por DHCP).
 
 ### Unión al dominio
 

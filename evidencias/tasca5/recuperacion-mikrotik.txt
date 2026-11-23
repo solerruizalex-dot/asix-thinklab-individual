@@ -1,3 +1,6 @@
+# NOTA: salida capturada ANTES del cambio de red del 23/11 (11:15). Entonces la LAN era 192.168.30.0/24; ahora es
+# 192.168.36.0/24 y cada equipo conserva su último octeto (.30.21 -> .36.21...). Ver evidencias/tasca4/cambio-red-192.168.36.txt
+
 ### 22:57:23 T0 - reseteo de fabrica sin configuracion (simula que el router ha perdido la configuracion)
 ### 22:57:28 prueba desde la LAN (gw .1)
 

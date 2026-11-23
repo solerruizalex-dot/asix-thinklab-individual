@@ -3,8 +3,8 @@
 # Crea una VM Debian 13 sin entorno gráfico a partir de la imagen oficial.
 # Se ejecuta en el nodo donde vivirá la VM.
 #   uso: pve-04-crear-vm.sh VMID NOMBRE IP [DISCOS_EXTRA]
-#   ej.: pve-04-crear-vm.sh 122 serveis 192.168.30.22 1
-#        pve-04-crear-vm.sh 123 dades   192.168.30.23 8    (7 discos de 1 GB para los RAID + 1 para DRBD)
+#   ej.: pve-04-crear-vm.sh 122 serveis 192.168.36.22 1
+#        pve-04-crear-vm.sh 123 dades   192.168.36.23 8    (7 discos de 1 GB para los RAID + 1 para DRBD)
 #        serveis lleva 1 disco extra (el otro lado del espejo DRBD)
 set -e
 : "${CLAVE:?define CLAVE con la contraseña del usuario alexsoler}"
@@ -20,7 +20,7 @@ qm set $ID --scsi0 local-lvm:0,import-from=$IMG,discard=on
 qm resize $ID scsi0 6G
 qm set $ID --ide2 local-lvm:cloudinit --boot order=scsi0
 qm set $ID --ciuser alexsoler --cipassword "$CLAVE" \
-   --ipconfig0 ip=$IP/24,gw=192.168.30.1 --nameserver "192.168.30.21 192.168.30.1" \
+   --ipconfig0 ip=$IP/24,gw=192.168.36.1 --nameserver "192.168.36.21 192.168.36.1" \
    --searchdomain alexsoler.lan --cicustom vendor=truenas-nfs:snippets/debian-base.yaml
 for n in $(seq 1 $EXTRA); do
     qm set $ID --scsi$n local-lvm:1

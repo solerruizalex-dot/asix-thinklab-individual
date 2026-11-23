@@ -24,8 +24,8 @@ Cada sistema tiene su documento con lo mismo: imagen y versión, actualización,
 | OPNsense | 26.7.9_3 | 26.7 → 26.7.9_3 | `root` + `alexsoler` | WAN DHCP / LAN .2 | `config.xml` diario | Regla borrada → 8 s |
 | Debian nftables | 13.8 | 13.7 → 13.8 | `alexsoler` + `root` (solo clave) | WAN DHCP / LAN .3 | `/etc` diario | `masquerade` borrado → 8 s |
 | TrueNAS | 24.04.2.5 | 24.04.0 → 24.04.2.5 | `admin`, `alexsoler`, `copias` | .20 fija | Es el destino (+ snapshots) | — |
-| Proxmox ×3 | 9.2.32, kernel 7.0.14 | 9.2.2 → 9.2.32 | `alexsoler@pve` | .32–.34 en vmbr0 | `vzdump` diario + `/etc/pve` | Migraciones medidas |
+| Proxmox ×3 | 9.2.32, kernel 7.0.14 | 9.2.2 → 9.2.32 | `alexsoler@pve` | .32–.34 en vmbr0 | `/etc/pve` (+ `vzdump` probado con las máquinas de prueba) | Migraciones medidas; cambio de red sin perder el quórum |
 | Windows Server | 2025, 26100.33822 | 26100.32230 → 26100.33822 | `adm.alex` | .21 fija | Exportaciones + estado del sistema | — |
-| serveis / dades | Debian 13.8 | 13.7 → 13.8 | `alexsoler` (sudo) | .22 / .23 fijas | `/etc` + `vzdump` | Caída de serveis → 21 s con DRBD |
-| Windows 11 | 23H2, 22631.6199 | 22631.2861 → 22631.6199 | Admins. del dominio | DHCP .198 | Perfiles por SMB | — |
+| serveis / dades | Debian 13.8 (VMs independientes) | Instaladas desde la ISO 13.1, salen en 13.8 | `alexsoler` (sudo), root bloqueado | .22 / .23 fijas | `/etc` diario | Caída de serveis → datos en dades en 2,7 s con DRBD; disco de RAID arrancado → reconstrucción en 6–7 s |
+| Windows 11 | 23H2, 22631.6199 | 22631.2861 → 22631.6199 | Admins. del dominio | DHCP (.200) | Perfiles por SMB | — |
 | Debian cliente | 13.8 | 13.1 → 13.8 | `alexsoler`, G_Informatica | DHCP reservado .150 | `/etc` | — |

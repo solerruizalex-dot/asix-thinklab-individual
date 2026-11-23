@@ -1,73 +1,161 @@
-[00:46:32] 1) Datos ficticios en cada array y su suma SHA-256
-0b5c257686fc33944e974da459052c80bf4abc6a5033ea7537d1eb867847606e  /srv/md0/datos.bin
-4d08514585e1a631634d3d5888efc9c542adf07de2245c579812437028dd7c5f  /srv/md1/datos.bin
-94330d69af24208658d4720d15dee13e8b9d9fb474d9c8aafcdf11a981be0f83  /srv/md5/datos.bin
-[00:46:35] 2) Velocidad (dd 200 MB, escritura directa sin caché y lectura con caché vaciada)
-   disco simple (sda) escritura: 209715200 bytes (210 MB, 200 MiB) copied, 0.238387 s, 880 MB/s
-   md0 escritura: 209715200 bytes (210 MB, 200 MiB) copied, 0.195881 s, 1.1 GB/s
-   md0 lectura:   209715200 bytes (210 MB, 200 MiB) copied, 0.145574 s, 1.4 GB/s
-   md1 escritura: 209715200 bytes (210 MB, 200 MiB) copied, 0.396253 s, 529 MB/s
-   md1 lectura:   209715200 bytes (210 MB, 200 MiB) copied, 0.139751 s, 1.5 GB/s
-   md5 escritura: 209715200 bytes (210 MB, 200 MiB) copied, 0.331851 s, 632 MB/s
-   md5 lectura:   209715200 bytes (210 MB, 200 MiB) copied, 0.204184 s, 1.0 GB/s
-[00:46:37] 3) RAID 1: fallo de sde
-             State : clean, degraded 
-    Active Devices : 1
-    Failed Devices : 1
-/srv/md1/datos.bin: OK
-[00:46:38]    retiro el disco 'roto' y lo vuelvo a añadir (como si fuera uno nuevo)
-mdadm: hot removed /dev/sde from /dev/md1
-mdadm: added /dev/sde
-md1 : active raid1 sde[2](S) sdd[0]
-      1046528 blocks super 1.2 [2/1] [U_]
-      
-[00:46:43]    reconstruido en 5 s
-             State : clean 
-    Active Devices : 2
-[00:46:43] 4) RAID 5: fallo de sdg
-             State : clean, degraded 
-    Active Devices : 2
-    Failed Devices : 1
-/srv/md5/datos.bin: OK
-mdadm: hot removed /dev/sdg from /dev/md5
-mdadm: added /dev/sdg
-md5 : active raid5 sdg[4](S) sdh[3] sdf[0]
-      2093056 blocks super 1.2 level 5, 512k chunk, algorithm 2 [3/2] [U_U]
-      
-[00:47:04]    reconstruido en 11 s
-             State : clean 
-    Active Devices : 3
-/srv/md5/datos.bin: OK
-[00:47:04] 5) RAID 0: mdadm no deja marcar un disco como fallado (no hay redundancia)
-mdadm: Cannot remove /dev/sdc from /dev/md0, array will be failed.
-[00:47:04]    simulo que falta sdc: paro el array e intento montarlo solo con sdb
-mdadm: stopped /dev/md0
-mdadm: /dev/md0 assembled from 1 drive - not enough to start the array.
-[00:47:04]    vuelvo a conectar sdc
-mdadm: /dev/md0 has been started with 2 drives.
-/srv/md0/datos.bin: OK
-Personalities : [raid0] [raid1] [raid6] [raid5] [raid4] 
-md0 : active raid0 sdb[0] sdc[1]
+### Pruebas de fallo de los RAID de dades quitando discos de verdad (VirtualBox, extracción en caliente) - 2026-11-23 10:55:45
+
+[10:55:45] 0) Situación inicial
+Personalities : [raid6] [raid5] [raid4] [raid0] [raid1] [raid10] 
+md0 : active raid0 sdc[1] sdb[0]
       2093056 blocks super 1.2 512k chunks
       
-md5 : active raid5 sdg[4] sdh[3] sdf[0]
+md5 : active raid5 sdg[3] sde[0] sdf[1]
       2093056 blocks super 1.2 level 5, 512k chunk, algorithm 2 [3/3] [UUU]
       
-md1 : active raid1 sde[2] sdd[0]
+md1 : active raid1 sdd[2] sdi[0]
       1046528 blocks super 1.2 [2/2] [UU]
       
 unused devices: <none>
+puerto SATA 1 -> /dev/sdb
+puerto SATA 2 -> /dev/sdc
+puerto SATA 3 -> /dev/sdi
+puerto SATA 4 -> /dev/sdd
+puerto SATA 5 -> /dev/sde
+puerto SATA 6 -> /dev/sdf
+puerto SATA 7 -> /dev/sdg
+puerto SATA 8 -> /dev/sdh
 
-### tras reiniciar dades (00:47:38): los arrays se montan solos
-md5 : active raid5 sdh[3] sdf[0] sdg[4]
-      2093056 blocks super 1.2 level 5, 512k chunk, algorithm 2 [3/3] [UUU]
-md1 : active raid1 sdd[0] sde[2]
+[10:55:46] 1) Datos ficticios (100 MB aleatorios) en cada RAID y su SHA-256
+5a3c23d0c40bb9cdcdd1d3b67b147cb8886e4d82cd9867c258f6f9439bd61395  /srv/md0/datos.bin
+43be6a11698eab21b8d1fe3c9ad78f01ac3baf4079bf1a5a3895d3f3d5993507  /srv/md1/datos.bin
+537a69d546d66db20ddb34ce3b84976ee1073101afd1e80a0b84baec76b93f85  /srv/md5/datos.bin
+
+[10:55:48] 2) Velocidad: dd de 200 MB saltándose la caché (oflag/iflag=direct)
+   disco simple (sda) escritura: 209715200 bytes (210 MB, 200 MiB) copied, 0,0675298 s, 3,1 GB/s
+   md0 escritura: 209715200 bytes (210 MB, 200 MiB) copied, 0,0709223 s, 3,0 GB/s
+   md0 lectura:   209715200 bytes (210 MB, 200 MiB) copied, 0,0297552 s, 7,0 GB/s
+   md1 escritura: 209715200 bytes (210 MB, 200 MiB) copied, 0,0726098 s, 2,9 GB/s
+   md1 lectura:   209715200 bytes (210 MB, 200 MiB) copied, 0,0254529 s, 8,2 GB/s
+   md5 escritura: 209715200 bytes (210 MB, 200 MiB) copied, 0,196605 s, 1,1 GB/s
+   md5 lectura:   209715200 bytes (210 MB, 200 MiB) copied, 0,0731832 s, 2,9 GB/s
+
+[10:55:49] 3) RAID 1 (md1): fallo real de un disco y cambio por uno nuevo
+
+[10:55:49]    arranco el disco del puerto 4 (sdd) con dades encendida
+   (anfitrión) disco del puerto SATA 4 arrancado
+   justo después:
+md1 : active raid1 sdd[2] sdi[0]
       1046528 blocks super 1.2 [2/2] [UU]
-md0 : active raid0 sdc[1] sdb[0]
-Filesystem      Size  Used Avail Use% Mounted on
-/dev/md0        2.0G  101M  1.8G   6% /srv/md0
-/dev/md1        988M  101M  821M  11% /srv/md1
-/dev/md5        2.0G  101M  1.8G   6% /srv/md5
-/srv/md0/datos.bin: OK
-/srv/md1/datos.bin: OK
-/srv/md5/datos.bin: OK
+
+[10:55:54]    escribo en el RAID: así mdadm descubre que falta el disco
+md1 : active raid1 sdd[2](F) sdi[0]
+      1046528 blocks super 1.2 [2/1] [U_]
+             State : clean, degraded 
+    Active Devices : 1
+    Failed Devices : 1
+[  824.909125] sd 6:0:0:0: [sdd] Synchronize Cache(10) failed: Result: hostbyte=DID_BAD_TARGET driverbyte=DRIVER_OK
+[  824.909126] sd 6:0:0:0: [sdd] Stopping disk
+[  824.909127] sd 6:0:0:0: [sdd] Start/Stop Unit failed: Result: hostbyte=DID_BAD_TARGET driverbyte=DRIVER_OK
+/srv/md1/datos.bin: La suma coincide
+
+[10:56:05]    quito el disco del RAID, el kernel lo olvida y pongo un disco NUEVO y vacío en el mismo puerto
+mdadm: hot removed 8:48 from /dev/md1
+   el kernel ya no tiene sdd
+0%...10%...20%...30%...40%...50%...60%...70%...80%...90%...100%
+   (anfitrión) cambio-md1.vdi conectado en el puerto SATA 4
+   el disco nuevo del puerto 4 aparece como /dev/sdd (   1G VBc579a959-2504bae5)
+mdadm: added /dev/sdd
+   md1 reconstruido en 6 s
+md1 : active raid1 sdd[2] sdi[0]
+      1046528 blocks super 1.2 [2/2] [UU]
+             State : clean 
+    Active Devices : 2
+/srv/md1/datos.bin: La suma coincide
+
+[10:56:19] 4) RAID 5 (md5): fallo real de un disco y cambio por uno nuevo
+
+[10:56:20]    arranco el disco del puerto 6 (sdf) con dades encendida
+   (anfitrión) disco del puerto SATA 6 arrancado
+   justo después:
+md5 : active raid5 sdg[3] sde[0] sdf[1]
+      2093056 blocks super 1.2 level 5, 512k chunk, algorithm 2 [3/3] [UUU]
+
+[10:56:24]    escribo en el RAID: así mdadm descubre que falta el disco
+md5 : active raid5 sdg[3] sde[0] sdf[1](F)
+      2093056 blocks super 1.2 level 5, 512k chunk, algorithm 2 [3/2] [U_U]
+             State : clean, degraded 
+    Active Devices : 2
+    Failed Devices : 1
+[  854.077558] sd 8:0:0:0: [sdf] Synchronize Cache(10) failed: Result: hostbyte=DID_BAD_TARGET driverbyte=DRIVER_OK
+[  854.077560] sd 8:0:0:0: [sdf] Stopping disk
+[  854.077563] sd 8:0:0:0: [sdf] Start/Stop Unit failed: Result: hostbyte=DID_BAD_TARGET driverbyte=DRIVER_OK
+/srv/md5/datos.bin: La suma coincide
+
+[10:56:35]    quito el disco del RAID, el kernel lo olvida y pongo un disco NUEVO y vacío en el mismo puerto
+mdadm: hot removed 8:80 from /dev/md5
+   el kernel ya no tiene sdf
+0%...10%...20%...30%...40%...50%...60%...70%...80%...90%...100%
+   (anfitrión) cambio-md5.vdi conectado en el puerto SATA 6
+   el disco nuevo del puerto 6 aparece como /dev/sdf (   1G VBbc362347-55f46d0f)
+mdadm: added /dev/sdf
+   md5 reconstruido en 7 s
+md5 : active raid5 sdf[4] sdg[3] sde[0]
+      2093056 blocks super 1.2 level 5, 512k chunk, algorithm 2 [3/3] [UUU]
+             State : clean 
+    Active Devices : 3
+/srv/md5/datos.bin: La suma coincide
+
+[10:56:50] 5) RAID 0 (md0): arranco el disco del puerto 2
+   (anfitrión) disco del puerto SATA 2 arrancado
+/srv/md0/datos.bin: FAILED open or read
+sha256sum: WARNING: 1 listed file could not be read
+md0 : broken raid0 sdc[1] sdb[0]
+      2093056 blocks super 1.2 512k chunks
+             State : broken, FAILED 
+    Active Devices : 2
+    Failed Devices : 0
+[  884.802624] Buffer I/O error on device md0, logical block 33280
+[  884.803243] Aborting journal on device md0-8.
+[  884.803336] Buffer I/O error on dev md0, logical block 196608, lost sync page write
+[  884.803467] JBD2: I/O error when updating journal superblock for md0-8.
+
+[10:57:05]    vuelvo a conectar el disco ORIGINAL de md0 (con uno nuevo no habría nada que recuperar)
+mdadm: stopped /dev/md0
+   el kernel ya no tiene sdc
+   (anfitrión) raid2.vdi conectado en el puerto SATA 2
+mdadm: /dev/md0 has been started with 2 drives.
+md0: ***** FILE SYSTEM WAS MODIFIED *****
+md0: 13/130816 files (7.7% non-contiguous), 43675/523264 blocks
+md0 : active raid0 sdb[0] sdc[1]
+      2093056 blocks super 1.2 512k chunks
+/srv/md0/datos.bin: La suma coincide
+
+[10:57:13] 6) Estado final
+Personalities : [raid6] [raid5] [raid4] [raid0] [raid1] [raid10] 
+md0 : active raid0 sdb[0] sdc[1]
+      2093056 blocks super 1.2 512k chunks
+      
+md5 : active raid5 sdf[4] sdg[3] sde[0]
+      2093056 blocks super 1.2 level 5, 512k chunk, algorithm 2 [3/3] [UUU]
+      
+md1 : active raid1 sdd[2] sdi[0]
+      1046528 blocks super 1.2 [2/2] [UU]
+      
+unused devices: <none>
+ARRAY /dev/md1 metadata=1.2 UUID=0ee28a81:121fa554:544e3d95:92f0d968
+ARRAY /dev/md5 metadata=1.2 UUID=5c35d627:40c040ed:8ec3f6f3:339c3bf1
+ARRAY /dev/md0 metadata=1.2 UUID=68194015:99f24198:83396841:fa2318e8
+puerto SATA 1 -> /dev/sdb VBfe73be8b-0edbb03b
+puerto SATA 2 -> /dev/sdc VB4ac1629b-f164cb0f
+puerto SATA 3 -> /dev/sdi VBa1f0ac5f-01eb6dbe
+puerto SATA 4 -> /dev/sdd VBc579a959-2504bae5
+puerto SATA 5 -> /dev/sde VBfdd0eace-a077dd27
+puerto SATA 6 -> /dev/sdf VBbc362347-55f46d0f
+puerto SATA 7 -> /dev/sdg VB4753ff64-a62b23e0
+### fin 10:57:13
+
+### Nota: primer intento (10:43, cancelado)
+En el primer intento conecté el disco nuevo en el puerto 4 justo después de arrancar el viejo, sin más.
+- md1 seguía en [UU]: mdadm no se entera de que falta un disco hasta que intenta escribir en él.
+- dmesg: "ata7.00: serial number mismatch 'VBd014d761-db7f3e15' != 'VB3413fbf0-e3643850'" y "revalidation failed":
+  el kernel aún tenía registrado el disco viejo en ese puerto y no creó ningún sdX para el nuevo.
+- VBoxManage storageattach --hotpluggable on con la VM encendida da "The machine is not mutable": la marca
+  de extraíble se pone con la VM apagada (y se conserva al cambiar el disco).
+Lo cancelé, volví a conectar el disco original, lo reincorporé a md1 (reconstrucción de 5 s según dmesg) y
+corregí el script: escribir en el RAID, --fail/--remove, /sys/block/sdX/device/delete, cambiar y reescanear.

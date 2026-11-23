@@ -30,7 +30,7 @@ Para activar el SSH la primera vez tuve que usar la consola de la VM. Ahí me en
 | Interfaz | Uso | Configuración |
 |---|---|---|
 | em0 | WAN | DHCP del NAT → 10.0.2.15/24, puerta 10.0.2.2 |
-| em1 | LAN | 192.168.30.2/24 estática |
+| em1 | LAN | 192.168.36.2/24 estática |
 
 NAT de salida en modo **automático** (crea solo el *masquerade* de la LAN hacia la WAN).
 
@@ -58,21 +58,21 @@ Mismo cliente (TrueNAS) y destino que en el MikroTik, con la puerta de enlace ca
 HTTP 80 (permitida):      HTTP 200 en 0.211502s
 TCP 23 telnet (bloqueada): no conecta (descartado)
 TCP 445 SMB (bloqueada):   no conecta (descartado)
-traceroute: 1 192.168.30.2 · 2 10.0.2.2
+traceroute: 1 192.168.36.2 · 2 10.0.2.2
 ```
 
 Registro en `/var/log/filter/`:
 
 ```
 2026-11-22T23:19:53+01:00 OPNsense-AlexSoler filterlog ... b10c0b10-...,em1,match,block,in,4,...,tcp,60,
-192.168.30.20,13.216.200.40,59562,445,0,S,...
+192.168.36.20,13.216.200.40,59562,445,0,S,...
 ```
 
-Se lee por campos separados por comas: identificador de la regla (`b10c0b10…`, la mía), interfaz `em1`, `match,block,in`, IPv4, TCP, origen 192.168.30.20, destino 13.216.200.40, puerto 445, flag `S` (intento de conexión). La hora del registro iba **una hora adelantada**: VirtualBox le pasa el reloj en hora local y FreeBSD lo interpreta como UTC. Lo corregí con `VBoxManage modifyvm OPNsense-AlexSoler --rtc-use-utc on`.
+Se lee por campos separados por comas: identificador de la regla (`b10c0b10…`, la mía), interfaz `em1`, `match,block,in`, IPv4, TCP, origen 192.168.36.20, destino 13.216.200.40, puerto 445, flag `S` (intento de conexión). La hora del registro iba **una hora adelantada**: VirtualBox le pasa el reloj en hora local y FreeBSD lo interpreta como UTC. Lo corregí con `VBoxManage modifyvm OPNsense-AlexSoler --rtc-use-utc on`.
 
 ## Copia de seguridad
 
-Todo OPNsense está en un único fichero: `/conf/config.xml`. Es lo único que hay que guardar; el sistema se reinstala desde la ISO en unos 10 minutos (estimado, no lo he cronometrado) y, al importar ese fichero (opción 13 de la consola o *System › Configuration › Backups*), queda igual. El NAS lo copia cada noche por SSH con su clave (ver [10-copias-automatizadas](10-copias-automatizadas.md)). La clave está en el usuario `root` limitada con `from="192.168.30.20"`.
+Todo OPNsense está en un único fichero: `/conf/config.xml`. Es lo único que hay que guardar; el sistema se reinstala desde la ISO en unos 10 minutos (estimado, no lo he cronometrado) y, al importar ese fichero (opción 13 de la consola o *System › Configuration › Backups*), queda igual. El NAS lo copia cada noche por SSH con su clave (ver [10-copias-automatizadas](10-copias-automatizadas.md)). La clave está en el usuario `root` limitada con `from="192.168.36.20"`.
 
 Además OPNsense guarda solo sus versiones anteriores en `/conf/backup/` (el 23/11 había 20, ver [opnsense-actualizacion.txt](../../evidencias/tasca5/opnsense-actualizacion.txt)).
 

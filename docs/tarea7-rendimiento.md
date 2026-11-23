@@ -28,6 +28,7 @@ Todas las salidas están en [evidencias/tasca7](../evidencias/tasca7/).
 | Dominio + cliente: Windows 11 instalando la acumulativa | MikroTik, Debian, DC, Windows 11 | 12,8 GB (3 GB disponibles) | 79,6 % | 28 % / 49 % | Carga del sistema 2,8: la instalación de parches es la tarea más pesada del bloque |
 | Comunicaciones (descarga por cada router) | MikroTik, OPNsense, Debian, TrueNAS y también el DC | 13,3 GB | máx. 83–85 % (solo guardé el máximo de cada ventana de 15 s) | máx. 32–37 % | La red llega a 178 Mb/s en el anfitrión |
 
+| **Arquitectura final, portátil de clase (32 GB)**: servidores + dominio con la copia del DC en marcha | MikroTik, Debian, TrueNAS, DC (copiando), Windows 11, serveis, dades (13,75 GB asignados) | **18,8 GB** (12,5 GB libres) | 89,3 % | 51 % / 64 % | La RAM ya no es el límite; el disco USB sí: la copia del DC lo tiene ocupado la mitad del tiempo con solo 7–10 MB/s ([bloque-final-portatil.txt](../evidencias/tasca7/bloque-final-portatil.txt)) |
 Ficheros: [bloque-virtualizacion.txt](../evidencias/tasca7/bloque-virtualizacion.txt), [bloque-dominio.txt](../evidencias/tasca7/bloque-dominio.txt), [bloque-comunicaciones.txt](../evidencias/tasca7/bloque-comunicaciones.txt).
 
 ## Qué satura cada máquina
@@ -60,7 +61,7 @@ Mi **hipótesis** es que se atascó el puente USB del disco con varias VMs escri
 1. La RAM asignada sumada no pase de **unos 10–11 GB**. La cuenta sale de las medidas: el escritorio solo ya usa 2,9 GB (línea base), y con 10,25 GB asignados el anfitrión llega a 13,4 GB de 15,5 (VirtualBox añade su propio consumo).
 2. **Solo una** de ellas haga escrituras pesadas a la vez (copias, actualizaciones, migraciones).
 
-Por eso trabajo por bloques: comunicaciones, dominio y virtualización. En el portátil de clase (32 GB de RAM, ver Tarea 2) la RAM deja de ser el límite, pero el disco es el mismo SSD por USB, así que la regla 2 se mantiene.
+Por eso trabajo por bloques: comunicaciones, dominio y virtualización. En el portátil de clase (32 GB de RAM, ver Tarea 2) la RAM deja de ser el límite, pero el disco es el mismo SSD por USB, así que la regla 2 se mantiene. Lo medí con la arquitectura final (serveis y dades fuera de Proxmox): siete VMs encendidas, 18,8 GB usados y 12,5 GB libres, pero con la copia del DC el disco ya está ocupado el 51 % del tiempo de media. Los tres nodos Proxmox (6 GB más) también caben en RAM; lo que no haría es tenerlos arrancando a la vez que la copia del DC.
 
 ## Optimizaciones aplicadas (antes y después)
 

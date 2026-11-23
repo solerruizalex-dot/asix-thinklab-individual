@@ -1,0 +1,20 @@
+### Cuenta local Administracion-AlexS: contraseña puesta - 2026-11-23 09:47:25
+(antes: habilitada, administradora y sin contraseña; ver w11-usuarios-requisitos.txt)
+
+
+Name             : Administracion-AlexS
+Enabled          : True
+PasswordRequired : True
+PasswordLastSet  : 23/11/2026 9:47:19
+
+
+
+
+Cuenta activa                              Sí
+Último cambio de contraseña                23/11/2026 9:47:19
+La contraseña expira                       04/01/2027 9:47:19
+Cambio de contraseña                       23/11/2026 9:47:19
+Contraseña requerida                       Sí
+El usuario puede cambiar la contraseña     Sí
+
+

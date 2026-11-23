@@ -1,0 +1,54 @@
+### Tests de AlexSolerRuiz - 2026-11-23 08:26:58
+Equipo: ASUSTeK COMPUTER INC. ASUS EXPERTBOOK B3605CCA
+CPU:  Intel(R) Core(TM) Ultra 5 125H · 18 hilos
+VMs de VirtualBox encendidas: 0
+Carga al empezar: 0.36 0.38 0.25
+
+=== 1. MEMORIA ===
+               total       usado       libre  compartido   búf/caché  disponible
+Mem:           31331        2902       26444         376        2794       28429
+Inter:         16024           0       16024
+--- errores de memoria en el registro del kernel (MCE/EDAC)
+nov 23 08:12:46 AlexSolerRuiz kernel: EDAC MC0: Giving out device to module igen6_edac controller Intel_client_SoC MC#0: DEV 0000:00:00.0 (INTERRUPT)
+nov 23 08:12:46 AlexSolerRuiz kernel: EDAC MC1: Giving out device to module igen6_edac controller Intel_client_SoC MC#1: DEV 0000:00:00.0 (INTERRUPT)
+nov 23 08:12:46 AlexSolerRuiz kernel: EDAC igen6 MC1: HANDLING IBECC MEMORY ERROR
+nov 23 08:12:46 AlexSolerRuiz kernel: EDAC igen6 MC0: HANDLING IBECC MEMORY ERROR
+(si no sale nada arriba: ninguno)
+--- prueba de patrones y ancho de banda (Python, 2 GB)
+patrones 00/FF/55/AA sobre 2 GB: 0 bloques con error · escritura+verificación a 3.6 GB/s en 4.7 s
+(esto detecta fallos gordos; el test completo es memtest86+ desde el arranque)
+
+=== 2. DISCO ===
+Disco de $HOME: /dev/sda3 en /dev/sda · usb  KINGSTON SA400S37480G 447,1G
+Espacio:   381G   226G  136G  63%
+--- escritura secuencial 1 GB sin caché (dd oflag=direct)
+1073741824 bytes (1,1 GB, 1,0 GiB) copied, 2,64499 s, 406 MB/s
+--- lectura secuencial 1 GB sin caché (dd iflag=direct)
+1073741824 bytes (1,1 GB, 1,0 GiB) copied, 2,62728 s, 409 MB/s
+--- escritura de bloques pequeños: 4000 x 4 KB con sincronización (como una base de datos)
+16384000 bytes (16 MB, 16 MiB) copied, 5,59763 s, 2,9 MB/s
+--- errores de disco/USB en el registro
+(si no sale nada arriba: ninguno)
+
+=== 3. RED ===
+Interfaz eno1 · enlace 1000 Mbit/s · dúplex full · puerta 172.16.222.1
+--- latencia a la puerta de enlace (20 pings)
+20 packets transmitted, 20 received, 0% packet loss, time 3893ms
+rtt min/avg/max/mdev = 0.582/0.775/0.996/0.115 ms
+--- latencia a Internet (1.1.1.1, 20 pings)
+20 packets transmitted, 0 received, 100% packet loss, time 3947ms
+
+--- descarga de 100 MB (cdimage.debian.org)
+104857600 bytes en 54.844693 s = 1911900 B/s
+--- errores de la tarjeta
+    RX:  bytes packets errors dropped  missed   mcast           
+     121722162   95326      0       0       0    2764 
+    TX:  bytes packets errors dropped carrier collsns           
+       5721132   38135      0       0       0       0 
+
+### Fin 08:28:27
+--- lsusb -t en el portátil de clase (23/11/2026)
+/:  Bus 004.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/2p, 20000M/x2
+    |__ Port 002: Dev 002, If 0, Class=Mass Storage, Driver=uas, 5000M
+0000:00:0d.0 USB controller: Intel Corporation Meteor Lake-P Thunderbolt 4 USB Controller (rev 10)
+0000:00:14.0 USB controller: Intel Corporation Meteor Lake-P USB 3.2 Gen 2x1 xHCI Host Controller (rev 20)

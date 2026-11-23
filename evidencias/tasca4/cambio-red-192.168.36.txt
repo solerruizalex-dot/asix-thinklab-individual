@@ -1,0 +1,80 @@
+# Cambio de la LAN de 192.168.30.0/24 a 192.168.36.0/24 - 23/11/2026, de 11:15 a 11:40
+# Motivo: en la parte individual me corresponde la red 192.168.36.x; lo había montado todo en la .30 (la del grupo).
+# Regla: cada equipo conserva su último octeto. Orden pensado para no quedarme sin acceso: primero los routers con
+# las dos redes a la vez, luego cada equipo, y al final se quita la red vieja.
+
+1. MikroTik: añadir 192.168.36.1/24 en ether2 (sin quitar la .30.1), pool DHCP .36.100-.200, red DHCP nueva
+   (puerta .36.1, DNS .36.21 y .36.1, dominio alexsoler.lan), reserva de pc-informatica -> .36.150, y el usuario
+   'copias' aceptado temporalmente desde .30.20 y .36.20.
+2. Router Debian: interfaces/nftables.conf/dnsmasq a .36.3 + 'ip addr add 192.168.36.3/24' en caliente.
+   Claves del NAS en /root/.ssh/authorized_keys: from="192.168.36.20".
+3. TrueNAS (midclt): script de copias y red del NFS a .36; interface.update + interface.commit sin rollback (la
+   confirmación no podía llegar desde la IP vieja) + puerta y DNS. Resultado: 192.168.36.20, HTTP 200.
+4. serveis y dades: DRBD abajo, sed de interfaces/hosts/resolv.conf/authorized_keys/espejo.res, ifdown/ifup,
+   DRBD arriba -> cs:Connected ro:Primary/Secondary ds:UpToDate/UpToDate, carpeta compartida intacta.
+5. DC: scripts/dc-06-cambio-red.ps1 (por VBoxManage guestcontrol, no depende de la red). Primer intento: error
+   WIN32 9607 al crear el primer registro justo después de reiniciar el DNS -> espera de 20 s y repetir. Salida:
+   == 1. IP del DC: .21 en la red nueva, puerta .1 y DNS él mismo + MikroTik
+   == 2. Servidor DNS: escuchar en la IP nueva (estaba fijado a la vieja) y reenviadores
+   == 3. Zona inversa nueva y registros A (con su PTR) de los equipos con IP fija
+   == 4. Scripts del DC que apuntan al NAS por IP
+   == 5. El DC vuelve a registrar sus registros (A, SRV del dominio) con la IP nueva
+   IPAddress     PrefixLength
+   ---------     ------------
+   192.168.36.21           24
+   HostName       IP            
+   --------       --            
+   @              192.168.36.21 
+   dades          192.168.36.23 
+   dc01-alex      192.168.36.21 
+   debian-nft     192.168.36.3  
+   DomainDnsZones 192.168.36.21 
+   ForestDnsZones 192.168.36.21 
+   mikrotik       192.168.36.1  
+   opnsense       192.168.36.2  
+   pc-informatica 192.168.36.150
+   pve1           192.168.36.32 
+   pve2           192.168.36.33 
+   pve3           192.168.36.34 
+   serveis        192.168.36.22 
+   truenas        192.168.36.20 
+   Name                               NameTarget              Port
+   ----                               ----------              ----
+   _ldap._tcp.dc._msdcs.alexsoler.lan dc01-alex.alexsoler.lan  389
+   dc01-alex.alexsoler.lan                                        
+6. W11 (PC-ADMIN01, DHCP): la cuenta del dominio no servía (el equipo seguía en la .30 y no veía al DC), así que usé la
+   cuenta local. 'ipconfig /renew' devolvía la misma IP vieja porque el MikroTik conservaba la concesión: la borré y
+   con /release + /renew recibió 192.168.36.200. Canal seguro con el dominio: nltest /sc_query -> NERR_Success.
+7. Clúster Proxmox (los tres nodos encendidos y con quórum):
+   - /etc/pve/corosync.conf: ring0_addr .30.3x -> .36.3x y config_version 3 -> 4 (pmxcfs lo reparte a los tres).
+   - En cada nodo: interfaces y /etc/hosts a .36, ifreload -a, reinicio de corosync, pve-cluster y pveproxy.
+   - 45 s después: Nodes 3, Quorate Yes, 0x1 192.168.36.32 · 0x2 192.168.36.33 · 0x3 192.168.36.34
+   - pvecm updatecerts --force (el certificado web lleva la IP): IP Address:192.168.36.32/.33/.34
+   - /etc/pve/priv/known_hosts tenía la IP vieja: ssh-keygen -R no funciona sobre pmxcfs, lo reescribí.
+8. OPNsense: sed de /conf/config.xml (IP de LAN y rango DHCP) + la clave del NAS, que va en base64 dentro del
+   XML (decodificar, cambiar el from=, codificar con 'openssl base64 -A' porque b64encode parte las líneas). Reinicio.
+9. pc-informatica: la reserva DHCP le dio la .36.150 sola. Para cambiar el from= de la clave del NAS necesitaba
+   root y no tenía su contraseña, así que usé la propia clave del NAS: IP .30.20 temporal en el NAS, ruta de host
+   hacia el cliente por el MikroTik (si no, la vuelta era asimétrica y el cortafuegos la descartaba como inválida)
+   y una regla temporal LAN->LAN en el MikroTik. Después lo quité todo y comprobé el acceso desde la .36.20.
+10. Fin: quitar 192.168.30.1 del MikroTik y 192.168.30.3 del router Debian; 'copias' solo desde 192.168.36.20.
+    Nada en ningún equipo responde ya en la 192.168.30.0/24.
+
+### Copia del NAS tras el cambio (todos los equipos lo aceptan desde su IP nueva)
+2026-11-23 11:26:44 ---- inicio de copias ----
+2026-11-23 11:26:44 OK    mikrotik
+2026-11-23 11:26:44 OK    opnsense
+2026-11-23 11:26:45 OK    debian-nft
+2026-11-23 11:26:45 OK    proxmox-pve1
+2026-11-23 11:26:48 FALLO proxmox-pve2 (codigo 255)      <- apagado en ese momento
+2026-11-23 11:26:51 FALLO proxmox-pve3 (codigo 255)      <- apagado en ese momento
+2026-11-23 11:26:52 OK    serveis
+2026-11-23 11:26:53 OK    dades
+2026-11-23 11:26:56 FALLO cliente-linux (codigo 255)     <- apagado en ese momento (luego, clave cambiada y acceso OK)
+2026-11-23 11:26:56 ---- fin: 6 correctas, 3 con fallo ----
+
+### Descubierto durante el cambio: las descargas desde serveis y dades se quedaban paradas
+curl recibía la cabecera (200) y la descarga se paraba a los 3-5 KB, con MTU 1500 y con 1400. El TrueNAS, por la
+misma red y la misma puerta, descargaba bien. Diferencia: serveis y dades tenían tarjeta virtio y el resto Intel
+82540EM. Con la VM apagada, --nictype1 82540EM: 138.611 bytes en 1,7 s. Era también la causa de que el instalador
+de Debian se colgara descargando por lan_grupo3.

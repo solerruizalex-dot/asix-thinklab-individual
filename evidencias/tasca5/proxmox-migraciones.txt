@@ -1,96 +1,107 @@
-### Migraciones en el clúster grupo3-cluster - 2026-11-23 01:06:24
---- situación inicial
-id       type cgroup-mode content   cpu       disk   diskread  diskwrite hastate host-arch level lock maxcpu  
-lxc/130  lxc                      0.00% 570.62 MiB 447.83 MiB   5.80 MiB                                   1 1
-qemu/122 qemu                     1.64%     0.00 B 172.53 MiB   1.01 GiB                                   1 6
-qemu/123 qemu                     1.57%     0.00 B   1.53 GiB 164.39 MiB                                   1 6
-  vm-130-disk-0  2.00g 32.36 
-  vm-122-cloudinit  4.00m 9.38  
-  vm-122-disk-0     6.00g 25.95 
-  vm-122-disk-1     1.00g 100.00
+# NOTA: salida capturada ANTES del cambio de red del 23/11 (11:15). Entonces la LAN era 192.168.30.0/24; ahora es
+# 192.168.36.0/24 y cada equipo conserva su último octeto (.30.21 -> .36.21...). Ver evidencias/tasca4/cambio-red-192.168.36.txt
 
-=== 1) Contenedor 130 (web-pruebas) pve1 -> pve2, modo restart (los contenedores no admiten migración en vivo)
-2026-11-23 01:06:33 starting migration of CT 130 to node 'pve2' (192.168.30.33)
-2026-11-23 01:06:49 start final cleanup
-2026-11-23 01:06:50 start container on target node
-2026-11-23 01:06:50 # /usr/bin/ssh -e none -o 'BatchMode=yes' -o 'HostKeyAlias=pve2' -o 'UserKnownHostsFile=/etc/pve/nodes/pve2/ssh_known_hosts' -o 'GlobalKnownHostsFile=none' root@192.168.30.33 pct start 130
-2026-11-23 01:06:53 migration finished successfully (duration 00:00:24)
-TIEMPO TOTAL: 23.816336920 s
---- ping al contenedor durante la migración:
---- 192.168.30.30 ping statistics ---
-236 packets transmitted, 194 received, 17.7966% packet loss, time 119638ms
-rtt min/avg/max/mdev = 0.137/0.792/1.640/0.351 ms
-status: running
-web-pruebas
-2026-11-23 01:06:33 found local volume 'local-lvm:vm-130-disk-0' (in current VM config)
-2026-11-23 01:06:34   Logical volume "vm-130-disk-0" created.
-2026-11-23 01:06:34   WARNING: Sum of all thin volume sizes (9.00 GiB) exceeds the size of thin pool pve/data and the amount of free space in volume group (8.00 MiB).
-2026-11-23 01:06:34   Logical volume pve/vm-130-disk-0 changed.
-2026-11-23 01:06:39 419430400 bytes (419 MB, 400 MiB) copied, 3 s, 140 MB/s
-2026-11-23 01:06:39 474284032 bytes (474 MB, 452 MiB) copied, 6 s, 85.0 MB/s
-2026-11-23 01:06:40 474349568 bytes (474 MB, 452 MiB) copied, 6 s, 85.0 MB/s
-2026-11-23 01:06:41 553254912 bytes (553 MB, 528 MiB) copied, 6 s, 92.2 MB/s
-2026-11-23 01:06:44 1078132736 bytes (1.1 GB, 1.0 GiB) copied, 9 s, 120 MB/s
-2026-11-23 01:06:47 1797783552 bytes (1.8 GB, 1.7 GiB) copied, 12 s, 150 MB/s
-2026-11-23 01:06:47 2147483648 bytes (2.1 GB, 2.0 GiB) copied, 13.3573 s, 161 MB/s
-2026-11-23 01:06:48 2147483648 bytes (2.1 GB, 2.0 GiB) copied, 13.482 s, 159 MB/s
+### Prueba de migración en grupo3-cluster - 2026-11-23 08:46:38
+Máquinas de prueba: CT 130 (web-pruebas) y VM 140 (prueba-migracion, Debian 13 sin entorno gráfico).
+Nodes:            3
+Quorate:          Yes
 
-=== 2) VM 122 (serveis, Debian 13 sin entorno gráfico) pve2 -> pve1 EN VIVO con discos locales (--online --with-local-disks)
-    la VM sigue encendida, con el espejo DRBD como primario y montado
-migration problems
-TIEMPO TOTAL: 102.081684880 s (rc=255)
-2026-11-23 01:09:15 starting migration of VM 122 to node 'pve1' (192.168.30.32)
-2026-11-23 01:09:17 starting VM 122 on remote node 'pve1'
-2026-11-23 01:09:23 starting storage migration
-drive mirror is starting for drive-scsi0
-2026-11-23 01:10:52 ERROR: migration finished with problems (duration 00:01:40)
-mirror-scsi1: transferred 799.0 MiB of 1.0 GiB (78.03%) in 1m 3s
-mirror-scsi1: transferred 799.0 MiB of 1.0 GiB (78.03%) in 1m 4s
-mirror-scsi1: transferred 799.0 MiB of 1.0 GiB (78.03%) in 1m 5s
-2026-11-23 01:10:52 ERROR: migration finished with problems (duration 00:01:40)
---- 192.168.30.22 ping statistics ---
-213 packets transmitted, 213 received, 0% packet loss, time 107364ms
-rtt min/avg/max/mdev = 0.249/1.666/17.840/2.004 ms
-Configuration file 'nodes/pve1/qemu-server/122.conf' does not exist
-  data  6.78g 0.00  
- 01:11:00 up 7 min,  1 user,  load average: 0.01, 0.10, 0.08
- 0: cs:Connected ro:Primary/Secondary ds:UpToDate/UpToDate C r-----
-Administracion
-Comercial
-Informatica
-lost+found
---- por qué falló: en pve1
-Nov 23 01:09:43 pve1 kernel: device-mapper: thin: 252:4: reached low water mark for data device: sending event.
-Nov 23 01:09:44 pve1 dmeventd[290]: WARNING: Thin pool pve-data-tpool data is now 100.00% full.
-Nov 23 01:10:49 pve1 QEMU[2690]: kvm: terminating on signal 15 from pid 3005 (task UPID:pve1:00000BBD:00007C88:6B038489:qmstop:122:root@pam:)
-    La migración en vivo copia los discos con drive-mirror (NBD) y en un destino LVM-thin escribe también los ceros: 6 GiB + 1 GiB no caben en el thin pool de 6,78 GiB de pve1. Proxmox canceló y la VM siguió funcionando en pve2 (0 pings perdidos).
-
-=== 3) VM 122 (serveis) pve2 -> pve1 EN FRÍO (offline)
-[01:11:26] mantenimiento planificado: el recurso DRBD pasa a dades antes de parar serveis
-dades primario: Administracion Comercial Informatica lost+found 
-apagado limpio: 4.979370036 s
-migración: 44.496080614 s (rc=0)
-2026-11-23 01:12:07 5098504192 bytes (5.1 GB, 4.7 GiB) copied, 27 s, 189 MB/s
-2026-11-23 01:12:10 5899878400 bytes (5.9 GB, 5.5 GiB) copied, 30 s, 197 MB/s
-2026-11-23 01:12:11 6442450944 bytes (6.4 GB, 6.0 GiB) copied, 32.041 s, 201 MB/s
-2026-11-23 01:12:11 6442450944 bytes (6.4 GB, 6.0 GiB) copied, 32.1685 s, 200 MB/s
-2026-11-23 01:12:16 845545472 bytes (846 MB, 806 MiB) copied, 3 s, 282 MB/s
-2026-11-23 01:12:16 1073741824 bytes (1.1 GB, 1.0 GiB) copied, 3.83755 s, 280 MB/s
-2026-11-23 01:12:16 1073741824 bytes (1.1 GB, 1.0 GiB) copied, 3.88168 s, 277 MB/s
-2026-11-23 01:12:19 migration finished successfully (duration 00:00:44)
+=== 0) Crear la VM de prueba 140 en pve1 (disco en local-lvm, así la migración tiene que copiarlo)
+  Size of logical volume pve/vm-140-disk-0 changed from 3.00 GiB (768 extents) to 4.00 GiB (1024 extents).
+  Logical volume pve/vm-140-disk-0 successfully resized.
 generating cloud-init ISO
-arranque en pve1 lanzado: 2.204299880 s
-[01:12:39] serveis responde por SSH en pve1: 70 s desde que se empezó a apagar
---- 192.168.30.22 ping statistics ---
-69 packets transmitted, 10 received, +5 errors, 85.5072% packet loss, time 34786ms
-rtt min/avg/max/mdev = 0.331/1.063/3.505/0.940 ms, pipe 5
-status: running
-  data              6.78g 23.31 
-  vm-122-cloudinit  4.00m 9.38  
-  vm-122-disk-0     6.00g 25.50 
-  vm-122-disk-1     1.00g 5.08  
-[01:12:41] DRBD vuelve a conectar y serveis recupera el papel de primario
-resincronizado en 1 s
- 0: cs:Connected ro:Primary/Secondary ds:UpToDate/UpToDate C r-----
-durante-la-caida.txt
-leeme.txt
+cores: 1
+memory: 384
+name: prueba-migracion
+nameserver: 192.168.30.1
+net0: virtio=BC:24:11:E3:0D:B0,bridge=vmbr0
+scsi0: local-lvm:vm-140-disk-0,discard=on,size=4G
+La VM responde al ping tras arrancar: sí
+
+=== 1) Contenedor 130 pve2 -> pve1 (modo restart: los contenedores LXC no migran en vivo)
+2026-11-23 08:47:26 starting migration of CT 130 to node 'pve1' (192.168.30.32)
+2026-11-23 08:47:31 377552896 bytes (378 MB, 360 MiB) copied, 3 s, 126 MB/s
+2026-11-23 08:47:33 580124672 bytes (580 MB, 553 MiB) copied, 6 s, 105 MB/s
+2026-11-23 08:47:34 616562688 bytes (617 MB, 588 MiB) copied, 6 s, 102 MB/s
+2026-11-23 08:47:37 939982848 bytes (940 MB, 896 MiB) copied, 9 s, 104 MB/s
+2026-11-23 08:47:40 1273233408 bytes (1.3 GB, 1.2 GiB) copied, 12 s, 106 MB/s
+2026-11-23 08:47:43 1744961536 bytes (1.7 GB, 1.6 GiB) copied, 15 s, 116 MB/s
+2026-11-23 08:47:43 2147483648 bytes (2.1 GB, 2.0 GiB) copied, 16.2891 s, 132 MB/s
+2026-11-23 08:47:44 2147483648 bytes (2.1 GB, 2.0 GiB) copied, 16.651 s, 129 MB/s
+2026-11-23 08:47:47 migration finished successfully (duration 00:00:24)
+--- 192.168.30.30 ping statistics ---
+58 packets transmitted, 12 received, 79.3103% packet loss, time 29414ms
+rtt min/avg/max/mdev = 0.201/0.534/1.740/0.392 ms
+TIEMPO TOTAL: 26.6 s (rc=0)
+Ahora está en: pve1
+
+=== 2) VM 140 pve1 -> pve2 EN VIVO con el disco LOCAL (--online --with-local-disks)
+2026-11-23 08:47:54 starting migration of VM 140 to node 'pve2' (192.168.30.33)
+2026-11-23 08:47:55 4194304 bytes (4.2 MB, 4.0 MiB) copied, 0.411983 s, 10.2 MB/s
+2026-11-23 08:47:55 4194304 bytes (4.2 MB, 4.0 MiB) copied, 0.0313107 s, 134 MB/s
+2026-11-23 08:47:55 starting VM 140 on remote node 'pve2'
+2026-11-23 08:47:58 starting storage migration
+drive mirror is starting for drive-scsi0
+2026-11-23 08:48:10 starting online/live migration on unix:/run/qemu-server/140.migrate
+2026-11-23 08:48:10 migration downtime limit: 100 ms
+2026-11-23 08:48:12 average migration speed: 192.4 MiB/s - downtime 75 ms
+2026-11-23 08:48:17 migration finished successfully (duration 00:00:25)
+--- 192.168.30.40 ping statistics ---
+56 packets transmitted, 49 received, 12.5% packet loss, time 28328ms
+rtt min/avg/max/mdev = 0.301/0.850/2.573/0.496 ms
+TIEMPO TOTAL: 25.3 s (rc=0)
+
+=== 3) Mejora: muevo el disco de la VM al NFS compartido de TrueNAS (sin apagarla)
+removing source volume 'local-lvm:vm-140-disk-0' after successful copy
+  Logical volume "vm-140-disk-0" successfully removed.
+Movimiento del disco: 22.3 s
+
+=== 4) VM 140 pve2 -> pve3 EN VIVO con el disco COMPARTIDO (solo viaja la RAM)
+2026-11-23 08:48:47 starting migration of VM 140 to node 'pve3' (192.168.30.34)
+2026-11-23 08:48:48 4194304 bytes (4.2 MB, 4.0 MiB) copied, 0.351408 s, 11.9 MB/s
+2026-11-23 08:48:48 4194304 bytes (4.2 MB, 4.0 MiB) copied, 0.0412317 s, 102 MB/s
+2026-11-23 08:48:48 starting VM 140 on remote node 'pve3'
+2026-11-23 08:48:50 starting online/live migration on unix:/run/qemu-server/140.migrate
+2026-11-23 08:48:50 migration downtime limit: 100 ms
+2026-11-23 08:48:53 average migration speed: 192.4 MiB/s - downtime 26 ms
+2026-11-23 08:48:56 migration finished successfully (duration 00:00:11)
+--- 192.168.30.40 ping statistics ---
+29 packets transmitted, 28 received, 3.44828% packet loss, time 14502ms
+rtt min/avg/max/mdev = 0.199/1.067/5.053/1.162 ms
+TIEMPO TOTAL: 11.7 s (rc=0)
+
+=== 5) Copia de imagen (vzdump) de las dos máquinas de prueba al NAS
+INFO: creating vzdump archive '/mnt/pve/truenas-nfs/dump/vzdump-qemu-140-2026_11_23-08_49_00.vma.zst'
+INFO: transferred 4.00 GiB in 9 seconds (455.1 MiB/s)
+INFO: archive file size: 370MB
+INFO: Finished Backup of VM 140 (00:00:12)
+INFO: creating vzdump archive '/mnt/pve/truenas-nfs/dump/vzdump-lxc-130-2026_11_23-08_49_13.tar.zst'
+INFO: archive file size: 246MB
+INFO: Finished Backup of VM 130 (00:00:13)
+Volid                                                          Format  Type           Size VMID
+truenas-nfs:backup/vzdump-lxc-130-2026_11_23-01_13_03.tar.zst  tar.zst backup    167410200 130
+truenas-nfs:backup/vzdump-lxc-130-2026_11_23-08_49_13.tar.zst  tar.zst backup    258424116 130
+truenas-nfs:backup/vzdump-qemu-122-2026_11_23-01_13_18.vma.zst vma.zst backup    783584410 122
+truenas-nfs:backup/vzdump-qemu-140-2026_11_23-08_49_00.vma.zst vma.zst backup    388868663 140
+
+=== Situación final
+lxc/130   web-pruebas        pve1 running
+qemu/140  prueba-migracion   pve3 running
+### Fin 08:49:28
+
+=== 6) Restauración de la copia de la VM 140 como VM 141 en pve2 (sin red, para no duplicar la IP)
+copia: truenas-nfs:backup/vzdump-qemu-140-2026_11_23-08_49_00.vma.zst
+progress 100% (read 4294967296 bytes, duration 7 sec)
+total bytes read 4294967296, sparse bytes 3230224384 (75.2%)
+space reduction due to 4K zero blocks 5.43%
+rescan volumes...
+Restauración: 9.6 s
+generating cloud-init ISO
+(la imagen genérica de Debian no trae qemu-guest-agent, así que lo compruebo por red)
+QEMU Guest Agent is not running - VM 140 qga command 'guest-ping' failed - got timeout
+VM 140 (original) apagada en pve3
+generating cloud-init ISO
+La VM restaurada (141) responde en 192.168.30.40 a los 16 s de arrancar: 3 received
+192.168.30.40 dev vmbr0 lladdr bc:24:11:68:54:da REACHABLE 
+QEMU Guest Agent is not running - VM 141 qga command 'guest-ping' failed - got timeout
+VM 141 apagada

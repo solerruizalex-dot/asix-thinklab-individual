@@ -1,79 +1,98 @@
-### Espejo DRBD entre serveis (pve2, /dev/sdb) y dades (pve3, /dev/sdi) - 2026-11-23 00:49:35
---- versión
+### Espejo DRBD entre serveis (192.168.36.22, disco del puerto SATA 1) y dades (192.168.36.23, puerto SATA 8) - 2026-11-23 11:52:48
+
+[11:52:48] 0) Configuración en los dos equipos (drbd-espejo.sh)
+espejo role:Primary
+  disk:UpToDate
+  peer role:Secondary
+    replication:Established peer-disk:UpToDate
+
+espejo role:Secondary
+  disk:UpToDate
+  peer role:Primary
+    replication:Established peer-disk:UpToDate
+
 version: 8.4.11 (api:1/proto:86-101)
 DRBDADM_VERSION=9.22.0
---- configuración (/etc/drbd.d/espejo.res)
 resource espejo {
     protocol C;                 # síncrono: la escritura acaba cuando está en los dos discos
     device    /dev/drbd0;
     meta-disk internal;
-    on serveis { disk /dev/sdb; address 192.168.30.22:7789; }
-    on dades   { disk /dev/sdi; address 192.168.30.23:7789; }
+    on serveis { disk "/dev/disk/by-path/pci-0000:00:0d.0-ata-2"; address 192.168.36.22:7789; }   # puerto SATA 1
+    on dades   { disk "/dev/disk/by-path/pci-0000:00:0d.0-ata-9"; address 192.168.36.23:7789; }   # puerto SATA 8
     net { after-sb-0pri discard-zero-changes; after-sb-1pri discard-secondary; }
 }
 
-[00:49:36] serveis pasa a primario y se hace la sincronización inicial
-
-[01:02:14] La primera sincronización se cortó al 95 % porque se llenó el thin pool de pve3 (ver incidencia-thin-pool.txt). Tras liberar espacio, DRBD reconectó solo y terminó:
+[11:52:50] 1) serveis pasa a primario y se hace la sincronización inicial (1 GB)
  0: cs:Connected ro:Primary/Secondary ds:UpToDate/UpToDate C r-----
-    ns:1066424 nr:0 dw:0 dr:1066424 al:8 bm:0 lo:0 pe:0 ua:0 ap:0 ep:1 wo:f oos:0
+    ns:8 nr:0 dw:8 dr:973 al:1 bm:0 lo:0 pe:0 ua:0 ap:0 ep:1 wo:f oos:0
+   sincronización inicial: 0,4 s
 
-[01:02:15] sistema de ficheros y datos ficticios en serveis (primario)
-da6d1992eab9bcbaa11395d080f98ceb58e2ae32d4f490bbfa1cbb11ae3e5988  ./Administracion/leeme.txt
-e72ae4b55e8ae9a4ad83336e20934784eb358f5aa1323cee0be1001ff8f5e96b  ./Comercial/leeme.txt
-610a500c7cb454b5abf3bb2e79f9baec3b0765fcf7a85bb9966f6bef55e06694  ./Informatica/imagen.bin
-c71c5096742466de9dfa9180977f3d1dec47585739e0517da639753cbe684e5a  ./Informatica/leeme.txt
+[11:52:51] 2) Carpeta compartida de la empresa en serveis (primario) con datos ficticios
+75281d4f2c7436a0f052a0a9ca7f36a3e3f9d0cc864fb9df3f285e62316a9241  ./Administracion/leeme.txt
+74a844c9c7f4b669dab067f9eeaa2a516240a7cab23b1d2f76abf13c29fdd09f  ./Comercial/leeme.txt
+a4e88e7a0c5706ec7f4210a5c632560c4460b623db6d3d102263aa97925e1421  ./Informatica/imagen.bin
+c3be182f33f085231109108f417b8dfe9b72a5e75d5afec8931f4e82819b1e14  ./Informatica/leeme.txt
 total 28
-drwxr-xr-x 2 root root  4096 Nov 23 01:02 Administracion
-drwxr-x--- 2 root root  4096 Nov 23 01:02 Comercial
-drwxr-xr-x 2 root root  4096 Nov 23 01:02 Informatica
-drwx------ 2 root root 16384 Nov 23 01:02 lost+found
+drwxr-xr-x 2 root root  4096 nov 23 11:52 Administracion
+drwxr-x--- 2 root root  4096 nov 23 11:52 Comercial
+drwxr-xr-x 2 root root  4096 nov 23 11:52 Informatica
+drwx------ 2 root root 16384 nov 23 11:52 lost+found
  0: cs:Connected ro:Primary/Secondary ds:UpToDate/UpToDate C r-----
-    ns:1118620 nr:0 dw:1117224 dr:1070305 al:14 bm:0 lo:0 pe:0 ua:0 ap:0 ep:1 wo:f oos:0
+    ns:52208 nr:0 dw:68724 dr:2002 al:6 bm:0 lo:0 pe:0 ua:0 ap:0 ep:1 wo:f oos:0
 
-[01:02:16] en dades (secundario) no se puede montar: solo recibe las escrituras
-mount: /srv/compartida: fsconfig() failed: /dev/drbd0: Can't open blockdev.
+[11:52:52] 3) En dades (secundario) no se puede montar: solo recibe las escrituras
+mount: /srv/compartida: fsconfig() ha fallado/dev/drbd0: Can't open blockdev.
+       dmesg(1) puede ser que tenga más información tras el fallo de la llamada al sistema de montaje.
 
-[01:02:17] FALLO: apago serveis de golpe desde pve2 (qm stop = quitar la corriente)
-status: stopped
+[11:52:53] 4) FALLO: apago serveis de golpe desde VirtualBox (como quitar la corriente)
+0%...10%...20%...30%...40%...50%...60%...70%...80%...90%...100%
  0: cs:Connected ro:Secondary/Primary ds:UpToDate/UpToDate C r-----
-    ns:0 nr:101280 dw:1182680 dr:0 al:0 bm:0 lo:0 pe:0 ua:0 ap:0 ep:1 wo:f oos:0
-[01:02:22] RECUPERACIÓN en dades: paso a primario, monto y compruebo los ficheros
-total 28
-drwxr-xr-x 2 root root  4096 Nov 23 01:02 Administracion
-drwxr-x--- 2 root root  4096 Nov 23 01:02 Comercial
-drwxr-xr-x 2 root root  4096 Nov 23 01:02 Informatica
-drwx------ 2 root root 16384 Nov 23 01:02 lost+found
-documento de Administracion - 01:02:15
-documento de Informatica - 01:02:15
-[01:02:38] datos disponibles en dades 21 s después del fallo
-[01:02:54] comprobación de contenido y permisos en dades (como root, con las sumas sacadas en serveis antes del fallo)
-./Administracion/leeme.txt: OK
-./Comercial/leeme.txt: OK
-./Informatica/imagen.bin: OK
-./Informatica/leeme.txt: OK
-drwxr-x--- root Comercial
-cat: Comercial/leeme.txt: Permission denied
+    ns:0 nr:52208 dw:85096 dr:0 al:0 bm:0 lo:0 pe:0 ua:0 ap:0 ep:1 wo:f oos:0
 
-[01:02:55] mientras serveis está caído se sigue trabajando en dades: fichero nuevo
-creado en dades durante la caída de serveis 01:02:55
+[11:52:54] 5) RECUPERACIÓN en dades: paso a primario, monto y compruebo los ficheros
+./Administracion/leeme.txt: La suma coincide
+./Comercial/leeme.txt: La suma coincide
+./Informatica/imagen.bin: La suma coincide
+./Informatica/leeme.txt: La suma coincide
+documento de Administracion - 11:52:51
+   datos comprobados en dades 2,7 s después del fallo
+drwxr-x--- root /srv/compartida/Comercial
+   como usuario sin permisos: cat: /srv/compartida/Comercial/leeme.txt: Permiso denegado
+
+[11:52:56] 6) Mientras serveis está caído se sigue trabajando en dades
  0: cs:WFConnection ro:Primary/Unknown ds:UpToDate/DUnknown C r-----
-    ns:0 nr:101280 dw:1199144 dr:52309 al:6 bm:0 lo:0 pe:0 ua:0 ap:0 ep:1 wo:f oos:16444
+    ns:0 nr:52208 dw:85232 dr:52297 al:4 bm:0 lo:0 pe:0 ua:0 ap:0 ep:1 wo:f oos:100
 
-[01:02:55] vuelvo a encender serveis
-generating cloud-init ISO
+[11:52:56] 7) Vuelvo a encender serveis
+VM "serveis-AlexSoler" has been successfully started.
 disabled
-1
-version: 8.4.11 (api:1/proto:86-101)
 srcversion: 637677C4EAFCF5D1D5446B0 
-[01:03:28] drbd.service está deshabilitado: serveis no se reconecta solo. Lo levanto a mano (paso del procedimiento)
-Marked additional 1024 MB as out-of-sync based on AL.
-resincronizado en 64 s. OJO: como serveis cayó siendo primario, DRBD marcó por su activity log 1024 MB como desincronizados y copió el disco entero (nr:1048508), no solo lo cambiado
- 0: cs:Connected ro:Secondary/Primary ds:UpToDate/UpToDate C r-----
-    ns:0 nr:1048508 dw:1048508 dr:0 al:0 bm:0 lo:0 pe:0 ua:0 ap:0 ep:1 wo:f oos:0
 
-[01:04:33] vuelta a la situación normal: dades suelta el recurso y serveis vuelve a ser primario
+[11:53:15]    serveis no se reconecta solo (drbd.service deshabilitado): lo levanto a mano, como paso del procedimiento
+Marked additional 108 MB as out-of-sync based on AL.
+[   26.518275] drbd espejo/0 drbd0: Resync done (total 17 sec; paused 0 sec; 6500 K/sec)
+[   26.518645] drbd espejo/0 drbd0: helper command: /sbin/drbdadm after-resync-target minor-0
+[   26.520210] drbd espejo/0 drbd0: helper command: /sbin/drbdadm after-resync-target minor-0 exit code 0 (0x0)
+ 0: cs:Connected ro:Secondary/Primary ds:UpToDate/UpToDate C r-----
+    ns:0 nr:110528 dw:110528 dr:0 al:0 bm:0 lo:0 pe:0 ua:0 ap:0 ep:1 wo:f oos:0
+   resincronizado en 18,4 s
+
+[11:53:33] 8) Vuelta a la normalidad: dades suelta el recurso y serveis vuelve a ser primario
 dades: secundario
-creado en dades durante la caída de serveis 01:02:55
+creado en dades durante la caída de serveis 11:52:56
  0: cs:Connected ro:Primary/Secondary ds:UpToDate/UpToDate C r-----
-    ns:4 nr:1048528 dw:1048532 dr:953 al:1 bm:0 lo:0 pe:0 ua:0 ap:0 ep:1 wo:f oos:0
+    ns:4 nr:110544 dw:110548 dr:949 al:1 bm:0 lo:0 pe:0 ua:0 ap:0 ep:1 wo:f oos:0
+### fin 11:53:34
+
+### Ejecución anterior (11:07, misma prueba con la LAN aún en 192.168.30.0/24)
+   sincronización inicial: 53,5 s
+   datos comprobados en dades 2,7 s después del fallo
+   resincronizado en 18,5 s
+
+### Nota: primer intento (10:58, fallido)
+drbdadm no aceptó la ruta del disco sin comillas:
+  drbd.d/espejo.res:5: Parse error: ';' expected, but got ':00:0d' (TK 316)
+(los ':' de /dev/disk/by-path/pci-0000:00:0d.0-ata-N rompen el analizador). El recurso no llegó a crearse y mi
+script siguió: creó la "carpeta compartida" en el disco de sistema de serveis, sin DRBD. Lo paré, borré esos
+ficheros, puse la ruta entre comillas en drbd-espejo.sh y añadí al script de prueba que se pare si el espejo no
+está sincronizado o la carpeta no está montada sobre /dev/drbd0. Este fichero es el segundo intento, el bueno.

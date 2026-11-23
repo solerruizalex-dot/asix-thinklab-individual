@@ -1,3 +1,6 @@
+# NOTA: salida capturada ANTES del cambio de red del 23/11 (11:15). Entonces la LAN era 192.168.30.0/24; ahora es
+# 192.168.36.0/24 y cada equipo conserva su último octeto (.30.21 -> .36.21...). Ver evidencias/tasca4/cambio-red-192.168.36.txt
+
 ### MikroTik: /log print where message~"MK-BLOQ"
  2026-11-22 22:19:45 firewall,info MK-BLOQ forward: in:ether2 out:ether1, connection-state:new src-mac 08:00:27:E1:B1:FA, proto TCP (SYN), 192.168.30.20:36022->13.216.200.40:445, len 60
  2026-11-22 22:19:46 firewall,info MK-BLOQ forward: in:ether2 out:ether1, connection-state:new src-mac 08:00:27:E1:B1:FA, proto TCP (SYN), 192.168.30.20:36022->13.216.200.40:445, len 60

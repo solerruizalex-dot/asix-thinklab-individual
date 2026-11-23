@@ -1,7 +1,10 @@
 #!/bin/bash
 # drbd-espejo.sh - Álex Soler Ruiz
-# Espejo (RAID 1 por red) entre el disco scsi1 de serveis y el scsi8 de dades con DRBD.
-# Uso la ruta by-id porque los nombres sdX pueden cambiar de orden al arrancar (me pasó).
+# Espejo (RAID 1 por red) entre un disco de serveis y otro de dades con DRBD.
+# serveis y dades son VMs de VirtualBox: el disco del espejo es el del puerto SATA 1 en serveis
+# y el del puerto SATA 8 en dades. Uso la ruta by-path (controlador + puerto) y no sdX, porque los
+# nombres sdX cambian de orden al arrancar o al quitar discos (me pasó con los RAID).
+# La ruta va entre comillas: sin ellas drbdadm se atasca en los ':' (Parse error: ';' expected).
 # Se ejecuta como root en LOS DOS equipos con el mismo contenido; el primario se elige después.
 [ "$(id -u)" = 0 ] || exec sudo -E bash "$0" "$@"
 set -e
@@ -13,8 +16,8 @@ resource espejo {
     protocol C;                 # síncrono: la escritura acaba cuando está en los dos discos
     device    /dev/drbd0;
     meta-disk internal;
-    on serveis { disk /dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive-scsi1; address 192.168.30.22:7789; }
-    on dades   { disk /dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive-scsi8; address 192.168.30.23:7789; }
+    on serveis { disk "/dev/disk/by-path/pci-0000:00:0d.0-ata-2"; address 192.168.36.22:7789; }   # puerto SATA 1
+    on dades   { disk "/dev/disk/by-path/pci-0000:00:0d.0-ata-9"; address 192.168.36.23:7789; }   # puerto SATA 8
     net { after-sb-0pri discard-zero-changes; after-sb-1pri discard-secondary; }
 }
 EOT

@@ -20,9 +20,9 @@
 
 | Interfaz | Configuración |
 |---|---|
-| enp0s3 (`lan_grupo3`) | **192.168.30.20/24 estática** (al principio tenía la .200 por DHCP del MikroTik) |
-| Puerta de enlace | 192.168.30.1 |
-| DNS | 192.168.30.1, 1.1.1.1 · dominio `alexsoler.lan` |
+| enp0s3 (`lan_grupo3`) | **192.168.36.20/24 estática** (al principio tenía la .200 por DHCP del MikroTik) |
+| Puerta de enlace | 192.168.36.1 |
+| DNS | 192.168.36.1, 1.1.1.1 · dominio `alexsoler.lan` |
 
 Un NAS de copias necesita IP fija: todos los equipos y scripts apuntan a ella.
 
@@ -36,10 +36,11 @@ Un NAS de copias necesita IP fija: todos los equipos y scripts apuntan a ella.
 |---|---|---|
 | `copias/configs` | Configuración de routers, nodos y servidores Linux | Solo el propio NAS (las va a buscar él) |
 | `copias/windows` | Estado del sistema del DC y perfiles del Windows 11 | SMB `\\truenas\copias-windows`, usuario `copias`, **cuota de 30 GB** |
-| `copias/proxmox` | Copias `vzdump`, plantillas, imagen de Debian, discos de RAID de dades | NFS solo para 192.168.30.0/24 |
+| `copias/proxmox` | Almacenamiento compartido del clúster: lo usé en la prueba de migración (disco de la VM de prueba, copias `vzdump` y su restauración). Al terminar lo vacié | NFS solo para 192.168.36.0/24 |
 | `copias/linux` | Reservado a datos de clientes Linux | — |
 | `copias/scripts` | El script de copias, su clave SSH y el log | Solo root |
 
+- Red: 192.168.36.20/24, puerta .1, DNS el DC (.21), el MikroTik (.1) y 1.1.1.1. La cambié desde la API (`interface.update` + `interface.commit` sin *rollback*, porque la confirmación no podía llegar desde la IP vieja).
 - **Snapshots** del pool todos los días a las 23:00 con retención de 14 días: si un fichero copiado se estropea o se sobrescribe, tengo las versiones de los días anteriores.
 
 Estado completo sacado de la API: [truenas-estado.txt](../../evidencias/tasca5/truenas-estado.txt).
@@ -49,5 +50,5 @@ Estado completo sacado de la API: [truenas-estado.txt](../../evidencias/tasca5/t
 El detalle de qué se copia de cada equipo está en [10-copias-automatizadas](10-copias-automatizadas.md). Resumen de la idea:
 
 - **Configuración** (pequeña, cambia poco, es lo que de verdad cuesta rehacer): el NAS **se la lleva** cada noche por SSH. Los equipos no guardan ninguna contraseña del NAS.
-- **Imágenes** (grandes): Proxmox las deja por NFS y el DC por SMB.
+- **Imágenes** (grandes): el DC deja el estado del sistema por SMB. El clúster Proxmox las dejaría por NFS (probado con las máquinas de prueba).
 - **No se copia** lo que se reinstala más rápido de lo que se restaura (los sistemas operativos de routers, nodos y clientes).

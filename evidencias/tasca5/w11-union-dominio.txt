@@ -1,3 +1,6 @@
+# NOTA: salida capturada ANTES del cambio de red del 23/11 (11:15). Entonces la LAN era 192.168.30.0/24; ahora es
+# 192.168.36.0/24 y cada equipo conserva su último octeto (.30.21 -> .36.21...). Ver evidencias/tasca4/cambio-red-192.168.36.txt
+
 IPv4Address        : {192.168.30.198}
 IPv4DefaultGateway : {MSFT_NetRoute (InstanceID = ":8:8:8:9:55B55;C?8;@B8?:8;55;")}
 DNSServer          : {MSFT_DNSClientServerAddress (Name = "8", CreationClassName = "", SystemCreationClassName = "", 

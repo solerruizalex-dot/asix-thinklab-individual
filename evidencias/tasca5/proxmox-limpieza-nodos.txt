@@ -1,0 +1,46 @@
+# NOTA: salida capturada ANTES del cambio de red del 23/11 (11:15). Entonces la LAN era 192.168.30.0/24; ahora es
+# 192.168.36.0/24 y cada equipo conserva su último octeto (.30.21 -> .36.21...). Ver evidencias/tasca4/cambio-red-192.168.36.txt
+
+### Limpieza de los nodos - 2026-11-23 09:01:02
+borrada lxc 130 (en pve1)
+ERROR borrando qemu 140
+ERROR borrando qemu 141
+(primer intento: el ssh del bucle se comía el resto del script por stdin; corregido con ssh -n)
+
+### Limpieza de los nodos - 2026-11-23 09:01:16
+ERROR borrando qemu 140
+ERROR borrando qemu 141
+borrado del NAS: truenas-nfs:140/vm-140-disk-0.qcow2
+borrado del NAS: truenas-nfs:backup/vzdump-lxc-130-2026_11_23-01_13_03.tar.zst
+trying to acquire lock...
+ OK
+borrado del NAS: truenas-nfs:backup/vzdump-lxc-130-2026_11_23-08_49_13.tar.zst
+borrado del NAS: truenas-nfs:backup/vzdump-qemu-122-2026_11_23-01_13_18.vma.zst
+borrado del NAS: truenas-nfs:backup/vzdump-qemu-140-2026_11_23-08_49_00.vma.zst
+borrado del NAS: truenas-nfs:snippets/debian-base.yaml
+borrado del NAS: truenas-nfs:vztmpl/debian-13-standard_13.6-1_amd64.tar.zst
+borrada la imagen debian-13-generic del NAS
+quitada la tarea de copia vzdump 'copia-diaria'
+quitado el almacenamiento truenas-nfs
+
+(las VMs 140 y 141 fallaron porque pve1 no resuelve por nombre los otros nodos; las borré en su nodo:)
+pve3# qm destroy 140 --purge 1  -> purging VM 140 (aviso: su disco del NFS ya estaba borrado)
+pve2# qm destroy 141 --purge 1  -> Logical volume vm-141-disk-0 successfully removed
+(script corregido con las IPs de los nodos)
+
+--- Estado final
+Name:             grupo3-cluster
+Nodes:            3
+Quorate:          Yes
+Máquinas en el clúster: 0
+Name             Type     Status     Total (KiB)      Used (KiB) Available (KiB)        %
+local             dir     active         8968652         6353156         2138312   70.84%
+local-lvm     lvmthin     active         7110656               0         7110656    0.00%
+Tareas de copia: 0
+Usuario: alexsoler@pve
+Usuario: root@pam
+Grupo: administradores -> alexsoler@pve
+acl:1:/:@administradores:Administrator:
+pve1: 192.168.30.32 9.2.32
+pve2: 192.168.30.33 9.2.32
+pve3: 192.168.30.34 9.2.32

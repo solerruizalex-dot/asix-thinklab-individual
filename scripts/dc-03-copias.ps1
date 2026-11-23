@@ -1,5 +1,5 @@
 ﻿# dc-03-copias.ps1 - Álex Soler Ruiz
-# Copia del controlador de dominio al NAS (\\192.168.30.20\copias-windows)
+# Copia del controlador de dominio al NAS (\\192.168.36.20\copias-windows)
 #  - Estado del sistema (AD, SYSVOL, registro, arranque): es lo que hace falta para
 #    recuperar el dominio. Una imagen completa de C: no compensa: reinstalar Windows
 #    tarda menos que restaurar 20 GB por USB, y lo que tiene valor es el estado del sistema.
@@ -7,7 +7,7 @@
 #    un objeto suelto sin restaurar el DC entero.
 # Se ejecuta como tarea programada (SYSTEM) cada noche.
 $ErrorActionPreference = 'Continue'
-$nas   = '\\192.168.30.20\copias-windows'
+$nas   = '\\192.168.36.20\copias-windows'
 $user  = 'copias'
 $pass  = Get-Content 'C:\scripts\.nas' -ErrorAction Stop   # fichero con permisos solo para administradores
 $hoy   = Get-Date -Format 'yyyy-MM-dd_HHmm'

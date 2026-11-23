@@ -1,22 +1,11 @@
-### dades (192.168.30.23) - discos antes de crear los RAID - 2026-11-23 00:45:28
-NAME     SIZE TYPE SERIAL
-sda        6G disk drive-scsi0
-├─sda1   5.9G part 
-├─sda14    3M part 
-└─sda15  124M part 
-sdb        1G disk drive-scsi1
-sdc        1G disk drive-scsi2
-sdd        1G disk drive-scsi3
-sde        1G disk drive-scsi4
-sdf        1G disk drive-scsi5
-sdg        1G disk drive-scsi6
-sdh        1G disk drive-scsi7
-sdi        1G disk drive-scsi8
-sr0        4M rom  QM00003
+# NOTA: salida capturada ANTES del cambio de red del 23/11 (11:15). Entonces la LAN era 192.168.30.0/24; ahora es
+# 192.168.36.0/24 y cada equipo conserva su último octeto (.30.21 -> .36.21...). Ver evidencias/tasca4/cambio-red-192.168.36.txt
 
-### ejecución de scripts/dades-raid.sh
+### Creación de los RAID en dades (VM de VirtualBox) - 2026-11-23 10:41:41
+/dev/md0 (RAID 0): /dev/sdb /dev/sdc
 mdadm: Defaulting to version 1.2 metadata
 mdadm: array /dev/md0 started.
+/dev/md1 (RAID 1): /dev/sdi /dev/sdd
 mdadm: Note: this array has metadata at the start and
     may not be suitable as a boot device.  If you plan to
     store '/boot' on this device please ensure that
@@ -24,78 +13,59 @@ mdadm: Note: this array has metadata at the start and
     --metadata=0.90
 mdadm: Defaulting to version 1.2 metadata
 mdadm: array /dev/md1 started.
+/dev/md5 (RAID 5): /dev/sde /dev/sdf /dev/sdg
 mdadm: Defaulting to version 1.2 metadata
 mdadm: array /dev/md5 started.
-Personalities : [raid0] [raid1] [raid6] [raid5] [raid4] 
-md5 : active raid5 sdh[3] sdg[1] sdf[0]
-      2093056 blocks super 1.2 level 5, 512k chunk, algorithm 2 [3/3] [UUU]
+Personalities : [raid0] [raid1] [raid6] [raid5] [raid4] [raid10] 
+md5 : active raid5 sdg[3] sdf[1] sde[0]
+      2093056 blocks super 1.2 level 5, 512k chunk, algorithm 2 [3/2] [UU_]
+      [===================>.]  recovery = 98.5% (1032536/1046528) finish=0.0min speed=172089K/sec
       
-md1 : active raid1 sde[1] sdd[0]
+md1 : active raid1 sdd[1] sdi[0]
       1046528 blocks super 1.2 [2/2] [UU]
       
 md0 : active raid0 sdc[1] sdb[0]
       2093056 blocks super 1.2 512k chunks
       
 unused devices: <none>
-Filesystem      Size  Used Avail Use% Mounted on
-/dev/md0        2.0G  532K  1.9G   1% /srv/md0
-/dev/md1        988M  276K  921M   1% /srv/md1
-/dev/md5        2.0G  532K  1.9G   1% /srv/md5
+S.ficheros     Tamaño Usados  Disp Uso% Montado en
+/dev/md0         2,0G   532K  1,9G   1% /srv/md0
+/dev/md1         988M   276K  921M   1% /srv/md1
+/dev/md5         2,0G   532K  1,9G   1% /srv/md5
+--- sincronización inicial terminada en 2 s
+Personalities : [raid0] [raid1] [raid6] [raid5] [raid4] [raid10] 
+md5 : active raid5 sdg[3] sdf[1] sde[0]
+      2093056 blocks super 1.2 level 5, 512k chunk, algorithm 2 [3/3] [UUU]
+      
+md1 : active raid1 sdd[1] sdi[0]
+      1046528 blocks super 1.2 [2/2] [UU]
+      
+md0 : active raid0 sdc[1] sdb[0]
+      2093056 blocks super 1.2 512k chunks
+      
+unused devices: <none>
+--- /etc/fstab
+LABEL=md0 /srv/md0 ext4 defaults,nofail 0 2
+LABEL=md1 /srv/md1 ext4 defaults,nofail 0 2
+LABEL=md5 /srv/md5 ext4 defaults,nofail 0 2
+--- mdadm.conf
+ARRAY /dev/md0 metadata=1.2 UUID=68194015:99f24198:83396841:fa2318e8
+ARRAY /dev/md1 metadata=1.2 UUID=0ee28a81:121fa554:544e3d95:92f0d968
+ARRAY /dev/md5 metadata=1.2 spares=1 UUID=5c35d627:40c040ed:8ec3f6f3:339c3bf1
 
-### detalle de cada array
-/dev/md0:
-        Raid Level : raid0
-        Array Size : 2093056 (2044.00 MiB 2143.29 MB)
-      Raid Devices : 2
-             State : clean 
-    Active Devices : 2
-    Failed Devices : 0
-     Spare Devices : 0
-        Chunk Size : 512K
-       0       8       16        0      active sync   /dev/sdb
-       1       8       32        1      active sync   /dev/sdc
+### mdadm.conf regenerado con los arrays ya sincronizados (la primera vez salió 'spares=1' en md5)
+ARRAY /dev/md0 metadata=1.2 UUID=68194015:99f24198:83396841:fa2318e8
+ARRAY /dev/md1 metadata=1.2 UUID=0ee28a81:121fa554:544e3d95:92f0d968
+ARRAY /dev/md5 metadata=1.2 UUID=5c35d627:40c040ed:8ec3f6f3:339c3bf1
+Connection to 192.168.30.23 closed by remote host.
 
-/dev/md1:
-        Raid Level : raid1
-        Array Size : 1046528 (1022.00 MiB 1071.64 MB)
-      Raid Devices : 2
-             State : clean 
-    Active Devices : 2
-    Failed Devices : 0
-     Spare Devices : 0
-       0       8       48        0      active sync   /dev/sdd
-       1       8       64        1      active sync   /dev/sde
-
-/dev/md5:
-        Raid Level : raid5
-        Array Size : 2093056 (2044.00 MiB 2143.29 MB)
-      Raid Devices : 3
-             State : clean 
-    Active Devices : 3
-    Failed Devices : 0
-     Spare Devices : 0
-        Chunk Size : 512K
-       0       8       80        0      active sync   /dev/sdf
-       1       8       96        1      active sync   /dev/sdg
-       3       8      112        2      active sync   /dev/sdh
-
-NAME     SIZE TYPE  MOUNTPOINT
-sda        6G disk  
-├─sda1   5.9G part  /
-├─sda14    3M part  
-└─sda15  124M part  /boot/efi
-sdb        1G disk  
-└─md0      2G raid0 /srv/md0
-sdc        1G disk  
-└─md0      2G raid0 /srv/md0
-sdd        1G disk  
-└─md1   1022M raid1 /srv/md1
-sde        1G disk  
-└─md1   1022M raid1 /srv/md1
-sdf        1G disk  
-└─md5      2G raid5 /srv/md5
-sdg        1G disk  
-└─md5      2G raid5 /srv/md5
-sdh        1G disk  
-└─md5      2G raid5 /srv/md5
-sdi        1G disk  
+### Tras reiniciar dades (10:42:44): los RAID se montan solos
+md0 : active raid0 sdc[1] sdb[0]
+      2093056 blocks super 1.2 512k chunks
+md5 : active raid5 sdg[3] sde[0] sdf[1]
+      2093056 blocks super 1.2 level 5, 512k chunk, algorithm 2 [3/3] [UUU]
+md1 : active raid1 sdd[1] sdi[0]
+      1046528 blocks super 1.2 [2/2] [UU]
+/dev/md0         2,0G   532K  1,9G   1% /srv/md0
+/dev/md1         988M   276K  921M   1% /srv/md1
+/dev/md5         2,0G   532K  1,9G   1% /srv/md5

@@ -11,7 +11,7 @@ printf '%s\n%s\n' "$CLAVE" "$CLAVE" | pveum passwd alexsoler@pve
 
 # almacenamiento compartido en TrueNAS para copias (vzdump), ISOs y plantillas
 pvesm status | grep -q truenas-nfs || \
-pvesm add nfs truenas-nfs --server 192.168.30.20 --export /mnt/copias/proxmox \
+pvesm add nfs truenas-nfs --server 192.168.36.20 --export /mnt/copias/proxmox \
       --content backup,iso,vztmpl,images --options vers=4.2 --prune-backups keep-last=3
 
 # copia programada de todas las VMs y contenedores al NAS (diaria 22:00, modo snapshot)

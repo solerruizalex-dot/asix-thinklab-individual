@@ -14,11 +14,11 @@
 |---|---|---|
 | `admin` | full | El de fábrica, con contraseña. Lo dejo por si hay que entrar por consola |
 | `alexsoler` | full | Mi cuenta personal para administrar |
-| `copias` | `copias` (ssh, read, sensitive, ftp, test) | Solo lo usa el NAS para llevarse las copias; únicamente puede conectar desde 192.168.30.20 y entra con clave SSH, no con contraseña |
+| `copias` | `copias` (ssh, read, sensitive, ftp, test) | Solo lo usa el NAS para llevarse las copias; únicamente puede conectar desde 192.168.36.20 y entra con clave SSH, no con contraseña |
 
 ```
 /user group add name=copias policy=ssh,read,sensitive,ftp,test
-/user add name=copias group=copias address=192.168.30.20/32
+/user add name=copias group=copias address=192.168.36.20/32
 /user ssh-keys import user=copias public-key-file=copias.pub
 ```
 
@@ -29,10 +29,10 @@ Además desactivé los servicios que no uso: `/ip service disable telnet,ftp,api
 | Interfaz | Uso | Configuración |
 |---|---|---|
 | ether1 | WAN | Cliente DHCP del NAT de VirtualBox → 10.0.2.15/24, puerta 10.0.2.2 |
-| ether2 | LAN | 192.168.30.1/24 estática |
+| ether2 | LAN | 192.168.36.1/24 estática |
 
-- **DHCP** en la LAN: rango 192.168.30.100–200, puerta 192.168.30.1, **DNS 192.168.30.21 (el DC) y 192.168.30.1**, dominio `alexsoler.lan`. Así los clientes encuentran el dominio sin tocar nada a mano (en el grupo nos pasó lo contrario: el cliente usaba el DNS del router y no veía el dominio).
-- Reserva para el cliente Linux: MAC 08:00:27:AA:51:50 → 192.168.30.150 (el NAS necesita una IP fija para hacerle copias).
+- **DHCP** en la LAN: rango 192.168.36.100–200, puerta 192.168.36.1, **DNS 192.168.36.21 (el DC) y 192.168.36.1**, dominio `alexsoler.lan`. Así los clientes encuentran el dominio sin tocar nada a mano (en el grupo nos pasó lo contrario: el cliente usaba el DNS del router y no veía el dominio).
+- Reserva para el cliente Linux: MAC 08:00:27:AA:51:50 → 192.168.36.150 (el NAS necesita una IP fija para hacerle copias).
 - **NAT**: `chain=srcnat action=masquerade out-interface=ether1`.
 - **DNS** propio: reenvía a 1.1.1.1 y 8.8.8.8 y responde a la LAN.
 
@@ -56,21 +56,21 @@ La configuración completa exportada (sin contraseñas) está en [configs/mikrot
 
 ## Prueba: una conexión permitida y otra bloqueada
 
-Cliente de prueba: TrueNAS (192.168.30.20) con puerta de enlace .1. Destino `portquiz.net` (13.216.200.40), un servidor que responde en cualquier puerto, así que si algo no conecta es por el cortafuegos y no porque el destino no escuche.
+Cliente de prueba: TrueNAS (192.168.36.20) con puerta de enlace .1. Destino `portquiz.net` (13.216.200.40), un servidor que responde en cualquier puerto, así que si algo no conecta es por el cortafuegos y no porque el destino no escuche.
 
 ```
 HTTP 80 (permitida):      HTTP 200 en 0.208837s
 TCP 23 telnet (bloqueada): no conecta (descartado)
 TCP 445 SMB (bloqueada):   no conecta (descartado)
 traceroute -n -m 3 1.1.1.1:
- 1  192.168.30.1   2  10.0.2.2   3  * * *
+ 1  192.168.36.1   2  10.0.2.2   3  * * *
 ```
 
 Registro (`/log print where message~"MK-BLOQ"`):
 
 ```
 22:19:45 firewall,info MK-BLOQ forward: in:ether2 out:ether1, connection-state:new
-         src-mac 08:00:27:E1:B1:FA, proto TCP (SYN), 192.168.30.20:36022->13.216.200.40:445, len 60
+         src-mac 08:00:27:E1:B1:FA, proto TCP (SYN), 192.168.36.20:36022->13.216.200.40:445, len 60
 ```
 
 Cómo lo leo: entra por `ether2` (la LAN), saldría por `ether1`, es un paquete nuevo (SYN), lo manda la MAC del TrueNAS y va al puerto 445. Lo descarta la regla 9 y por eso el cliente no recibe respuesta y espera hasta el timeout. Los contadores confirman 12 paquetes descartados en esa regla mientras la de "LAN a Internet" sigue sumando.

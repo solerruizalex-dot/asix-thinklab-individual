@@ -1,0 +1,27 @@
+# Copia nocturna del DC repetida a mano en la red nueva (192.168.36.0/24) - 23/11/2026, portátil de clase
+# Log C:\scripts\copias.log, eventos Microsoft-Windows-Backup y espacio de E: (salidas copiadas tal cual)
+
+## Primer intento (11:55) - FALLO
+2026-11-23T11:55:16  exportaciones copiadas a \\192.168.36.20\copias-windows\DC01-export\2026-11-23_1155
+2026-11-23T12:01:56  wbadmin: FALLO (codigo -4): Registro de archivos con errores de copia de seguridad: C:\WINDOWS\Logs\WindowsServerBackup\Backup_Error-23-11-2026_10-55-32.log
+2026-11-23T12:01:56  no replico al NAS una copia que no ha terminado bien
+Evento 7: "La operación de copia de seguridad ... se completó con errores"
+Evento 24: "Se inició una nueva copia de seguridad para el volumen ('Esp'): [motivo: 'Tamaño de volumen cambiado']"
+El fichero Backup_Error... está vacío (2 bytes). El detalle del evento: C: State="15", SSBTotalSizeOnDisk="19620991004" (19,6 GB)
+E: (disco de copias, 25 GB):  Used 25367330816  Free 1458384896   -> 1,4 GB libres
+E:\WindowsImageBackup: 19,7 GB (copia anterior de las 09:47) + 3,57 GB de instantáneas VSS en el propio E:
+Causa: no cabía una segunda versión. wbadmin guarda la anterior mientras escribe la nueva.
+
+## Solución
+VBoxManage modifymedium disk ws-dc-copias.vdi --resize 51200     (DC apagado; 25 GB -> 50 GB)
+Resize-Partition -DriveLetter E -Size (Get-PartitionSupportedSize -DriveLetter E).SizeMax
+E:  Size 53670293504  SizeRemaining 28302143488
+
+## Segundo intento (12:10) - CORRECTO
+2026-11-23T12:10:21  exportaciones copiadas a \\192.168.36.20\copias-windows\DC01-export\2026-11-23_1210
+2026-11-23T12:22:18  wbadmin: copia de estado del sistema CORRECTA
+2026-11-23T12:24:45  robocopy al NAS terminado (codigo 3; 0-7 es correcto)
+Eventos: 12:11:20 Id 24 (copia completa: tamaño de volumen cambiado) · 12:22:12 Id 4 "La operación de copia de seguridad finalizó correctamente."
+wbadmin get versions -> Hora de copia de seguridad: 23/11/2026 12:10
+E: después: Size 53670293504  SizeRemaining 32102256640  (29,9 GB libres)
+Total: 14 min 33 s (12:10:12 -> 12:24:45), contra el NAS en su IP nueva 192.168.36.20

@@ -10,7 +10,7 @@
 ## Usuarios de administración
 
 - `alexsoler`: usuario normal, no está en el grupo `sudo`; para administrar uso `su -`.
-- `root`: con contraseña local. Por SSH solo entra con clave (lo que trae Debian por defecto, `PermitRootLogin prohibit-password`). La única clave autorizada es la del NAS, limitada con `from="192.168.30.20"`.
+- `root`: con contraseña local. Por SSH solo entra con clave (lo que trae Debian por defecto, `PermitRootLogin prohibit-password`). La única clave autorizada es la del NAS, limitada con `from="192.168.36.20"`.
 
 ## Red
 
@@ -22,7 +22,7 @@ iface enp0s3 inet dhcp          # WAN: NAT de VirtualBox → 10.0.2.15
 
 auto enp0s8
 iface enp0s8 inet static
-    address 192.168.30.3/24      # LAN, sin gateway (la salida es por enp0s3)
+    address 192.168.36.3/24      # LAN, sin gateway (la salida es por enp0s3)
 ```
 
 Reenvío de paquetes activado en `/etc/sysctl.d/99-forward.conf` → `net.ipv4.ip_forward=1`.
@@ -66,13 +66,13 @@ Cliente TrueNAS con puerta de enlace .3:
 HTTP 80 (permitida):      HTTP 200 en 0.213137s
 TCP 23 telnet (bloqueada): no conecta (descartado)
 TCP 445 SMB (bloqueada):   no conecta (descartado)
-traceroute: 1 192.168.30.3 · 2 10.0.2.2
+traceroute: 1 192.168.36.3 · 2 10.0.2.2
 ```
 
 `journalctl -k | grep NFT-BLOQ`:
 
 ```
-NFT-BLOQ IN=enp0s8 OUT=enp0s3 SRC=192.168.30.20 DST=13.216.200.40 LEN=60 TTL=63
+NFT-BLOQ IN=enp0s8 OUT=enp0s3 SRC=192.168.36.20 DST=13.216.200.40 LEN=60 TTL=63
          PROTO=TCP SPT=52294 DPT=445 WINDOW=32120 SYN
 ```
 

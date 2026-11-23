@@ -11,9 +11,9 @@ if ($nic.Name -ne 'LAN') { Rename-NetAdapter -Name $nic.Name -NewName 'LAN' }
 Set-NetIPInterface -InterfaceAlias LAN -Dhcp Disabled
 Get-NetIPAddress -InterfaceAlias LAN -AddressFamily IPv4 -ErrorAction SilentlyContinue | Remove-NetIPAddress -Confirm:$false
 Remove-NetRoute -InterfaceAlias LAN -DestinationPrefix 0.0.0.0/0 -Confirm:$false -ErrorAction SilentlyContinue
-New-NetIPAddress -InterfaceAlias LAN -IPAddress 192.168.30.21 -PrefixLength 24 -DefaultGateway 192.168.30.1 | Out-Null
+New-NetIPAddress -InterfaceAlias LAN -IPAddress 192.168.36.21 -PrefixLength 24 -DefaultGateway 192.168.36.1 | Out-Null
 # hasta que sea DC pregunta al MikroTik; despues de promocionar se apunta a si mismo
-Set-DnsClientServerAddress -InterfaceAlias LAN -ServerAddresses 192.168.30.1
+Set-DnsClientServerAddress -InterfaceAlias LAN -ServerAddresses 192.168.36.1
 Set-TimeZone -Id 'Romance Standard Time'
 
 # --- la cuenta Administrador local pasa a ser la del dominio: necesita contraseña ---

@@ -1,3 +1,6 @@
+# NOTA: salida capturada ANTES del cambio de red del 23/11 (11:15). Entonces la LAN era 192.168.30.0/24; ahora es
+# 192.168.36.0/24 y cada equipo conserva su último octeto (.30.21 -> .36.21...). Ver evidencias/tasca4/cambio-red-192.168.36.txt
+
 # Diagnóstico de la lentitud de la copia del estado del sistema del DC (23/11/2026)
 # Salidas de los comandos tal cual; la hora es UTC (+1 h = hora local)
 
@@ -140,4 +143,32 @@ Name                                         MB
 a8554a08-a35f-4c69-8bc0-d5b77bfefb9b.vhdx 11332
 Esp.vhdx                                     46
 02:25:53
+
+
+### 23/11/2026: exclusión ACOTADA de Defender (scripts/dc-05-exclusion-defender.ps1) y nueva medida
+Equipo: portátil de clase (la medida de 41 min fue en el PC de casa): parte de la diferencia puede ser del equipo.
+
+
+ExclusionProcess : {C:\Windows\System32\wbengine.exe}
+ExclusionPath    : {E:\WindowsImageBackup}
+
+
+
+
+
+RealTimeProtectionEnabled : True
+
+
+
+--- CPU acumulada de MsMpEng: 102,3 s a las 09:47 (al lanzar la copia) y 113,3 s al terminar -> ~11 s durante la copia (antes 1.311 s)
+--- wbengine: 323 s de CPU al terminar
+--- log de la tarea (C:\scripts\copias.log)
+2026-11-23T09:46:52  exportaciones copiadas a \\192.168.30.20\copias-windows\DC01-export\2026-11-23_0946
+2026-11-23T09:57:24  wbadmin: copia de estado del sistema CORRECTA
+2026-11-23T09:59:13  robocopy al NAS terminado (codigo 3; 0-7 es correcto)
+
+Hora de copia de seguridad: 23/11/2026 9:47 
+Destino de copia de seguridad: Disco duro etiquetado E:
+Se puede recuperar: Volúmenes, Archivos, Aplicaciones, Estado del sistema
+
 

@@ -4,7 +4,7 @@
 
 ## Qué he montado y dónde
 
-El entorno individual simula, a escala, lo mismo que montamos en grupo en el aula: tres servidores de comunicaciones, un NAS, un clúster Proxmox de tres nodos, un controlador de dominio y clientes Windows y Linux. Todo corre en VirtualBox 7.0.20 dentro del PC que uso en casa, arrancando el SSD de clase (el mismo disco que llevo al instituto) conectado por USB.
+El entorno individual simula, a escala, lo mismo que montamos en grupo en el aula: tres servidores de comunicaciones, un NAS, un clúster Proxmox de tres nodos, un controlador de dominio y clientes Windows y Linux. Todo corre en VirtualBox 7.0.20 sobre el SSD de clase (el mismo disco que llevo al instituto), conectado por USB. Ese SSD lo arranco en dos equipos: el PC de casa (abajo) y el portátil de clase (ASUS ExpertBook, Core Ultra 5 125H, 32 GB), que está en la [Tarea 2](tarea2-equipos.md). Las últimas pruebas, del 23/11, son del portátil.
 
 | | Equipo anfitrión |
 |---|---|
@@ -24,7 +24,7 @@ En VirtualBox las máquinas están en el grupo **ASIX-ThinkLAB Individual**, sep
 La idea es la misma que en el aula, pero sin hardware:
 
 - La "red del aula" (172.16.222.0/24) la sustituye el **NAT de VirtualBox**: cada router tiene su WAN en NAT y coge IP por DHCP (10.0.2.15). El enunciado lo permite para el entorno individual.
-- El switch del grupo es la **red interna de VirtualBox `lan_grupo3`**. Todo lo que cuelga de ella está en 192.168.30.0/24 (mantengo el direccionamiento de nuestro grupo, el 3).
+- El switch del grupo es la **red interna de VirtualBox `lan_grupo3`**. Todo lo que cuelga de ella está en **192.168.36.0/24**, la red que me corresponde en la parte individual. Al principio lo monté en la 192.168.30.0/24 (la del grupo) y el 23/11 lo cambié todo ([Tarea 4](tarea4-red.md)).
 - Los tres routers están en la misma LAN con IPs distintas (.1, .2 y .3). Solo el MikroTik hace de puerta de enlace y DHCP; los otros dos están conectados pero se prueban de uno en uno cambiando la puerta de enlace del cliente de prueba. Así los tres se comparan en el mismo escenario.
 
 ## Máquinas y recursos
@@ -36,10 +36,9 @@ La idea es la misma que en el aula, pero sin hardware:
 | nftables-AlexSoler | Router GNU/Linux | Debian 13.8 + nftables | 2 | 1 GB | 20 GB | NAT + lan_grupo3 |
 | truenas-AlexSoler | NAS / copias | TrueNAS SCALE 24.04.2.5 | 2 | 2,5 GB | 16 GB + 60 GB | lan_grupo3 |
 | ws-dc-AlexSoler | Controlador de dominio | Windows Server 2025 Standard | 2 | 4 GB | 50 GB | lan_grupo3 |
-| clusterProxMox-pve1/2/3 | Nodos de virtualización (virtualización anidada) | Proxmox VE 9.2.32 | 2 c/u | 2 / 2 / 2,5 GB | 20 GB c/u | lan_grupo3 (modo promiscuo) |
-| ↳ serveis (VM 122, en pve1) | Servidor de infraestructura | Debian 13.8 | 1 | 384 MB | 6 GB + 1 GB (DRBD) | vmbr0 |
-| ↳ dades (VM 123, en pve3) | Servidor de datos, RAID | Debian 13.8 | 1 | 384 MB | 6 GB + 7 × 1 GB (RAID, en el NFS) + 1 GB (DRBD) | vmbr0 |
-| ↳ web-pruebas (CT 130, en pve2) | Contenedor para la prueba de migración | Debian 13 | 1 | 256 MB | 2 GB | vmbr0 |
+| clusterProxMox-pve1/2/3 | Nodos del clúster (solo red + clúster, sin máquinas dentro) | Proxmox VE 9.2.32 | 2 c/u | 2 GB c/u | 20 GB c/u | lan_grupo3 |
+| serveis-AlexSoler | Servidor de infraestructura | Debian 13 sin entorno gráfico | 1 | 1 GB | 10 GB + 1 GB (DRBD) | lan_grupo3 |
+| dades-AlexSoler | Servidor de datos: RAID y espejo | Debian 13 sin entorno gráfico | 1 | 1 GB | 10 GB + 7 × 1 GB (RAID) + 1 GB (DRBD) | lan_grupo3 |
 | administracion-AlexSoler | Cliente Windows (Administración) | Windows 11 Pro 23H2 | 2 | 4 GB | 80 GB | lan_grupo3 |
 | informatica-linux-AlexSoler | Cliente Linux (Informática) | Debian 13.8 GNOME | 2 | 2 GB | 20 GB | lan_grupo3 |
 
@@ -49,7 +48,8 @@ Si sumo la RAM que tenían asignada las máquinas al principio (DC 8 GB, TrueNAS
 |---|---|
 | Comunicaciones | MikroTik + OPNsense + Debian + TrueNAS (5,8 GB asignados) |
 | Dominio | MikroTik + Debian + DC + TrueNAS, o DC + Windows 11 apagando TrueNAS: el DC y el Windows 11 (4 GB cada uno) no caben con todo lo demás |
-| Virtualización | MikroTik + Debian (salto SSH) + TrueNAS + pve1-3, con serveis, dades y el contenedor dentro (10,25 GB asignados) |
+| Virtualización | MikroTik + Debian (salto SSH) + TrueNAS + pve1-3 (9,8 GB asignados). Las máquinas de prueba de la migración solo existieron durante la prueba |
+| Servidores Linux | MikroTik + Debian + TrueNAS + serveis + dades (5,75 GB asignados) |
 
 ## Cómo administro las máquinas
 
@@ -77,9 +77,11 @@ Si sumo la RAM que tenían asignada las máquinas al principio (DC 8 GB, TrueNAS
 | `sssd` no arrancaba tras unir el Linux al dominio | Varios reinicios seguidos con `realm permit` → *start-limit-hit* | `systemctl reset-failed sssd` y arrancarlo |
 | `grub-pc` no se configuraba al actualizar pve2 y pve3 | Los discos son clones/snapshots y cambió su número de serie; GRUB apuntaba al antiguo | Apuntar `grub-pc/install_devices` al disco actual (lo hace ahora [pve-01-nodo.sh](../scripts/pve-01-nodo.sh)) |
 | La actualización de pve1 se quedaba parada | Con un solo nodo encendido no hay quórum y `/etc/pve` es de solo lectura | Encender un segundo nodo |
-| Las VMs dentro de Proxmox no salían de su nodo | VirtualBox no entrega tramas a MAC que no son la de la tarjeta | `--nicpromisc1 allow-all` en los tres nodos |
-| La VM dades se quedó en `io-error` y una migración en vivo falló | Thin pool `local-lvm` de 6,8 GB lleno: había asignado más de lo que existe | Mover los discos de RAID al NFS; migrar en frío ([Tarea 5](tarea5/06-proxmox.md)) |
+| Las VMs dentro de Proxmox no salían de su nodo | VirtualBox no entrega tramas a MAC que no son la de la tarjeta | `--nicpromisc1 allow-all` en los tres nodos mientras duró la prueba |
+| dades (cuando estaba dentro de Proxmox) se quedó en `io-error` y una migración en vivo falló | Thin pool `local-lvm` de 6,8 GB lleno: había asignado más de lo que existe | Mover los discos al NFS y migrar en frío; al final saqué serveis y dades a VMs independientes ([Tarea 5](tarea5/06-proxmox.md)) |
 | Las VMs iban a 1,4–4 MB/s por el MikroTik | Su VM tenía tarjetas AMD PCnet emuladas | Cambiarlas a Intel PRO/1000: ×9 ([Tarea 7](tarea7-rendimiento.md)) |
+| Desde serveis y dades las descargas se quedaban paradas (y el instalador de Debian se colgaba) | Tarjeta **virtio** en la red interna de VirtualBox | Cambiarla a Intel 82540EM, como el resto: la descarga pasó a 1,7 s ([Tarea 4](tarea4-red.md)) |
+| La LAN estaba en la red equivocada (192.168.30.0/24) | Copié el direccionamiento del grupo | Cambiar los 12 equipos a 192.168.36.0/24 sin reinstalar ([Tarea 4](tarea4-red.md)) |
 | El PC se colgó entero | No quedó ningún error en el registro; mi hipótesis es el SSD USB atascado con varias VMs escribiendo a la vez | Trabajar por bloques, con una sola carga de disco pesada a la vez ([Tarea 7](tarea7-rendimiento.md)) |
 | El MikroTik avisa de licencia | Es la ISO x86 sin licencia (modo demo 24 h) | Para el laboratorio basta; para algo estable usaría CHR (licencia gratuita limitada a 1 Mbit/s) o una licencia nivel 4 |
 
@@ -99,10 +101,10 @@ docs/           un Markdown por tarea (la Tarea 5, uno por sistema)
 scripts/        todo lo que he automatizado: PowerShell (DC, Windows 11) y bash (Proxmox, NAS, RAID, DRBD, medidas)
 configs/        configuraciones exportadas de los routers, sin contraseñas
 evidencias/     salidas de comandos y capturas, una carpeta por tarea
-diagramas/      el esquema en Graphviz (.dot) y su imagen
+diagramas/      el esquema de red en draw.io (.drawio), su PNG/SVG y el script que lo genera
 pdf/            el script que genera los PDF de entrega a partir de los Markdown
 ```
 
 - Los PDF de entrega no se escriben aparte: se generan desde estos mismos Markdown ([generar-pdf.py](../pdf/generar-pdf.py)), así nunca hay dos versiones distintas.
 - **Las contraseñas no están en el repositorio.** Los scripts las leen de variables de entorno (`CLAVE`, `CLAVE_INICIAL`, `CLAVE_NAS`) y el `.gitignore` bloquea ficheros de credenciales y claves privadas. Antes de cada commit lo compruebo buscando las contraseñas reales con `grep`.
-- El esquema está en texto (`.dot`), así que en Git se ve qué cambió de una versión a otra, cosa que con una imagen no pasa.
+- El esquema está en **draw.io** ([red-individual.drawio](../diagramas/red-individual.drawio)): se abre y se edita en app.diagrams.net o en draw.io Desktop. Lo genero con un pequeño script ([generar-diagrama.py](../diagramas/generar-diagrama.py)) que escribe el `.drawio` y un SVG con la misma geometría. Así, cuando cambié la red a 192.168.36.0/24, actualicé las IPs en un solo sitio, y en Git se ve qué cambió de una versión a otra, cosa que con una imagen no pasa.

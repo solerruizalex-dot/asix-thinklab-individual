@@ -1,3 +1,6 @@
+# NOTA: salida capturada ANTES del cambio de red del 23/11 (11:15). Entonces la LAN era 192.168.30.0/24; ahora es
+# 192.168.36.0/24 y cada equipo conserva su último octeto (.30.21 -> .36.21...). Ver evidencias/tasca4/cambio-red-192.168.36.txt
+
 ### Windows Update en DC01-ALEX (Windows Server 2025) - script scripts/windows-actualizar.ps1
 2026-11-23 02:57:17  ANTES: Windows Server 2025 Standard Evaluation 24H2 compilación 26100.32230
 2026-11-23 02:57:23  PENDIENTE: Actualización de Windows Security platform: KB5007651 (versión 10.0.29680.1000)  [22 MB]

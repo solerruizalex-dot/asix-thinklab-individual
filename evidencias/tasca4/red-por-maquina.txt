@@ -1,265 +1,272 @@
-# Configuración de red y conectividad de cada máquina (Tarea 4) - 2026-11-23 01:14:42
-# Mismo script en todas las Linux: interfaces, rutas, DNS, ping a la puerta de enlace, NAS, DC y a Internet, y traceroute
+# Pruebas de red por máquina - LAN 192.168.36.0/24 (red interna lan_grupo3) - 23/11/2026, portátil de clase
+# En cada equipo: interfaces, rutas, DNS, ping a la puerta (.1), al NAS (.20) y al DC (.21), nombres del dominio,
+# descarga HTTP de Internet y traceroute. El ping a 1.1.1.1 no se usa: la red del instituto corta el ICMP hacia fuera.
+# Scripts: el bloque Linux es el mismo en todos; scripts/red-windows.ps1 en los Windows.
 
-### pve1 - 2026-11-23 01:14:43
---- interfaces (ip -br a)
-lo               UNKNOWN        127.0.0.1/8 
-vmbr0            UP             192.168.30.32/24 
---- rutas (ip r)
-default via 192.168.30.1 dev vmbr0 proto kernel onlink 
-192.168.30.0/24 dev vmbr0 proto kernel scope link src 192.168.30.32 
---- DNS
-search grupo3.local
-nameserver 192.168.30.1
---- ping 192.168.30.1: 2 packets transmitted, 2 received, 0% packet loss, time 1031ms
---- ping 192.168.30.20: 2 packets transmitted, 2 received, 0% packet loss, time 1021ms
---- ping 192.168.30.21: 2 packets transmitted, 0 received, 100% packet loss, time 1029ms
---- ping 1.1.1.1: 2 packets transmitted, 2 received, 0% packet loss, time 1016ms
---- traceroute -n -m 4 1.1.1.1
-traceroute to 1.1.1.1 (1.1.1.1), 4 hops max, 60 byte packets
- 1  192.168.30.1  1.316 ms  1.010 ms  0.893 ms
- 2  10.0.2.2  2.283 ms  2.184 ms  2.097 ms
- 3  * * *
- 4  10.0.1.119  3.062 ms  2.736 ms  2.883 ms
-
-### pve2 - 2026-11-23 01:14:50
---- interfaces (ip -br a)
-lo               UNKNOWN        127.0.0.1/8 
-vmbr0            UP             192.168.30.33/24 
---- rutas (ip r)
-default via 192.168.30.1 dev vmbr0 proto kernel onlink 
-192.168.30.0/24 dev vmbr0 proto kernel scope link src 192.168.30.33 
---- DNS
-search grupo3.local
-nameserver 192.168.30.1
---- ping 192.168.30.1: 2 packets transmitted, 2 received, 0% packet loss, time 1059ms
---- ping 192.168.30.20: 2 packets transmitted, 2 received, 0% packet loss, time 1007ms
---- ping 192.168.30.21: 2 packets transmitted, 0 received, 100% packet loss, time 1019ms
---- ping 1.1.1.1: 2 packets transmitted, 2 received, 0% packet loss, time 1014ms
---- traceroute -n -m 4 1.1.1.1
-traceroute to 1.1.1.1 (1.1.1.1), 4 hops max, 60 byte packets
- 1  192.168.30.1  0.798 ms  0.667 ms  0.760 ms
- 2  10.0.2.2  1.314 ms  1.471 ms  1.716 ms
- 3  * * *
- 4  10.0.1.119  2.503 ms  2.732 ms  3.259 ms
-
-### pve3 - 2026-11-23 01:14:58
---- interfaces (ip -br a)
-lo               UNKNOWN        127.0.0.1/8 
-vmbr0            UP             192.168.30.34/24 
---- rutas (ip r)
-default via 192.168.30.1 dev vmbr0 proto kernel onlink 
-192.168.30.0/24 dev vmbr0 proto kernel scope link src 192.168.30.34 
---- DNS
-search grupo3.local
-nameserver 192.168.30.1
---- ping 192.168.30.1: 2 packets transmitted, 2 received, 0% packet loss, time 1093ms
---- ping 192.168.30.20: 2 packets transmitted, 2 received, 0% packet loss, time 1003ms
---- ping 192.168.30.21: 2 packets transmitted, 0 received, +2 errors, 100% packet loss, time 1015ms
---- ping 1.1.1.1: 2 packets transmitted, 2 received, 0% packet loss, time 1001ms
---- traceroute -n -m 4 1.1.1.1
-traceroute to 1.1.1.1 (1.1.1.1), 4 hops max, 60 byte packets
- 1  192.168.30.1  0.258 ms  0.200 ms  0.175 ms
- 2  10.0.2.2  0.409 ms  0.468 ms  0.442 ms
- 3  * * *
- 4  10.0.1.119  2.086 ms  2.059 ms  2.142 ms
-
-### serveis - 2026-11-23 01:15:06
---- interfaces (ip -br a)
-lo               UNKNOWN        127.0.0.1/8 
-eth0             UP             192.168.30.22/24 
---- rutas (ip r)
-default via 192.168.30.1 dev eth0 proto static 
-192.168.30.0/24 dev eth0 proto kernel scope link src 192.168.30.22 
---- DNS
-nameserver 127.0.0.53
-search alexsoler.lan
---- ping 192.168.30.1: 2 packets transmitted, 2 received, 0% packet loss, time 1015ms
---- ping 192.168.30.20: 2 packets transmitted, 2 received, 0% packet loss, time 1011ms
---- ping 192.168.30.21: 2 packets transmitted, 0 received, 100% packet loss, time 1017ms
---- ping 1.1.1.1: 2 packets transmitted, 2 received, 0% packet loss, time 1003ms
---- traceroute -n -m 4 1.1.1.1
-traceroute to 1.1.1.1 (1.1.1.1), 4 hops max, 60 byte packets
- 1  192.168.30.1  0.516 ms  0.295 ms  0.272 ms
- 2  10.0.2.2  0.517 ms  0.430 ms  0.714 ms
- 3  * * *
- 4  10.0.1.119  1.665 ms  1.333 ms  1.683 ms
-
-### dades - 2026-11-23 01:15:14
---- interfaces (ip -br a)
-lo               UNKNOWN        127.0.0.1/8 
-eth0             UP             192.168.30.23/24 
---- rutas (ip r)
-default via 192.168.30.1 dev eth0 proto static 
-192.168.30.0/24 dev eth0 proto kernel scope link src 192.168.30.23 
---- DNS
-nameserver 127.0.0.53
-search alexsoler.lan
---- ping 192.168.30.1: 2 packets transmitted, 2 received, 0% packet loss, time 1017ms
---- ping 192.168.30.20: 2 packets transmitted, 2 received, 0% packet loss, time 1020ms
---- ping 192.168.30.21: 2 packets transmitted, 0 received, 100% packet loss, time 1008ms
---- ping 1.1.1.1: 2 packets transmitted, 2 received, 0% packet loss, time 1008ms
---- traceroute -n -m 4 1.1.1.1
-traceroute to 1.1.1.1 (1.1.1.1), 4 hops max, 60 byte packets
- 1  192.168.30.1  0.457 ms  0.336 ms  0.247 ms
- 2  10.0.2.2  0.400 ms  0.330 ms  0.439 ms
- 3  * * *
- 4  10.0.1.119  1.212 ms  1.753 ms  1.651 ms
-
-### truenas-alex - 2026-11-23 01:15:22
---- interfaces (ip -br a)
-lo               UNKNOWN        127.0.0.1/8 
-enp0s3           UP             192.168.30.20/24 
---- rutas (ip r)
-default via 192.168.30.1 dev enp0s3 proto static 
-192.168.30.0/24 dev enp0s3 proto kernel scope link src 192.168.30.20 
---- DNS
-nameserver 192.168.30.1
-nameserver 1.1.1.1
---- ping 192.168.30.1: 2 packets transmitted, 2 received, 0% packet loss, time 1049ms
---- ping 192.168.30.20: 2 packets transmitted, 2 received, 0% packet loss, time 1038ms
---- ping 192.168.30.21: 2 packets transmitted, 0 received, 100% packet loss, time 1041ms
---- ping 1.1.1.1: 2 packets transmitted, 2 received, 0% packet loss, time 1002ms
---- traceroute -n -m 4 1.1.1.1
-traceroute to 1.1.1.1 (1.1.1.1), 4 hops max, 60 byte packets
- 1  192.168.30.1  1.505 ms  1.557 ms  1.329 ms
- 2  10.0.2.2  2.672 ms  2.385 ms  2.043 ms
- 3  * * *
- 4  10.0.1.119  4.247 ms  4.159 ms  3.629 ms
-
-### contenedor web-pruebas (CT 130, en pve2)
-lo               UNKNOWN        127.0.0.1/8 
-eth0@if6         UP             192.168.30.30/24 
-default via 192.168.30.1 dev eth0 proto kernel onlink 
-192.168.30.0/24 dev eth0 proto kernel scope link src 192.168.30.30 
-2 packets transmitted, 2 received, 0% packet loss, time 1087ms
-
-### router Debian nftables (192.168.30.3)
-lo               UNKNOWN        127.0.0.1/8 
-enp0s3           UP             10.0.2.15/24 
-enp0s8           UP             192.168.30.3/24 
-default via 10.0.2.2 dev enp0s3 proto dhcp src 10.0.2.15 metric 1002 
-10.0.2.0/24 dev enp0s3 proto dhcp scope link src 10.0.2.15 metric 1002 
-192.168.30.0/24 dev enp0s8 proto kernel scope link src 192.168.30.3 
-1
-2 packets transmitted, 2 received, 0% packet loss, time 1017ms
-2 packets transmitted, 2 received, 0% packet loss, time 1004ms
-
-### MikroTik (192.168.30.1)
+### MikroTik (192.168.36.1) - 2026-11-23 11:46:27
 Flags: D - DYNAMIC
 Columns: ADDRESS, NETWORK, INTERFACE, VRF
 #   ADDRESS          NETWORK       INTERFACE  VRF 
-0   192.168.30.1/24  192.168.30.0  ether2     main
-1 D 10.0.2.15/24     10.0.2.0      ether1     main
+0 D 10.0.2.15/24     10.0.2.0      ether1     main
+;;; LAN individual
+1   192.168.36.1/24  192.168.36.0  ether2     main
 
 Flags: D - DYNAMIC; A - ACTIVE; c - CONNECT, d - DHCP
 Columns: DST-ADDRESS, GATEWAY, ROUTING-TABLE, DISTANCE
     DST-ADDRESS      GATEWAY   ROUTING-TABLE  DISTANCE
 DAd 0.0.0.0/0        10.0.2.2  main                  1
 DAc 10.0.2.0/24      ether1    main                  0
-DAc 192.168.30.0/24  ether2    main                  0
-
-                      servers: 1.1.1.1 
-                               8.8.8.8 
-              dynamic-servers: 10.0.2.3
-               use-doh-server:         
-              verify-doh-cert: no      
-   doh-max-server-connections: 5       
-   doh-max-concurrent-queries: 50      
-                  doh-timeout: 5s      
-        allow-remote-requests: yes     
-          max-udp-packet-size: 4096    
-         query-server-timeout: 2s      
-          query-total-timeout: 10s     
-       max-concurrent-queries: 100     
-  max-concurrent-tcp-sessions: 20      
-                   cache-size: 2048KiB 
-                cache-max-ttl: 1w      
-      address-list-extra-time: 0s      
-                          vrf: main    
-           mdns-repeat-ifaces:         
-                   cache-used: 49KiB   
+DAc 192.168.36.0/24  ether2    main                  0
 
   SEQ HOST                                     SIZE TTL TIME       STATUS      
-    0 1.1.1.1                                    56 254 10ms714us 
-    1 1.1.1.1                                    56 254 11ms408us 
-    sent=2 received=2 packet-loss=0% min-rtt=10ms714us avg-rtt=11ms61us 
-   max-rtt=11ms408us 
+    0 192.168.36.21                              56 128 740us     
+    1 192.168.36.21                              56 128 830us     
+    sent=2 received=2 packet-loss=0% min-rtt=740us avg-rtt=785us 
+   max-rtt=830us 
+
+  SEQ HOST                                     SIZE TTL TIME       STATUS      
+    0 192.168.36.20                              56  64 729us     
+    1 192.168.36.20                              56  64 682us     
+    sent=2 received=2 packet-loss=0% min-rtt=682us avg-rtt=705us 
+   max-rtt=729us 
 
 Columns: ADDRESS, LOSS, SENT, LAST, AVG, BEST, WORST, STD-DEV
-#  ADDRESS      LOSS  SENT  LAST   AVG  BEST  WORST  STD-DEV
-0  10.0.2.2     0%       1  0.5ms  0.5  0.5   0.5          0
-1  192.168.1.1  0%       1  1.1ms  1.1  1.1   1.1          0
-2  10.0.1.119   0%       1  1.4ms  1.4  1.4   1.4          0
+#  ADDRESS       LOSS  SENT  LAST   AVG  BEST  WORST  STD-DEV
+0  10.0.2.2      0%       1  0.4ms  0.4  0.4   0.4          0
+1  172.16.222.1  0%       1  0.9ms  0.9  0.9   0.9          0
+2  172.18.22.1   0%       1  1.1ms  1.1  1.1   1.1          0
+3                0%       1  0ms                             
 
-### DC01-ALEX - 2026-11-23 01:36:35
+Columns: ADDRESS, LOSS, SENT, LAST, AVG, BEST, WORST, STD-DEV
+#  ADDRESS       LOSS  SENT  LAST     AVG  BEST  WORST  STD-DEV
+0  10.0.2.2      0%       1  0.4ms    0.4  0.4   0.4          0
+1  172.16.222.1  0%       1  0.9ms    0.9  0.9   0.9          0
+2  172.18.22.1   0%       1  1.1ms    1.1  1.1   1.1          0
+3                100%     1  timeout                           
+
+
+### OPNsense (192.168.36.2) - 2026-11-23 11:50:29
 --- interfaces
-LAN: IP 192.168.30.21/24  puerta 192.168.30.1  DNS 127.0.0.1,192.168.30.1  DHCP Disabled
---- rutas IPv4 (route print -4)
-0.0.0.0          0.0.0.0     192.168.30.1    192.168.30.21    281
-192.168.30.0    255.255.255.0      En vínculo     192.168.30.21    281
-192.168.30.21  255.255.255.255      En vínculo     192.168.30.21    281
-192.168.30.255  255.255.255.255      En vínculo     192.168.30.21    281
-224.0.0.0        240.0.0.0      En vínculo         127.0.0.1    331
-224.0.0.0        240.0.0.0      En vínculo     192.168.30.21    281
-255.255.255.255  255.255.255.255      En vínculo     192.168.30.21    281
-0.0.0.0          0.0.0.0     192.168.30.1  Predeterminada
---- ping 192.168.30.1 : 2/2 respuestas
---- ping 192.168.30.20 : 2/2 respuestas
---- ping 192.168.30.21 : 2/2 respuestas
---- ping 1.1.1.1 : 2/2 respuestas
---- tracert -d -h 4 1.1.1.1
-1    <1 ms    <1 ms    <1 ms  192.168.30.1
-2    <1 ms    <1 ms    <1 ms  10.0.2.2
-3     *        *        *     Tiempo de espera agotado para esta solicitud.
-4     1 ms     1 ms    <1 ms  10.0.1.119
---- resolución del dominio
-alexsoler.lan -> 192.168.30.21
+	inet 10.0.2.15 netmask 0xffffff00 broadcast 10.0.2.255
+	inet 192.168.36.2 netmask 0xffffff00 broadcast 192.168.36.255
+--- rutas
+default            10.0.2.2           UGS             em0
+192.168.36.0/24    link#2             U               em1
+192.168.36.2       link#3             UHS             lo0
+--- ping 192.168.36.1: 2 packets transmitted, 2 packets received, 0.0% packet loss
+--- ping 192.168.36.20: 2 packets transmitted, 2 packets received, 0.0% packet loss
+--- ping 192.168.36.21: 2 packets transmitted, 2 packets received, 0.0% packet loss
+--- Internet por HTTP: OK
 
-### pc-informatica - 2026-11-23 02:07:56
+### debian-nft-AlexSoler - 2026-11-23 11:45:29
 --- interfaces (ip -br a)
 lo               UNKNOWN        127.0.0.1/8 
-enp0s3           UP             192.168.30.150/24 
+enp0s3           UP             10.0.2.15/24 
+enp0s8           UP             192.168.36.3/24 
 --- rutas (ip r)
-default via 192.168.30.1 dev enp0s3 proto dhcp src 192.168.30.150 metric 100 
-192.168.30.0/24 dev enp0s3 proto kernel scope link src 192.168.30.150 metric 100 
+default via 10.0.2.2 dev enp0s3 proto dhcp src 10.0.2.15 metric 1002 
+10.0.2.0/24 dev enp0s3 proto dhcp scope link src 10.0.2.15 metric 1002 
+192.168.36.0/24 dev enp0s8 proto kernel scope link src 192.168.36.3 
+--- DNS
+nameserver 10.0.2.3
+--- ping 192.168.36.1: 2 packets transmitted, 2 received, 0% packet loss, time 1013ms
+--- ping 192.168.36.20: 2 packets transmitted, 2 received, 0% packet loss, time 1019ms
+--- ping 192.168.36.21: 2 packets transmitted, 2 received, 0% packet loss, time 1019ms
+--- nombres: dc01-alex ->  · truenas ->  · deb.debian.org -> 151.101.194.132
+--- Internet por HTTP (el ICMP hacia fuera lo corta la red del instituto): wget OK, 138611 bytes en 0,90 s
+--- traceroute -n -m 4 1.1.1.1
+ 1  10.0.2.2  0.324 ms  0.296 ms  0.285 ms
+ 2  172.16.222.1  0.687 ms  0.675 ms  0.662 ms
+ 3  172.18.22.1  0.652 ms  0.642 ms  0.835 ms
+ 4  * * *
+
+### truenas-alex - 2026-11-23 11:45:25
+--- interfaces (ip -br a)
+lo               UNKNOWN        127.0.0.1/8 
+enp0s3           UP             192.168.36.20/24 
+--- rutas (ip r)
+default via 192.168.36.1 dev enp0s3 proto static 
+192.168.36.0/24 dev enp0s3 proto kernel scope link src 192.168.36.20 
+--- DNS
+domain alexsoler.lan
+nameserver 192.168.36.21
+nameserver 192.168.36.1
+nameserver 1.1.1.1
+--- ping 192.168.36.1: 2 packets transmitted, 2 received, 0% packet loss, time 1003ms
+--- ping 192.168.36.20: 2 packets transmitted, 2 received, 0% packet loss, time 1020ms
+--- ping 192.168.36.21: 2 packets transmitted, 2 received, 0% packet loss, time 1021ms
+--- nombres: dc01-alex -> 192.168.36.21 · truenas -> 192.168.36.20 · deb.debian.org -> 151.101.66.132
+--- Internet por HTTP (el ICMP hacia fuera lo corta la red del instituto): 200, 138611 bytes en 0.892787 s
+--- traceroute -n -m 4 1.1.1.1
+ 1  192.168.36.1  0.201 ms  0.227 ms  0.183 ms
+ 2  10.0.2.2  0.559 ms  0.525 ms  0.672 ms
+ 3  * * *
+ 4  172.18.22.1  0.899 ms  0.859 ms  0.847 ms
+
+### serveis - 2026-11-23 11:44:27
+--- interfaces (ip -br a)
+lo               UNKNOWN        127.0.0.1/8 
+enp0s3           UP             192.168.36.22/24 
+--- rutas (ip r)
+default via 192.168.36.1 dev enp0s3 onlink 
+192.168.36.0/24 dev enp0s3 proto kernel scope link src 192.168.36.22 
 --- DNS
 search alexsoler.lan
-nameserver 192.168.30.21
-nameserver 192.168.30.1
---- ping 192.168.30.1: 2 packets transmitted, 2 received, 0% packet loss, time 1012ms
---- ping 192.168.30.20: 2 packets transmitted, 2 received, 0% packet loss, time 1022ms
---- ping 192.168.30.21: 2 packets transmitted, 2 received, 0% packet loss, time 1022ms
---- ping 1.1.1.1: 2 packets transmitted, 2 received, 0% packet loss, time 1002ms
+nameserver 192.168.36.21
+nameserver 192.168.36.1
+--- ping 192.168.36.1: 2 packets transmitted, 2 received, 0% packet loss, time 1018ms
+--- ping 192.168.36.20: 2 packets transmitted, 2 received, 0% packet loss, time 1021ms
+--- ping 192.168.36.21: 2 packets transmitted, 2 received, 0% packet loss, time 1021ms
+--- nombres: dc01-alex -> 192.168.36.21 · truenas -> 192.168.36.20 · deb.debian.org -> 151.101.134.132
+--- Internet por HTTP (el ICMP hacia fuera lo corta la red del instituto): 200, 138611 bytes en 1.729063 s
 --- traceroute -n -m 4 1.1.1.1
-traceroute to 1.1.1.1 (1.1.1.1), 4 hops max, 60 byte packets
- 1  192.168.30.1  0.262 ms  0.242 ms  0.231 ms
- 2  10.0.2.2  0.356 ms  0.345 ms  0.338 ms
+ 1  192.168.36.1  0.630 ms  0.610 ms  0.603 ms
+ 2  10.0.2.2  0.916 ms  0.908 ms  0.900 ms
  3  * * *
- 4  10.0.1.119  1.535 ms  2.065 ms  1.504 ms
+ 4  172.18.22.1  1.367 ms  1.359 ms  1.351 ms
 
-### PC-ADMIN01 - 2026-11-23 02:32:34
+### dades - 2026-11-23 11:44:33
+--- interfaces (ip -br a)
+lo               UNKNOWN        127.0.0.1/8 
+enp0s3           UP             192.168.36.23/24 
+--- rutas (ip r)
+default via 192.168.36.1 dev enp0s3 onlink 
+192.168.36.0/24 dev enp0s3 proto kernel scope link src 192.168.36.23 
+--- DNS
+search alexsoler.lan
+nameserver 192.168.36.21
+nameserver 192.168.36.1
+--- ping 192.168.36.1: 2 packets transmitted, 2 received, 0% packet loss, time 1022ms
+--- ping 192.168.36.20: 2 packets transmitted, 2 received, 0% packet loss, time 1019ms
+--- ping 192.168.36.21: 2 packets transmitted, 2 received, 0% packet loss, time 1021ms
+--- nombres: dc01-alex -> 192.168.36.21 · truenas -> 192.168.36.20 · deb.debian.org -> 151.101.134.132
+--- Internet por HTTP (el ICMP hacia fuera lo corta la red del instituto): 200, 138611 bytes en 2.635160 s
+--- traceroute -n -m 4 1.1.1.1
+ 1  192.168.36.1  0.482 ms  0.313 ms  0.502 ms
+ 2  10.0.2.2  0.761 ms  0.753 ms  0.744 ms
+ 3  * * *
+ 4  172.18.22.1  1.141 ms  1.132 ms  1.106 ms
+
+### pve1 - 2026-11-23 11:48:11
+--- interfaces (ip -br a)
+lo               UNKNOWN        127.0.0.1/8 
+vmbr0            UP             192.168.36.32/24 
+--- rutas (ip r)
+default via 192.168.36.1 dev vmbr0 proto kernel onlink 
+192.168.36.0/24 dev vmbr0 proto kernel scope link src 192.168.36.32 
+--- DNS
+search alexsoler.lan
+nameserver 192.168.36.21
+nameserver 192.168.36.1
+--- ping 192.168.36.1: 2 packets transmitted, 2 received, 0% packet loss, time 1039ms
+--- ping 192.168.36.20: 2 packets transmitted, 2 received, 0% packet loss, time 1020ms
+--- ping 192.168.36.21: 2 packets transmitted, 2 received, 0% packet loss, time 1021ms
+--- nombres: dc01-alex -> 192.168.36.21 · truenas -> 192.168.36.20 · deb.debian.org -> 151.101.66.132
+--- Internet por HTTP (el ICMP hacia fuera lo corta la red del instituto): 200, 138611 bytes en 0.101047 s
+--- traceroute -n -m 4 1.1.1.1
+ 1  192.168.36.1  0.234 ms  0.196 ms  0.171 ms
+ 2  10.0.2.2  0.343 ms  0.318 ms  0.328 ms
+ 3  * * *
+ 4  172.18.22.1  0.812 ms  0.658 ms  0.636 ms
+
+### pve2 - 2026-11-23 11:48:14
+--- interfaces (ip -br a)
+lo               UNKNOWN        127.0.0.1/8 
+vmbr0            UP             192.168.36.33/24 
+--- rutas (ip r)
+default via 192.168.36.1 dev vmbr0 proto kernel onlink 
+192.168.36.0/24 dev vmbr0 proto kernel scope link src 192.168.36.33 
+--- DNS
+search alexsoler.lan
+nameserver 192.168.36.21
+nameserver 192.168.36.1
+--- ping 192.168.36.1: 2 packets transmitted, 2 received, 0% packet loss, time 1048ms
+--- ping 192.168.36.20: 2 packets transmitted, 2 received, 0% packet loss, time 1021ms
+--- ping 192.168.36.21: 2 packets transmitted, 2 received, 0% packet loss, time 1021ms
+--- nombres: dc01-alex -> 192.168.36.21 · truenas -> 192.168.36.20 · deb.debian.org -> 151.101.194.132
+--- Internet por HTTP (el ICMP hacia fuera lo corta la red del instituto): 200, 138611 bytes en 0.296278 s
+--- traceroute -n -m 4 1.1.1.1
+ 1  192.168.36.1  0.445 ms  0.423 ms  0.376 ms
+ 2  10.0.2.2  0.535 ms  0.497 ms  0.772 ms
+ 3  * * *
+ 4  172.18.22.1  1.090 ms  0.980 ms  0.967 ms
+
+### pve3 - 2026-11-23 11:48:19
+--- interfaces (ip -br a)
+lo               UNKNOWN        127.0.0.1/8 
+vmbr0            UP             192.168.36.34/24 
+--- rutas (ip r)
+default via 192.168.36.1 dev vmbr0 proto kernel onlink 
+192.168.36.0/24 dev vmbr0 proto kernel scope link src 192.168.36.34 
+--- DNS
+search alexsoler.lan
+nameserver 192.168.36.21
+nameserver 192.168.36.1
+--- ping 192.168.36.1: 2 packets transmitted, 2 received, 0% packet loss, time 1041ms
+--- ping 192.168.36.20: 2 packets transmitted, 2 received, 0% packet loss, time 1047ms
+--- ping 192.168.36.21: 2 packets transmitted, 2 received, 0% packet loss, time 1062ms
+--- nombres: dc01-alex -> 192.168.36.21 · truenas -> 192.168.36.20 · deb.debian.org -> 151.101.66.132
+--- Internet por HTTP (el ICMP hacia fuera lo corta la red del instituto): 200, 138611 bytes en 0.241832 s
+--- traceroute -n -m 4 1.1.1.1
+ 1  192.168.36.1  0.345 ms  0.323 ms  0.458 ms
+ 2  10.0.2.2  0.611 ms  0.663 ms  0.653 ms
+ 3  * * *
+ 4  172.18.22.1  0.855 ms  0.904 ms  0.763 ms
+
+### pc-informatica - 2026-11-23 11:45:38
+--- interfaces (ip -br a)
+lo               UNKNOWN        127.0.0.1/8 
+enp0s3           UP             192.168.36.150/24 
+--- rutas (ip r)
+default via 192.168.36.1 dev enp0s3 proto dhcp src 192.168.36.150 metric 100 
+192.168.36.0/24 dev enp0s3 proto kernel scope link src 192.168.36.150 metric 100 
+--- DNS
+search alexsoler.lan
+nameserver 192.168.36.21
+nameserver 192.168.36.1
+--- ping 192.168.36.1: 2 packets transmitted, 2 received, 0% packet loss, time 1017ms
+--- ping 192.168.36.20: 2 packets transmitted, 2 received, 0% packet loss, time 1020ms
+--- ping 192.168.36.21: 2 packets transmitted, 2 received, 0% packet loss, time 1018ms
+--- nombres: dc01-alex -> 192.168.36.21 · truenas -> 192.168.36.20 · deb.debian.org -> 151.101.2.132
+--- Internet por HTTP (el ICMP hacia fuera lo corta la red del instituto): wget OK, 138611 bytes en 0,87 s
+--- traceroute -n -m 4 1.1.1.1
+ 1  192.168.36.1  0.504 ms  0.474 ms  0.457 ms
+ 2  10.0.2.2  0.901 ms  0.947 ms  0.870 ms
+ 3  * * *
+ 4  172.18.22.1  1.173 ms  1.156 ms  1.140 ms
+
+### DC01-ALEX - 2026-11-23 11:46:02
 --- interfaces
-Ethernet: IP 192.168.30.198/24  puerta 192.168.30.1  DNS 192.168.30.21,192.168.30.1  DHCP Enabled
+LAN: IP 192.168.36.21/24  puerta 192.168.36.1  DNS 127.0.0.1,192.168.36.1  DHCP Disabled
 --- rutas IPv4 (route print -4)
-0.0.0.0          0.0.0.0     192.168.30.1   192.168.30.198     25
-192.168.30.0    255.255.255.0      En vínculo    192.168.30.198    281
-192.168.30.198  255.255.255.255      En vínculo    192.168.30.198    281
-192.168.30.255  255.255.255.255      En vínculo    192.168.30.198    281
-224.0.0.0        240.0.0.0      En vínculo         127.0.0.1    331
-224.0.0.0        240.0.0.0      En vínculo    192.168.30.198    281
-255.255.255.255  255.255.255.255      En vínculo    192.168.30.198    281
---- ping 192.168.30.1 : 2/2 respuestas
---- ping 192.168.30.20 : 0/2 respuestas
---- ping 192.168.30.21 : 2/2 respuestas
---- ping 1.1.1.1 : 2/2 respuestas
+0.0.0.0          0.0.0.0     192.168.36.1    192.168.36.21    281
+192.168.36.0    255.255.255.0      En vínculo     192.168.36.21    281
+0.0.0.0          0.0.0.0     192.168.36.1  Predeterminada
+--- ping 192.168.36.1 : 2/2 respuestas
+--- ping 192.168.36.20 : 2/2 respuestas
+--- ping 192.168.36.21 : 2/2 respuestas
+--- nombres: dc01-alex -> 192.168.36.21 · truenas -> 192.168.36.20 · serveis -> 192.168.36.22 · deb.debian.org -> 199.232.34.132
+--- Internet por HTTP (el ICMP hacia fuera lo corta la red del instituto): 200, 138611 bytes en 0.94 s
 --- tracert -d -h 4 1.1.1.1
-1    <1 ms    <1 ms    <1 ms  192.168.30.1
+1    <1 ms    <1 ms    <1 ms  192.168.36.1
 2    <1 ms    <1 ms    <1 ms  10.0.2.2
 3     *        *        *     Tiempo de espera agotado para esta solicitud.
-4     1 ms     1 ms    <1 ms  10.0.1.119
---- resolución del dominio
-alexsoler.lan -> 192.168.30.21
+4     1 ms    <1 ms    <1 ms  172.18.22.1
 
-(el NAS .20 estaba apagado en este bloque para dejar memoria al Windows 11; el resto responde)
+### PC-ADMIN01 - 2026-11-23 11:51:05
+--- interfaces
+Ethernet: IP 192.168.36.200/24  puerta 192.168.36.1  DNS 192.168.36.21,192.168.36.1  DHCP Enabled
+--- rutas IPv4 (route print -4)
+0.0.0.0          0.0.0.0     192.168.36.1   192.168.36.200     25
+192.168.36.0    255.255.255.0      En vínculo    192.168.36.200    281
+--- ping 192.168.36.1 : 2/2 respuestas
+--- ping 192.168.36.20 : 2/2 respuestas
+--- ping 192.168.36.21 : 2/2 respuestas
+--- nombres: dc01-alex -> 192.168.36.21 · truenas -> 192.168.36.20 · serveis -> 192.168.36.22 · deb.debian.org -> 199.232.34.132
+--- Internet por HTTP (el ICMP hacia fuera lo corta la red del instituto): 200, 138611 bytes en 1.33 s
+--- tracert -d -h 4 1.1.1.1
+1    <1 ms    <1 ms    <1 ms  192.168.36.1
+2    <1 ms    <1 ms    <1 ms  10.0.2.2
+3     *        *        *     Tiempo de espera agotado para esta solicitud.
+4    <1 ms    <1 ms    <1 ms  172.18.22.1
 

@@ -8,15 +8,15 @@ Import-Module ActiveDirectory
 $base = 'DC=alexsoler,DC=lan'
 
 # DNS: el propio DC primero, reenviadores hacia fuera
-Set-DnsClientServerAddress -InterfaceAlias LAN -ServerAddresses 127.0.0.1, 192.168.30.1
-Set-DnsServerForwarder -IPAddress 192.168.30.1, 1.1.1.1
-if (-not (Get-DnsServerZone -Name '30.168.192.in-addr.arpa' -ErrorAction SilentlyContinue)) {
-    Add-DnsServerPrimaryZone -NetworkId '192.168.30.0/24' -ReplicationScope Forest
+Set-DnsClientServerAddress -InterfaceAlias LAN -ServerAddresses 127.0.0.1, 192.168.36.1
+Set-DnsServerForwarder -IPAddress 192.168.36.1, 1.1.1.1
+if (-not (Get-DnsServerZone -Name '36.168.192.in-addr.arpa' -ErrorAction SilentlyContinue)) {
+    Add-DnsServerPrimaryZone -NetworkId '192.168.36.0/24' -ReplicationScope Forest
 }
 # registros de los equipos con IP fija
-$fijos = @{ 'mikrotik'='192.168.30.1'; 'opnsense'='192.168.30.2'; 'debian-nft'='192.168.30.3';
-            'truenas'='192.168.30.20'; 'serveis'='192.168.30.22'; 'dades'='192.168.30.23';
-            'pve1'='192.168.30.32'; 'pve2'='192.168.30.33'; 'pve3'='192.168.30.34' }
+$fijos = @{ 'mikrotik'='192.168.36.1'; 'opnsense'='192.168.36.2'; 'debian-nft'='192.168.36.3';
+            'truenas'='192.168.36.20'; 'serveis'='192.168.36.22'; 'dades'='192.168.36.23';
+            'pve1'='192.168.36.32'; 'pve2'='192.168.36.33'; 'pve3'='192.168.36.34' }
 foreach ($h in $fijos.Keys) {
     if (-not (Get-DnsServerResourceRecord -ZoneName alexsoler.lan -Name $h -ErrorAction SilentlyContinue)) {
         Add-DnsServerResourceRecordA -ZoneName alexsoler.lan -Name $h -IPv4Address $fijos[$h] -CreatePtr
