@@ -27,7 +27,7 @@ Qué cambia respecto al del grupo y cómo leerlo:
 
 | Equipo | Interfaz | IP / máscara | Puerta | DNS | Asignación |
 |---|---|---|---|---|---|
-| MikroTik | ether1 WAN | 10.0.2.15/24 | 10.0.2.2 | 1.1.1.1, 8.8.8.8 | DHCP (NAT) |
+| MikroTik | ether1 WAN | 10.0.2.15/24 | 10.0.2.2 | 1.1.1.1, 8.8.8.8 y 10.0.2.3 (este por DHCP) | DHCP (NAT) |
 | | ether2 LAN | **192.168.36.1/24** | — | — | Estática |
 | OPNsense | em0 WAN / em1 LAN | 10.0.2.15/24 / **192.168.36.2/24** | 10.0.2.2 | — | DHCP / estática |
 | Debian nftables | enp0s3 WAN / enp0s8 LAN | 10.0.2.15/24 / **192.168.36.3/24** | 10.0.2.2 | — | DHCP / estática |
