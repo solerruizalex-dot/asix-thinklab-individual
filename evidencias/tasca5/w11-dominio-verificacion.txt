@@ -1,0 +1,25 @@
+### Desde el cliente PC-ADMIN01, sesión del usuario del dominio
+usuario: alexsoler\administracion
+grupos del dominio:
+  ALEXSOLER\G_Administracion
+equipo: PC-ADMIN01  dominio: alexsoler.lan  parte del dominio: True
+sistema: Microsoft Windows 11 Pro 10.0.22631 build 22631
+servidor de inicio de sesion: 
+IPv4: 192.168.30.198/24  gw: 192.168.30.1  DNS: 192.168.30.21, 192.168.30.1
+DHCP: Enabled
+### nltest /dsgetdc:alexsoler.lan
+           DC: \\DC01-ALEX.alexsoler.lan
+      Dirección: \\192.168.30.21
+     GUID del DOM: b5a21b9d-176d-46b0-ae4c-ee5f7fa7523e
+     Nombre del DOM: alexsoler.lan
+  Nombre del bosque: alexsoler.lan
+ Nombre de sitio DC: Default-First-Site-Name
+Nuestro nombre de sitio: Default-First-Site-Name
+        Marcas: PDC GC DS LDAP KDC TIMESERV GTIMESERV WRITABLE DNS_DC DNS_DOMAIN DNS_FOREST CLOSE_SITE FULL_SECRET WS DS_8 DS_9 DS_10 LISTA DE CLAVES 0x40000
+El comando se completó correctamente
+### Desde el DC: equipos del dominio
+Name           OperatingSystem                         IPv4Address    DistinguishedName                                          
+----           ---------------                         -----------    -----------------                                          
+DC01-ALEX      Windows Server 2025 Standard Evaluation 192.168.30.21  CN=DC01-ALEX,OU=Domain Controllers,DC=alexsoler,DC=lan     
+PC-INFORMATICA pc-linux-gnu                                           CN=PC-INFORMATICA,OU=Equipos,OU=Empresa,DC=alexsoler,DC=lan
+PC-ADMIN01     Windows 11 Pro                          192.168.30.198 CN=PC-ADMIN01,OU=Equipos,OU=Empresa,DC=alexsoler,DC=lan    

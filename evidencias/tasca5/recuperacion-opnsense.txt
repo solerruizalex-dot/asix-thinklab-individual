@@ -1,0 +1,14 @@
+### 22:21:29 T0 - provoco el fallo: se borra la regla que deja salir a la LAN
+regla 'Default allow LAN to any rule' borrada
+0
+### 22:21:29 prueba desde la LAN (gw .2)
+HTTP 000
+SIN SALIDA A INTERNET
+### 22:21:36 restauro /conf/config.xml desde la ultima copia del NAS
+copia usada: /mnt/copias/configs/opnsense/2026-11-22_2218/
+OK
+
+
+1
+prueba final HTTP 200
+### 22:21:37 T1 - servicio recuperado

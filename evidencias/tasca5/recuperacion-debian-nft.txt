@@ -1,0 +1,21 @@
+### 22:21:01 T0 - provoco el fallo: borro la linea masquerade de /etc/nftables.conf y reinicio nftables
+table ip nat {
+	chain postrouting {
+		type nat hook postrouting priority srcnat; policy accept;
+	}
+}
+
+### 22:21:01 compruebo desde un cliente de la LAN (truenas, gw .3)
+HTTP 000
+SIN SALIDA A INTERNET
+
+### 22:21:08 diagnostico: la tabla nat esta vacia -> falta el masquerade. Restauro desde la ultima copia del NAS
+copia usada: /mnt/copias/configs/debian-nft/2026-11-22_2218/
+table ip nat {
+	chain postrouting {
+		type nat hook postrouting priority srcnat; policy accept;
+		oifname "enp0s3" masquerade
+	}
+}
+prueba final HTTP 200
+### 22:21:09 T1 - servicio recuperado

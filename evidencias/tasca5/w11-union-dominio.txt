@@ -1,0 +1,12 @@
+IPv4Address        : {192.168.30.198}
+IPv4DefaultGateway : {MSFT_NetRoute (InstanceID = ":8:8:8:9:55B55;C?8;@B8?:8;55;")}
+DNSServer          : {MSFT_DNSClientServerAddress (Name = "8", CreationClassName = "", SystemCreationClassName = "", 
+                     SystemName = "23"), MSFT_DNSClientServerAddress (Name = "8", CreationClassName = "", 
+                     SystemCreationClassName = "", SystemName = "2")}
+Name          IPAddress    
+----          ---------    
+alexsoler.lan 192.168.30.21
+Name                               NameTarget              Port
+----                               ----------              ----
+_ldap._tcp.dc._msdcs.alexsoler.lan dc01-alex.alexsoler.lan  389
+dc01-alex.alexsoler.lan                                        

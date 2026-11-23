@@ -1,0 +1,19 @@
+VMs encendidas: ws-dc-AlexSoler nftables-AlexSoler OPNsense-AlexSoler Mikrotik-AlexSoler truenas-AlexSoler  (el DC está haciendo su copia)
+Prueba: TrueNAS descarga 100 MB cambiando su puerta de enlace a cada router
+MikroTik: 104857600 bytes a 22686835 B/s en 4.621958 s
+MÁXIMO     3.3  24.0   0.1  83.9   13325   2592   438     32.1     30.1   33.9   172.77  3.14
+
+OPNsense: 104857600 bytes a 38536746 B/s en 2.720977 s
+MÁXIMO     3.3  27.0   0.1  82.8   13313   2608   438     36.3     23.9   32.3   177.97  3.43
+
+Debian-nftables: 104857600 bytes a 36249955 B/s en 2.892627 s
+MÁXIMO     3.0  21.8   0.1  85.1   13310   2634   438     36.8     47.8   37.2   178.32  3.43
+
+--- CPU de cada router en reposo y RAM usada
+              free-memory: 46.2MiB                    
+             total-memory: 256.0MiB                   
+                 cpu-load: 0%                         
+CPU:  2.0% user,  0.0% nice,  2.5% system,  0.3% interrupt, 95.2% idle
+Mem: 158M Active, 63M Inact, 335M Wired, 200M Buf, 1402M Free
+Mem:             967         300         636           1         167         666
+ 01:56:49 up 1 min,  3 users,  load average: 0,23, 0,14, 0,05

@@ -1,0 +1,22 @@
+### Actualización de OPNsense - 2026-11-23 01:51:26
+ANTES: OPNsense 26.7 (amd64) / 15.1-RELEASE-p1
+paquetes pendientes: 95
+OK
+
+
+DESPUES: OPNsense 26.7.9_3 (amd64) / 15.1-RELEASE-p6
+ 1:53AM  up 21 secs, 0 users, load averages: 0.06, 0.02, 0.00
+paquetes pendientes: 4
+Updating OPNsense repository catalogue...
+Fetching meta.conf: . done
+Fetching data: .......... done
+Processing entries: .......... done
+OPNsense repository update completed. 933 packages processed.
+All repositories are up to date.
+check=1
+--- comprobación tras actualizar
+block drop in log quick on em1 inet proto tcp from (em1:network) to any port = telnet label "b10c0b10-c0b1-4c0b-8c0b-10c0b10c0b10"
+block drop in log quick on em1 inet proto tcp from (em1:network) to any port = microsoft-ds label "b10c0b10-c0b1-4c0b-8c0b-10c0b10c0b10"
+HTTP 80 por OPNsense: 200
+TCP 445: bloqueado (bien)
+default via 192.168.30.1 dev enp0s3 

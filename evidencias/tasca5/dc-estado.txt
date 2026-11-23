@@ -1,0 +1,105 @@
+### Version
+WindowsProductName : Windows Server 2025 Standard Evaluation
+OsVersion          : 10.0.26100
+CsName             : DC01-ALEX
+CsDomain           : alexsoler.lan
+OsLanguage         : es-ES
+### Red (ipconfig /all)
+Configuración IP de Windows
+   Nombre de host. . . . . . . . . : DC01-ALEX
+   Sufijo DNS principal  . . . . . : alexsoler.lan
+   Tipo de nodo. . . . . . . . . . : híbrido
+   Enrutamiento IP habilitado. . . : no
+   Proxy WINS habilitado . . . . . : no
+   Lista de búsqueda de sufijos DNS: alexsoler.lan
+Adaptador de Ethernet LAN:
+   Sufijo DNS específico para la conexión. . : 
+   Descripción . . . . . . . . . . . . . . . : Intel(R) PRO/1000 MT Desktop Adapter
+   Dirección física. . . . . . . . . . . . . : 08-00-27-7B-4D-EF
+   DHCP habilitado . . . . . . . . . . . . . : no
+   Configuración automática habilitada . . . : sí
+   Vínculo: dirección IPv6 local. . . : fe80::2a54:106d:c9ab:6d2%6(Preferido) 
+   Dirección IPv4. . . . . . . . . . . . . . : 192.168.30.21(Preferido) 
+   Máscara de subred . . . . . . . . . . . . : 255.255.255.0
+   Puerta de enlace predeterminada . . . . . : 192.168.30.1
+   Servidores DNS. . . . . . . . . . . . . . : ::1
+                                       127.0.0.1
+                                       192.168.30.1
+   NetBIOS sobre TCP/IP. . . . . . . . . . . : habilitado
+### Dominio
+DNSRoot     : alexsoler.lan
+NetBIOSName : ALEXSOLER
+DomainMode  : Windows2016Domain
+PDCEmulator : DC01-ALEX.alexsoler.lan
+ForestMode   : Windows2016Forest
+SchemaMaster : DC01-ALEX.alexsoler.lan
+### Roles instalados
+Name                    DisplayName                             
+----                    -----------                             
+FileAndStorage-Services Servicios de archivos y almacenamiento  
+AD-Domain-Services      Servicios de dominio de Active Directory
+DNS                     Servidor DNS                            
+### DNS: reenviadores y registros A
+IPAddress : {192.168.30.1, 1.1.1.1}
+HostName       IP           
+--------       --           
+dades          192.168.30.23
+dc01-alex      192.168.30.21
+debian-nft     192.168.30.3 
+DomainDnsZones 192.168.30.21
+ForestDnsZones 192.168.30.21
+mikrotik       192.168.30.1 
+opnsense       192.168.30.2 
+pve1           192.168.30.32
+pve2           192.168.30.33
+pve3           192.168.30.34
+serveis        192.168.30.22
+truenas        192.168.30.20
+### Resolucion externa a traves del DC
+Name           IPAddress      
+----           ---------      
+www.debian.org 130.89.148.77  
+www.debian.org 140.211.166.200
+www.debian.org 128.31.0.62    
+### dcdiag /q
+         Existen eventos de advertencia o de error en las últimas 24 horas
+         después de compartir SYSVOL. Los problemas de replicación de SYSVOL
+         incorrecta pueden ocasionar problemas de la directiva de grupo. 
+         ......................... DC01-ALEX no superó la prueba DFSREvent
+         Evento de error. Id. de evento: 0xC0001B6F
+            Hora de creación: 11/22/2026   22:05:38
+            Cadena de eventos:
+            El servicio netprofm se cerró con el siguiente error: 
+         Evento de error. Id. de evento: 0xC0001B76
+            Hora de creación: 11/22/2026   22:07:45
+            Cadena de eventos:
+            El servicio Extensiones y notificaciones de impresora ha sido marcado como servicio interactivo. Sin embargo, el sistema está configurado para no permitir servicios interactivos. Este servicio puede tener un funcionamiento incorrecto.
+         Evento de error. Id. de evento: 0x00000704
+            Hora de creación: 11/22/2026   22:11:46
+            Cadena de eventos:
+            La actualización de arranque seguro no pudo actualizar DBX con el error El arranque seguro no está habilitado en esta máquina.. Para más información, consulta https://go.microsoft.com/fwlink/?linkid=2169931
+         Evento de error. Id. de evento: 0x00000704
+            Hora de creación: 11/22/2026   22:11:46
+            Cadena de eventos:
+            La actualización de arranque seguro no pudo actualizar SBAT con el error El arranque seguro no está habilitado en esta máquina.. Para más información, consulta https://go.microsoft.com/fwlink/?linkid=2169931
+         Evento de error. Id. de evento: 0x00000704
+            Hora de creación: 11/22/2026   22:21:35
+            Cadena de eventos:
+            La actualización de arranque seguro no pudo actualizar DBX con el error El arranque seguro no está habilitado en esta máquina.. Para más información, consulta https://go.microsoft.com/fwlink/?linkid=2169931
+         Evento de error. Id. de evento: 0x00000704
+            Hora de creación: 11/22/2026   22:21:35
+            Cadena de eventos:
+            La actualización de arranque seguro no pudo actualizar SBAT con el error El arranque seguro no está habilitado en esta máquina.. Para más información, consulta https://go.microsoft.com/fwlink/?linkid=2169931
+         Evento de error. Id. de evento: 0x0000168E
+            Hora de creación: 11/22/2026   22:24:44
+            Cadena de eventos:
+            Error en el registro dinámico del registro DNS 'alexsoler.lan. 600 IN A 192.168.30.21' en el siguiente servidor DNS:  
+         Evento de error. Id. de evento: 0x00000704
+            Hora de creación: 11/22/2026   22:29:07
+            Cadena de eventos:
+            La actualización de arranque seguro no pudo actualizar DBX con el error El arranque seguro no está habilitado en esta máquina.. Para más información, consulta https://go.microsoft.com/fwlink/?linkid=2169931
+         Evento de error. Id. de evento: 0x00000704
+            Hora de creación: 11/22/2026   22:29:07
+            Cadena de eventos:
+            La actualización de arranque seguro no pudo actualizar SBAT con el error El arranque seguro no está habilitado en esta máquina.. Para más información, consulta https://go.microsoft.com/fwlink/?linkid=2169931
+         ......................... DC01-ALEX no superó la prueba SystemLog

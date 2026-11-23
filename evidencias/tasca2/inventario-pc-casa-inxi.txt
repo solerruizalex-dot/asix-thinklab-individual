@@ -1,0 +1,114 @@
+System:
+  Kernel: 6.8.0-138-generic arch: x86_64 bits: 64 compiler: gcc v: 13.3.0
+  Desktop: Cinnamon v: 6.6.9 Distro: Linux Mint 22.3 Zena base: Ubuntu 24.04 noble
+Machine:
+  Type: Desktop System: Gigabyte product: H470M DS3H v: -CF serial: <superuser required>
+  Mobo: Gigabyte model: H470M DS3H v: x.x serial: <superuser required> UEFI: American Megatrends
+    v: F3 date: 05/27/2020
+CPU:
+  Info: 6-core model: Intel Core i5-10400F bits: 64 type: MT MCP arch: Comet Lake rev: 3 cache:
+    L1: 384 KiB L2: 1.5 MiB L3: 12 MiB
+  Speed (MHz): avg: 3269 high: 4106 min/max: 800/4300 cores: 1: 4100 2: 4098 3: 800 4: 4099
+    5: 4022 6: 4100 7: 4103 8: 4100 9: 800 10: 4106 11: 4100 12: 800 bogomips: 69597
+  Flags: avx avx2 ht lm nx pae sse sse2 sse3 sse4_1 sse4_2 ssse3 vmx
+Graphics:
+  Device-1: NVIDIA vendor: Micro-Star MSI driver: nvidia v: 595.99.02 bus-ID: 01:00.0
+  Display: x11 server: X.Org v: 21.1.11 with: Xwayland v: 23.2.6 driver: X: loaded: nvidia
+    unloaded: fbdev,modesetting,nouveau,vesa gpu: nv_platform,nvidia,nvidia-nvswitch
+    resolution: 1920x1080
+  API: EGL v: 1.5 drivers: nvidia,swrast platforms: active: gbm,x11,surfaceless,device
+    inactive: wayland,device-1
+  API: OpenGL v: 4.6.0 compat-v: 4.5 vendor: nvidia mesa v: 595.99.02 glx-v: 1.4
+    direct-render: yes renderer: NVIDIA GeForce RTX 5060/PCIe/SSE2
+  API: Vulkan v: 1.3.275 drivers: N/A surfaces: xcb,xlib devices: 2
+Audio:
+  Device-1: Intel Comet Lake PCH cAVS vendor: Gigabyte driver: snd_hda_intel v: kernel
+    bus-ID: 00:1f.3
+  Device-2: NVIDIA driver: snd_hda_intel v: kernel bus-ID: 01:00.1
+  Device-3: Sony PlayStation Link Adapter driver: cdc_acm,hid-generic,snd-usb-audio,usbhid
+    type: USB bus-ID: 1-9:4
+  API: ALSA v: k6.8.0-138-generic status: kernel-api
+  Server-1: PipeWire v: 1.0.5 status: active
+Network:
+  Device-1: Intel Ethernet I219-V vendor: Gigabyte driver: e1000e v: kernel port: N/A
+    bus-ID: 00:1f.6
+  IF: eno1 state: up speed: 1000 Mbps duplex: full mac: <filter>
+  IF-ID-1: docker0 state: down mac: <filter>
+Drives:
+  Local Storage: total: 894.26 GiB used: 145.41 GiB (16.3%)
+  ID-1: /dev/sda vendor: Kingston model: SA400S37480G size: 447.13 GiB
+  ID-2: /dev/sdb vendor: Kingston model: SA400S37480G size: 447.13 GiB type: USB
+Partition:
+  ID-1: / size: 57.36 GiB used: 24.47 GiB (42.7%) fs: ext4 dev: /dev/sdb2
+  ID-2: /boot/efi size: 508 MiB used: 16.1 MiB (3.2%) fs: vfat dev: /dev/sdb1
+  ID-3: /home size: 380.89 GiB used: 120.92 GiB (31.7%) fs: ext4 dev: /dev/sdb3
+Swap:
+  ID-1: swap-1 type: file size: 8 GiB used: 0 KiB (0.0%) file: /swapfile
+  ID-2: swap-2 type: zram size: 3.88 GiB used: 768 KiB (0.0%) dev: /dev/zram0
+Sensors:
+  System Temperatures: cpu: 31.0 C pch: 30.0 C mobo: 30.0 C gpu: nvidia temp: 44 C
+  Fan Speeds (rpm): N/A gpu: nvidia fan: 0%
+Info:
+  Memory: total: 16 GiB available: 15.53 GiB used: 12.14 GiB (78.1%)
+  Processes: 381 Uptime: 1h 14m Init: systemd target: graphical (5)
+  Packages: 2218 Compilers: gcc: 13.3.0 Client: shell wrapper v: 5.2.21-release inxi: 3.3.34
+
+/:  Bus 001.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/16p, 480M
+    |__ Port 001: Dev 002, If 0, Class=Human Interface Device, Driver=usbhid, 1.5M
+    |__ Port 001: Dev 002, If 1, Class=Human Interface Device, Driver=usbhid, 1.5M
+    |__ Port 007: Dev 003, If 0, Class=Human Interface Device, Driver=usbhid, 12M
+    |__ Port 007: Dev 003, If 1, Class=Human Interface Device, Driver=usbhid, 12M
+    |__ Port 007: Dev 003, If 2, Class=Human Interface Device, Driver=usbhid, 12M
+    |__ Port 009: Dev 004, If 0, Class=Human Interface Device, Driver=usbhid, 12M
+    |__ Port 009: Dev 004, If 1, Class=Audio, Driver=snd-usb-audio, 12M
+    |__ Port 009: Dev 004, If 2, Class=Audio, Driver=snd-usb-audio, 12M
+    |__ Port 009: Dev 004, If 3, Class=Audio, Driver=snd-usb-audio, 12M
+    |__ Port 009: Dev 004, If 4, Class=Communications, Driver=cdc_acm, 12M
+    |__ Port 009: Dev 004, If 5, Class=CDC Data, Driver=cdc_acm, 12M
+    |__ Port 013: Dev 005, If 0, Class=Human Interface Device, Driver=usbhid, 12M
+/:  Bus 002.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/8p, 10000M
+    |__ Port 005: Dev 002, If 0, Class=Mass Storage, Driver=uas, 5000M
+
+Arquitectura:                             x86_64
+modo(s) de operación de las CPUs:         32-bit, 64-bit
+Tamaños de las direcciones:               39 bits physical, 48 bits virtual
+Orden de los bytes:                       Little Endian
+CPU(s):                                   12
+Lista de la(s) CPU(s) en línea:           0-11
+ID de fabricante:                         GenuineIntel
+Nombre del modelo:                        Intel(R) Core(TM) i5-10400F CPU @ 2.90GHz
+Familia de CPU:                           6
+Modelo:                                   165
+Hilo(s) de procesamiento por núcleo:      2
+Núcleo(s) por «socket»:                   6
+«Socket(s)»:                              1
+Revisión:                                 3
+CPU(s) factor de escala MHz:              87%
+CPU MHz máx.:                             4300,0000
+CPU MHz mín.:                             800,0000
+BogoMIPS:                                 5799,77
+Indicadores:                              fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault ssbd ibrs ibpb stibp ibrs_enhanced tpr_shadow flexpriority ept vpid ept_ad fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid mpx rdseed adx smap clflushopt intel_pt xsaveopt xsavec xgetbv1 xsaves dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp vnmi md_clear flush_l1d arch_capabilities ibpb_exit_to_user
+Virtualización:                           VT-x
+Caché L1d:                                192 KiB (6 instancias)
+Caché L1i:                                192 KiB (6 instancias)
+Caché L2:                                 1,5 MiB (6 instancias)
+Caché L3:                                 12 MiB (1 instancia)
+Modo(s) NUMA:                             1
+CPU(s) del nodo NUMA 0:                   0-11
+Vulnerabilidad Gather data sampling:      Mitigation; Microcode
+Vulnerabilidad Indirect target selection: Mitigation; Aligned branch/return thunks
+Vulnerabilidad Itlb multihit:             KVM: Mitigation: Split huge pages
+Vulnerabilidad L1tf:                      Not affected
+Vulnerabilidad Mds:                       Not affected
+Vulnerabilidad Meltdown:                  Not affected
+Vulnerabilidad Mmio stale data:           Mitigation; Clear CPU buffers; SMT vulnerable
+Vulnerabilidad Reg file data sampling:    Not affected
+Vulnerabilidad Retbleed:                  Mitigation; Enhanced IBRS
+Vulnerabilidad Spec rstack overflow:      Not affected
+Vulnerabilidad Spec store bypass:         Mitigation; Speculative Store Bypass disabled via prctl
+Vulnerabilidad Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization
+Vulnerabilidad Spectre v2:                Mitigation; Enhanced / Automatic IBRS; IBPB conditional; PBRSB-eIBRS SW sequence; BHI SW loop, KVM SW loop
+Vulnerabilidad Srbds:                     Mitigation; Microcode
+Vulnerabilidad Tsa:                       Not affected
+Vulnerabilidad Tsx async abort:           Not affected
+Vulnerabilidad Vmscape:                   Mitigation; IBPB before exit to userspace

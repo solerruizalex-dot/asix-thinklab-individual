@@ -1,0 +1,73 @@
+[00:46:32] 1) Datos ficticios en cada array y su suma SHA-256
+0b5c257686fc33944e974da459052c80bf4abc6a5033ea7537d1eb867847606e  /srv/md0/datos.bin
+4d08514585e1a631634d3d5888efc9c542adf07de2245c579812437028dd7c5f  /srv/md1/datos.bin
+94330d69af24208658d4720d15dee13e8b9d9fb474d9c8aafcdf11a981be0f83  /srv/md5/datos.bin
+[00:46:35] 2) Velocidad (dd 200 MB, escritura directa sin caché y lectura con caché vaciada)
+   disco simple (sda) escritura: 209715200 bytes (210 MB, 200 MiB) copied, 0.238387 s, 880 MB/s
+   md0 escritura: 209715200 bytes (210 MB, 200 MiB) copied, 0.195881 s, 1.1 GB/s
+   md0 lectura:   209715200 bytes (210 MB, 200 MiB) copied, 0.145574 s, 1.4 GB/s
+   md1 escritura: 209715200 bytes (210 MB, 200 MiB) copied, 0.396253 s, 529 MB/s
+   md1 lectura:   209715200 bytes (210 MB, 200 MiB) copied, 0.139751 s, 1.5 GB/s
+   md5 escritura: 209715200 bytes (210 MB, 200 MiB) copied, 0.331851 s, 632 MB/s
+   md5 lectura:   209715200 bytes (210 MB, 200 MiB) copied, 0.204184 s, 1.0 GB/s
+[00:46:37] 3) RAID 1: fallo de sde
+             State : clean, degraded 
+    Active Devices : 1
+    Failed Devices : 1
+/srv/md1/datos.bin: OK
+[00:46:38]    retiro el disco 'roto' y lo vuelvo a añadir (como si fuera uno nuevo)
+mdadm: hot removed /dev/sde from /dev/md1
+mdadm: added /dev/sde
+md1 : active raid1 sde[2](S) sdd[0]
+      1046528 blocks super 1.2 [2/1] [U_]
+      
+[00:46:43]    reconstruido en 5 s
+             State : clean 
+    Active Devices : 2
+[00:46:43] 4) RAID 5: fallo de sdg
+             State : clean, degraded 
+    Active Devices : 2
+    Failed Devices : 1
+/srv/md5/datos.bin: OK
+mdadm: hot removed /dev/sdg from /dev/md5
+mdadm: added /dev/sdg
+md5 : active raid5 sdg[4](S) sdh[3] sdf[0]
+      2093056 blocks super 1.2 level 5, 512k chunk, algorithm 2 [3/2] [U_U]
+      
+[00:47:04]    reconstruido en 11 s
+             State : clean 
+    Active Devices : 3
+/srv/md5/datos.bin: OK
+[00:47:04] 5) RAID 0: mdadm no deja marcar un disco como fallado (no hay redundancia)
+mdadm: Cannot remove /dev/sdc from /dev/md0, array will be failed.
+[00:47:04]    simulo que falta sdc: paro el array e intento montarlo solo con sdb
+mdadm: stopped /dev/md0
+mdadm: /dev/md0 assembled from 1 drive - not enough to start the array.
+[00:47:04]    vuelvo a conectar sdc
+mdadm: /dev/md0 has been started with 2 drives.
+/srv/md0/datos.bin: OK
+Personalities : [raid0] [raid1] [raid6] [raid5] [raid4] 
+md0 : active raid0 sdb[0] sdc[1]
+      2093056 blocks super 1.2 512k chunks
+      
+md5 : active raid5 sdg[4] sdh[3] sdf[0]
+      2093056 blocks super 1.2 level 5, 512k chunk, algorithm 2 [3/3] [UUU]
+      
+md1 : active raid1 sde[2] sdd[0]
+      1046528 blocks super 1.2 [2/2] [UU]
+      
+unused devices: <none>
+
+### tras reiniciar dades (00:47:38): los arrays se montan solos
+md5 : active raid5 sdh[3] sdf[0] sdg[4]
+      2093056 blocks super 1.2 level 5, 512k chunk, algorithm 2 [3/3] [UUU]
+md1 : active raid1 sdd[0] sde[2]
+      1046528 blocks super 1.2 [2/2] [UU]
+md0 : active raid0 sdc[1] sdb[0]
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/md0        2.0G  101M  1.8G   6% /srv/md0
+/dev/md1        988M  101M  821M  11% /srv/md1
+/dev/md5        2.0G  101M  1.8G   6% /srv/md5
+/srv/md0/datos.bin: OK
+/srv/md1/datos.bin: OK
+/srv/md5/datos.bin: OK

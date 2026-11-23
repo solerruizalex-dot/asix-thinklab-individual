@@ -1,0 +1,41 @@
+### Sistema
+version: TrueNAS-SCALE-24.04.0  hostname: truenas-alex  RAM: 3925 MiB  zona: Europe/Madrid
+dominio: alexsoler.lan  gateway: 192.168.30.1  DNS: 192.168.30.1, 1.1.1.1
+interfaz enp0s3: dhcp=False alias=['192.168.30.20/24']
+
+### Discos
+sda  16 GiB  VBOX_HARDDISK
+sdb  60 GiB  VBOX_HARDDISK
+
+### Pools
+copias  estado=ONLINE  sano=True  topologia=[('DISK', 'sdb')]
+
+### Datasets
+copias             comp=LZ4  cuota=None  usado=7.57M
+copias/scripts     comp=LZ4  cuota=None  usado=112K
+copias/windows     comp=LZ4  cuota=30G  usado=1.92M
+copias/configs     comp=LZ4  cuota=None  usado=1.47M
+copias/proxmox     comp=LZ4  cuota=None  usado=96K
+copias/linux       comp=LZ4  cuota=None  usado=96K
+
+### Usuarios (no integrados)
+admin      Local Administrator              grupos=[40] smb=False ssh_pass=True
+alexsoler  Alex Soler Ruiz                  grupos=[40] smb=False ssh_pass=True
+copias     Cuenta de servicio para copias   grupos=[91] smb=True ssh_pass=False
+
+### Servicios activos
+cifs: RUNNING
+nfs: RUNNING
+ssh: RUNNING
+smartd: RUNNING
+
+### Recursos compartidos
+NFS /mnt/copias/proxmox  redes=['192.168.30.0/24']  maproot=root
+SMB \\truenas\copias-windows -> /mnt/copias/windows
+
+### Tareas
+snapshot copias recursivo=True a las 23:0 retencion 14 DAY
+cron root 23:0 /mnt/copias/scripts/copias-config.sh
+
+### Actualizaciones
+{"status": "AVAILABLE", "version": "24.04.2.5"}

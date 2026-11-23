@@ -1,0 +1,42 @@
+### Ejecución manual de copias-config.sh en TrueNAS - 2026-11-23 01:14:17
+(encendidos ahora: MikroTik, Debian nftables, pve1-3, serveis, dades; OPNsense, DC y clientes apagados)
+ssh: connect to host 192.168.30.2 port 22: No route to host
+Warning: Permanently added '192.168.30.32' (ED25519) to the list of known hosts.
+Warning: Permanently added '192.168.30.33' (ED25519) to the list of known hosts.
+Warning: Permanently added '192.168.30.34' (ED25519) to the list of known hosts.
+Warning: Permanently added '192.168.30.22' (ED25519) to the list of known hosts.
+Warning: Permanently added '192.168.30.23' (ED25519) to the list of known hosts.
+ssh: connect to host 192.168.30.150 port 22: No route to host
+2026-11-23 01:14:18 ---- inicio de copias ----
+2026-11-23 01:14:18 ---- inicio de copias ----
+2026-11-23 01:14:18 OK    mikrotik
+2026-11-23 01:14:21 FALLO opnsense (codigo 1)
+2026-11-23 01:14:22 OK    debian-nft
+2026-11-23 01:14:22 OK    proxmox-pve1
+2026-11-23 01:14:23 OK    proxmox-pve2
+2026-11-23 01:14:24 OK    proxmox-pve3
+2026-11-23 01:14:25 OK    serveis
+2026-11-23 01:14:27 OK    dades
+2026-11-23 01:14:30 FALLO cliente-linux (codigo 255)
+2026-11-23 01:14:30 ---- fin: 7 correctas, 2 con fallo ----
+
+--- tamaño por equipo
+1.1M	/mnt/copias/configs/cliente-linux/
+2.0K	/mnt/copias/configs/dades/
+162K	/mnt/copias/configs/debian-nft/
+138K	/mnt/copias/configs/mikrotik/
+22K	/mnt/copias/configs/opnsense/
+42K	/mnt/copias/configs/proxmox-pve1/
+42K	/mnt/copias/configs/proxmox-pve2/
+42K	/mnt/copias/configs/proxmox-pve3/
+526K	/mnt/copias/configs/serveis/
+--- última copia de serveis y dades
+/mnt/copias/configs/dades/2026-11-23_0114:
+total 1
+-rw-r--r-- 1 root root 510363 Nov 23 01:14 etc.tgz
+-rw-r--r-- 1 root root   9288 Nov 23 01:14 paquetes.txt
+
+/mnt/copias/configs/serveis/2026-11-23_0114:
+total 525
+-rw-r--r-- 1 root root 510545 Nov 23 01:14 etc.tgz
+-rw-r--r-- 1 root root   9288 Nov 23 01:14 paquetes.txt

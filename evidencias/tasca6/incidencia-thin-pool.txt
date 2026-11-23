@@ -1,0 +1,41 @@
+### pve3 - 2026-11-23 01:00:31 - VM 123 (dades) en io-error
+status: io-error
+  data              6.78g 100.00
+Nov 23 00:50:35 pve3 kernel: device-mapper: thin: 252:4: reached low water mark for data device: sending event.
+Nov 23 00:50:35 pve3 kernel: device-mapper: thin: 252:4: switching pool to out-of-data-space (queue IO) mode
+Nov 23 00:51:39 pve3 kernel: device-mapper: thin: 252:4: switching pool to out-of-data-space (error IO) mode
+--- solución: paro la VM y muevo los 7 discos de RAID al NFS de TrueNAS (qcow2)
+scsi1 movido en 7 s
+scsi2 movido en 5 s
+scsi3 movido en 7 s
+scsi4 movido en 5 s
+scsi5 movido en 5 s
+scsi6 movido en 5 s
+scsi7 movido en 5 s
+  data              6.78g 36.39 
+  vm-123-cloudinit  4.00m 9.38  
+  vm-123-disk-0     6.00g 25.22 
+  vm-123-disk-8     1.00g 95.45 
+generating cloud-init ISO
+scsi0: local-lvm:vm-123-disk-0,discard=on,size=6G
+scsi1: truenas-nfs:123/vm-123-disk-0.qcow2,size=1G
+scsi2: truenas-nfs:123/vm-123-disk-1.qcow2,size=1G
+scsi3: truenas-nfs:123/vm-123-disk-2.qcow2,size=1G
+scsi4: truenas-nfs:123/vm-123-disk-3.qcow2,size=1G
+scsi5: truenas-nfs:123/vm-123-disk-4.qcow2,size=1G
+scsi6: truenas-nfs:123/vm-123-disk-5.qcow2,size=1G
+scsi7: truenas-nfs:123/vm-123-disk-6.qcow2,size=1G
+scsi8: local-lvm:vm-123-disk-8,size=1G
+scsihw: virtio-scsi-single
+
+### dades tras mover los discos (01:01:38)
+md1 : active raid1 sdd[0] sdg[2]
+      1046528 blocks super 1.2 [2/2] [UU]
+md0 : active raid0 sdc[1] sdb[0]
+md5 : active raid5 sde[0] sdh[3] sdf[4]
+      2093056 blocks super 1.2 level 5, 512k chunk, algorithm 2 [3/3] [UUU]
+/srv/md0/datos.bin: OK
+/srv/md1/datos.bin: OK
+/srv/md5/datos.bin: OK
+	[>...................] sync'ed:  8.4% (46800/49084)K
+	finish: 0:00:39 speed: 1,140 (1,140) want: 1,760 K/sec

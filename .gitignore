@@ -1,0 +1,12 @@
+# Nunca al repositorio: credenciales y claves
+*CREDENCIALES*
+*.key
+*.pem
+id_*
+!id_*.pub
+.nas
+*.env
+# PDFs generados (se entregan aparte) y temporales
+pdf/*.pdf
+pdf/.*.html
+*.tmp

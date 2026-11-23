@@ -1,0 +1,9 @@
+### Optimización: tarjetas de red del MikroTik - 2026-11-23 01:26:11
+ANTES: nictype1/2 = Am79C973 (AMD PCnet-FAST III, 100 Mbit/s emulada)
+  truenas por MikroTik: 1425547 B/s (1,4 MB/s)  | serveis por MikroTik: 4015331 B/s (4,0 MB/s)
+  truenas por router Debian (Intel PRO/1000): 36339276 B/s (36 MB/s)
+CAMBIO: VBoxManage modifyvm Mikrotik-AlexSoler --nictype1 82540EM --nictype2 82540EM (Intel PRO/1000 MT)
+DESPUÉS:
+  truenas por MikroTik: 17715876 B/s en 5.918849 s
+  serveis (anidada) por MikroTik: 35835998 B/s en 2.926041 s
+                 cpu-load: 20%                        

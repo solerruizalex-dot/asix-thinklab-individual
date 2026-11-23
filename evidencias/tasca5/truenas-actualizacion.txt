@@ -1,0 +1,10 @@
+### Actualización de TrueNAS - 23/11/2026
+entornos de arranque antes: [('24.04.0', 'NR')]
+estado: SUCCESS None en 216 s
+entornos de arranque después: [('24.04.0', 'N'), ('24.04.2.5', 'R')]
+reinicio: la API vuelve a responder 67 s después
+versión: TrueNAS-SCALE-24.04.2.5
+entornos de arranque: [('24.04.0', ''), ('24.04.2.5', 'NR')]
+pool: [('copias', 'ONLINE', True)]
+servicios: [('cifs', 'RUNNING'), ('nfs', 'RUNNING'), ('ssh', 'RUNNING')]
+comprobación de nuevo: UNAVAILABLE

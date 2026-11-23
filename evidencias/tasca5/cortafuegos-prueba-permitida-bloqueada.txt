@@ -1,0 +1,30 @@
+portquiz.net = 13.216.200.40   (cliente de prueba: truenas-alex 192.168.30.20)
+
+=========== puerta de enlace 192.168.30.1  (22:19:32)
+HTTP 80 (permitida):      HTTP 200 en 0.208837s
+TCP 23 telnet (bloqueada): no conecta (descartado)
+TCP 445 SMB (bloqueada):   no conecta (descartado)
+traceroute -n -m 3 1.1.1.1:
+ 1  192.168.30.1  0.183 ms  0.157 ms  0.201 ms
+ 2  10.0.2.2  0.413 ms  0.397 ms  0.375 ms
+ 3  * * *
+
+=========== puerta de enlace 192.168.30.2  (22:19:46)
+HTTP 80 (permitida):      HTTP 200 en 0.211502s
+TCP 23 telnet (bloqueada): no conecta (descartado)
+TCP 445 SMB (bloqueada):   no conecta (descartado)
+traceroute -n -m 3 1.1.1.1:
+ 1  192.168.30.2  0.443 ms  0.233 ms  0.298 ms
+ 2  10.0.2.2  0.492 ms  0.476 ms  0.460 ms
+ 3  * * *
+
+=========== puerta de enlace 192.168.30.3  (22:20:01)
+HTTP 80 (permitida):      HTTP 200 en 0.213137s
+TCP 23 telnet (bloqueada): no conecta (descartado)
+TCP 445 SMB (bloqueada):   no conecta (descartado)
+traceroute -n -m 3 1.1.1.1:
+ 1  192.168.30.3  0.142 ms  0.120 ms  0.108 ms
+ 2  10.0.2.2  0.223 ms  0.209 ms  0.196 ms
+ 3  * * *
+
+ruta restaurada: default via 192.168.30.1 dev enp0s3 

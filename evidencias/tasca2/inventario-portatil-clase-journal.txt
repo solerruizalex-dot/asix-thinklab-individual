@@ -1,0 +1,66 @@
+# Inventario del portátil de clase sacado del registro del kernel (journalctl -k -b -2)
+# Arranque del SSD de clase en el aula: Thu 2026-11-19 09:54:09 - Thu 2026-11-19
+# No tengo el portátil en casa: los datos salen del arranque que hizo este mismo SSD en el aula
+
+DMI: ASUSTeK COMPUTER INC. ASUS EXPERTBOOK B3605CCA/B3605CCA, BIOS B3605CCA.303 06/11/2025
+Memory: 31591552K/32764828K available (22528K kernel code, 4441K rwdata, 14428K rodata, 4932K init, 4776K bss, 1173016K reserved, 0K cma-reserved)
+smpboot: CPU0: Intel(R) Core(TM) Ultra 5 125H (family: 0x6, model: 0xaa, stepping: 0x4)
+smpboot: Total of 18 processors activated (107827.20 BogoMIPS)
+thermal_sys: Registered thermal governor 'fair_share'
+thermal_sys: Registered thermal governor 'bang_bang'
+thermal_sys: Registered thermal governor 'step_wise'
+thermal_sys: Registered thermal governor 'user_space'
+thermal_sys: Registered thermal governor 'power_allocator'
+ACPI: AC: AC Adapter [ADP1] (on-line)
+thermal LNXTHERM:00: registered as thermal_zone0
+ACPI: thermal: Thermal Zone [TZ00] (28 C)
+ACPI: battery: Slot [BAT0] (battery present)
+usb usb1: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 6.08
+usb usb1: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+usb usb1: Product: xHCI Host Controller
+usb usb1: Manufacturer: Linux 6.8.0-138-generic xhci-hcd
+usb usb2: New USB device found, idVendor=1d6b, idProduct=0003, bcdDevice= 6.08
+usb usb2: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+usb usb2: Product: xHCI Host Controller
+usb usb2: Manufacturer: Linux 6.8.0-138-generic xhci-hcd
+usb usb3: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 6.08
+usb usb3: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+usb usb3: Product: xHCI Host Controller
+usb usb3: Manufacturer: Linux 6.8.0-138-generic xhci-hcd
+usb usb4: New USB device found, idVendor=1d6b, idProduct=0003, bcdDevice= 6.08
+usb usb4: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+usb usb4: Product: xHCI Host Controller
+usb usb4: Manufacturer: Linux 6.8.0-138-generic xhci-hcd
+nvme nvme0: pci function 10000:e1:00.0
+nvme nvme0: allocated 64 MiB host memory buffer.
+nvme nvme0: 16/0/0 default/read/poll queues
+ nvme0n1: p1 p2 p3 p4 p5 p6 p7
+usb 3-4: New USB device found, idVendor=322e, idProduct=2339, bcdDevice= 1.04
+usb 3-4: New USB device strings: Mfr=3, Product=1, SerialNumber=2
+usb 3-4: Product: USB2.0 FHD UVC WebCam
+usb 3-4: Manufacturer: BillionPixels
+e1000e 0000:00:1f.6 eth0: Intel(R) PRO/1000 Network Connection
+e1000e 0000:00:1f.6 eno1: renamed from eth0
+usb 3-8: New USB device found, idVendor=0bda, idProduct=0129, bcdDevice=39.60
+usb 3-8: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+usb 3-8: Product: USB2.0-CRW
+usb 3-8: Manufacturer: Generic
+usb 3-9: New USB device found, idVendor=413c, idProduct=301a, bcdDevice= 1.00
+usb 3-9: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+usb 3-9: Product: Dell MS116 USB Optical Mouse
+usb 3-9: Manufacturer: PixArt
+usb 3-10: New USB device found, idVendor=13d3, idProduct=3571, bcdDevice= 0.00
+usb 3-10: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+usb 3-10: Product: Bluetooth Radio
+usb 3-10: Manufacturer: Realtek
+usb 4-2: New USB device found, idVendor=152d, idProduct=0578, bcdDevice= 3.01
+usb 4-2: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+usb 4-2: Product: USB 3.0 Device
+usb 4-2: Manufacturer: USB 3.0 Device
+scsi host0: uas
+sd 0:0:0:0: [sda] 937703088 512-byte logical blocks: (480 GB/447 GiB)
+sd 0:0:0:0: [sda] 4096-byte physical blocks
+sd 0:0:0:0: [sda] Write Protect is off
+sd 0:0:0:0: [sda] Mode Sense: 53 00 00 08
+
+### Discos vistos en ese arranque

@@ -1,0 +1,37 @@
+### Copias de imagen (vzdump) al NFS de TrueNAS - 2026-11-23 01:13:00
+--- tarea programada del clúster (/etc/pve/jobs.cfg)
+vzdump: copia-diaria
+	schedule 22:00
+	all 1
+	compress zstd
+	enabled 1
+	mode snapshot
+	notes-template {{guestname}} - copia diaria
+	storage truenas-nfs
+
+Name               Type     Status     Total (KiB)      Used (KiB) Available (KiB)        %
+truenas-nfs         nfs     active        58414080         1472512        56941568    2.52%
+
+--- copia manual del contenedor 130 (en pve2)
+INFO: Starting Backup of VM 130 (lxc)
+INFO: creating vzdump archive '/mnt/pve/truenas-nfs/dump/vzdump-lxc-130-2026_11_23-01_13_03.tar.zst'
+INFO: Total bytes written: 584908800 (558MiB, 49MiB/s)
+INFO: archive file size: 159MB
+INFO: Finished Backup of VM 130 (00:00:13)
+tiempo: 14 s
+
+--- copia manual de la VM 122 serveis (en pve1, encendida, modo snapshot)
+INFO: Starting Backup of VM 122 (qemu)
+INFO: include disk 'scsi0' 'local-lvm:vm-122-disk-0' 6G
+INFO: include disk 'scsi1' 'local-lvm:vm-122-disk-1' 1G
+INFO: creating vzdump archive '/mnt/pve/truenas-nfs/dump/vzdump-qemu-122-2026_11_23-01_13_18.vma.zst'
+INFO: backup is sparse: 5.51 GiB (78%) total zero data
+INFO: transferred 7.00 GiB in 20 seconds (358.4 MiB/s)
+INFO: archive file size: 747MB
+INFO: Finished Backup of VM 122 (00:00:21)
+tiempo: 22 s
+
+--- copias guardadas en el NAS
+Volid                                                          Format  Type           Size VMID
+truenas-nfs:backup/vzdump-lxc-130-2026_11_23-01_13_03.tar.zst  tar.zst backup    167410200 130
+truenas-nfs:backup/vzdump-qemu-122-2026_11_23-01_13_18.vma.zst vma.zst backup    783584410 122

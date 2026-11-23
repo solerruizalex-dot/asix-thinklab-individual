@@ -1,0 +1,30 @@
+### 22:57:23 T0 - reseteo de fabrica sin configuracion (simula que el router ha perdido la configuracion)
+### 22:57:28 prueba desde la LAN (gw .1)
+
+HTTP 000
+SIN SALIDA A INTERNET
+### 22:58:21 consola: /system backup load name=mikrotik-diario.backup
+### 22:58:30 confirmado, el router reinicia con la configuracion restaurada
+### 22:58:52 router accesible otra vez por SSH (usuario admin con su clave original)
+  name: MikroTik-AlexSoler
+
+Flags: D - DYNAMIC
+Columns: ADDRESS, NETWORK, INTERFACE, VRF
+#   ADDRESS          NETWORK       INTERFACE  VRF 
+0   192.168.30.1/24  192.168.30.0  ether2     main
+1 D 10.0.2.15/24     10.0.2.0      ether1     main
+
+0  chain=srcnat action=masquerade out-interface=ether1
+
+Columns: NAME, GROUP, ADDRESS, LAST-LOGGED-IN, INACTIVITY-POLICY
+# NAME       GROUP   ADDRESS           LAST-LOGGED-IN       INACTIVITY-POLICY
+;;; system default user
+0 admin      full                      2026-11-22 22:58:56  none             
+;;; admin personal Alex
+1 alexsoler  full                                           none             
+;;; cuenta de copias (solo desde TrueNAS)
+2 copias     copias  192.168.30.20/32  2026-11-22 22:48:26  none             
+
+### 22:58:53 prueba final desde la LAN
+HTTP 200
+### 22:58:54 T1 - servicio recuperado

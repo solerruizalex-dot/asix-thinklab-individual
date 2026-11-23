@@ -1,0 +1,79 @@
+### Espejo DRBD entre serveis (pve2, /dev/sdb) y dades (pve3, /dev/sdi) - 2026-11-23 00:49:35
+--- versión
+version: 8.4.11 (api:1/proto:86-101)
+DRBDADM_VERSION=9.22.0
+--- configuración (/etc/drbd.d/espejo.res)
+resource espejo {
+    protocol C;                 # síncrono: la escritura acaba cuando está en los dos discos
+    device    /dev/drbd0;
+    meta-disk internal;
+    on serveis { disk /dev/sdb; address 192.168.30.22:7789; }
+    on dades   { disk /dev/sdi; address 192.168.30.23:7789; }
+    net { after-sb-0pri discard-zero-changes; after-sb-1pri discard-secondary; }
+}
+
+[00:49:36] serveis pasa a primario y se hace la sincronización inicial
+
+[01:02:14] La primera sincronización se cortó al 95 % porque se llenó el thin pool de pve3 (ver incidencia-thin-pool.txt). Tras liberar espacio, DRBD reconectó solo y terminó:
+ 0: cs:Connected ro:Primary/Secondary ds:UpToDate/UpToDate C r-----
+    ns:1066424 nr:0 dw:0 dr:1066424 al:8 bm:0 lo:0 pe:0 ua:0 ap:0 ep:1 wo:f oos:0
+
+[01:02:15] sistema de ficheros y datos ficticios en serveis (primario)
+da6d1992eab9bcbaa11395d080f98ceb58e2ae32d4f490bbfa1cbb11ae3e5988  ./Administracion/leeme.txt
+e72ae4b55e8ae9a4ad83336e20934784eb358f5aa1323cee0be1001ff8f5e96b  ./Comercial/leeme.txt
+610a500c7cb454b5abf3bb2e79f9baec3b0765fcf7a85bb9966f6bef55e06694  ./Informatica/imagen.bin
+c71c5096742466de9dfa9180977f3d1dec47585739e0517da639753cbe684e5a  ./Informatica/leeme.txt
+total 28
+drwxr-xr-x 2 root root  4096 Nov 23 01:02 Administracion
+drwxr-x--- 2 root root  4096 Nov 23 01:02 Comercial
+drwxr-xr-x 2 root root  4096 Nov 23 01:02 Informatica
+drwx------ 2 root root 16384 Nov 23 01:02 lost+found
+ 0: cs:Connected ro:Primary/Secondary ds:UpToDate/UpToDate C r-----
+    ns:1118620 nr:0 dw:1117224 dr:1070305 al:14 bm:0 lo:0 pe:0 ua:0 ap:0 ep:1 wo:f oos:0
+
+[01:02:16] en dades (secundario) no se puede montar: solo recibe las escrituras
+mount: /srv/compartida: fsconfig() failed: /dev/drbd0: Can't open blockdev.
+
+[01:02:17] FALLO: apago serveis de golpe desde pve2 (qm stop = quitar la corriente)
+status: stopped
+ 0: cs:Connected ro:Secondary/Primary ds:UpToDate/UpToDate C r-----
+    ns:0 nr:101280 dw:1182680 dr:0 al:0 bm:0 lo:0 pe:0 ua:0 ap:0 ep:1 wo:f oos:0
+[01:02:22] RECUPERACIÓN en dades: paso a primario, monto y compruebo los ficheros
+total 28
+drwxr-xr-x 2 root root  4096 Nov 23 01:02 Administracion
+drwxr-x--- 2 root root  4096 Nov 23 01:02 Comercial
+drwxr-xr-x 2 root root  4096 Nov 23 01:02 Informatica
+drwx------ 2 root root 16384 Nov 23 01:02 lost+found
+documento de Administracion - 01:02:15
+documento de Informatica - 01:02:15
+[01:02:38] datos disponibles en dades 21 s después del fallo
+[01:02:54] comprobación de contenido y permisos en dades (como root, con las sumas sacadas en serveis antes del fallo)
+./Administracion/leeme.txt: OK
+./Comercial/leeme.txt: OK
+./Informatica/imagen.bin: OK
+./Informatica/leeme.txt: OK
+drwxr-x--- root Comercial
+cat: Comercial/leeme.txt: Permission denied
+
+[01:02:55] mientras serveis está caído se sigue trabajando en dades: fichero nuevo
+creado en dades durante la caída de serveis 01:02:55
+ 0: cs:WFConnection ro:Primary/Unknown ds:UpToDate/DUnknown C r-----
+    ns:0 nr:101280 dw:1199144 dr:52309 al:6 bm:0 lo:0 pe:0 ua:0 ap:0 ep:1 wo:f oos:16444
+
+[01:02:55] vuelvo a encender serveis
+generating cloud-init ISO
+disabled
+1
+version: 8.4.11 (api:1/proto:86-101)
+srcversion: 637677C4EAFCF5D1D5446B0 
+[01:03:28] drbd.service está deshabilitado: serveis no se reconecta solo. Lo levanto a mano (paso del procedimiento)
+Marked additional 1024 MB as out-of-sync based on AL.
+resincronizado en 64 s. OJO: como serveis cayó siendo primario, DRBD marcó por su activity log 1024 MB como desincronizados y copió el disco entero (nr:1048508), no solo lo cambiado
+ 0: cs:Connected ro:Secondary/Primary ds:UpToDate/UpToDate C r-----
+    ns:0 nr:1048508 dw:1048508 dr:0 al:0 bm:0 lo:0 pe:0 ua:0 ap:0 ep:1 wo:f oos:0
+
+[01:04:33] vuelta a la situación normal: dades suelta el recurso y serveis vuelve a ser primario
+dades: secundario
+creado en dades durante la caída de serveis 01:02:55
+ 0: cs:Connected ro:Primary/Secondary ds:UpToDate/UpToDate C r-----
+    ns:4 nr:1048528 dw:1048532 dr:953 al:1 bm:0 lo:0 pe:0 ua:0 ap:0 ep:1 wo:f oos:0

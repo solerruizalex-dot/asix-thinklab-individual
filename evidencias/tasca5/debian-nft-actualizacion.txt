@@ -1,0 +1,9 @@
+13.7
+Descargados 27,7 MB en 2s (11,4 MB/s)
+Leyendo lista de paquetes...
+75
+Procesando disparadores para hicolor-icon-theme (0.18-2) ...
+Procesando disparadores para initramfs-tools (0.148.4) ...
+update-initramfs: Generating /boot/initrd.img-6.12.117+deb13-amd64
+13.8
+6.12.117+deb13-amd64

@@ -1,0 +1,40 @@
+### MikroTik: /log print where message~"MK-BLOQ"
+ 2026-11-22 22:19:45 firewall,info MK-BLOQ forward: in:ether2 out:ether1, connection-state:new src-mac 08:00:27:E1:B1:FA, proto TCP (SYN), 192.168.30.20:36022->13.216.200.40:445, len 60
+ 2026-11-22 22:19:46 firewall,info MK-BLOQ forward: in:ether2 out:ether1, connection-state:new src-mac 08:00:27:E1:B1:FA, proto TCP (SYN), 192.168.30.20:36022->13.216.200.40:445, len 60
+ 2026-11-22 22:19:47 firewall,info MK-BLOQ forward: in:ether2 out:ether1, connection-state:new src-mac 08:00:27:E1:B1:FA, proto TCP (SYN), 192.168.30.20:36022->13.216.200.40:445, len 60
+
+
+### MikroTik contadores
+Columns: CHAIN, ACTION, BYTES, PACKETS
+# CHAIN    ACTION        BYTES  PACKETS
+;;; FWD: establecidas
+0 forward  accept  270 134 455  239 293
+;;; FWD: invalidas
+1 forward  drop             80        2
+;;; FWD: prueba bloqueo telnet/SMB hacia fuera
+2 forward  drop            720       12
+;;; FWD: LAN a Internet
+3 forward  accept        2 744       44
+;;; FWD: resto descartado
+4 forward  drop              0        0
+
+
+### OPNsense /var/log/filter (regla b10c0b10)
+<134>1 2026-11-22T23:19:53+01:00 OPNsense-AlexSoler.alexsoler.lan filterlog 57836 - [meta sequenceId="49"] 66,,,b10c0b10-c0b1-4c0b-8c0b-10c0b10c0b10,em1,match,block,in,4,0x0,,64,33733,0,DF,6,tcp,60,192.168.30.20,13.216.200.40,59562,445,0,S,958582082,,32120,,mss;sackOK;TS;nop;wscale
+<134>1 2026-11-22T23:19:54+01:00 OPNsense-AlexSoler.alexsoler.lan filterlog 57836 - [meta sequenceId="50"] 66,,,b10c0b10-c0b1-4c0b-8c0b-10c0b10c0b10,em1,match,block,in,4,0x0,,64,33734,0,DF,6,tcp,60,192.168.30.20,13.216.200.40,59562,445,0,S,958582082,,32120,,mss;sackOK;TS;nop;wscale
+<134>1 2026-11-22T23:19:55+01:00 OPNsense-AlexSoler.alexsoler.lan filterlog 57836 - [meta sequenceId="51"] 66,,,b10c0b10-c0b1-4c0b-8c0b-10c0b10c0b10,em1,match,block,in,4,0x0,,64,33735,0,DF,6,tcp,60,192.168.30.20,13.216.200.40,59562,445,0,S,958582082,,32120,,mss;sackOK;TS;nop;wscale
+<134>1 2026-11-22T23:19:57+01:00 OPNsense-AlexSoler.alexsoler.lan filterlog 57836 - [meta sequenceId="53"] 66,,,b10c0b10-c0b1-4c0b-8c0b-10c0b10c0b10,em1,match,block,in,4,0x0,,64,33736,0,DF,6,tcp,60,192.168.30.20,13.216.200.40,59562,445,0,S,958582082,,32120,,mss;sackOK;TS;nop;wscale
+
+### Debian nftables: journalctl -k | grep NFT-BLOQ
+nov 22 22:20:08 debian-nft-AlexSoler kernel: NFT-BLOQ IN=enp0s8 OUT=enp0s3 MAC=08:00:27:3e:1e:73:08:00:27:e1:b1:fa:08:00 SRC=192.168.30.20 DST=13.216.200.40 LEN=60 TOS=0x00 PREC=0x00 TTL=63 ID=10444 DF PROTO=TCP SPT=52294 DPT=445 WINDOW=32120 RES=0x00 SYN URGP=0 
+nov 22 22:20:08 debian-nft-AlexSoler kernel: NFT-BLOQ IN=enp0s8 OUT=enp0s3 MAC=08:00:27:3e:1e:73:08:00:27:e1:b1:fa:08:00 SRC=192.168.30.20 DST=13.216.200.40 LEN=60 TOS=0x00 PREC=0x00 TTL=63 ID=10445 DF PROTO=TCP SPT=52294 DPT=445 WINDOW=32120 RES=0x00 SYN URGP=0 
+nov 22 22:20:10 debian-nft-AlexSoler kernel: NFT-BLOQ IN=enp0s8 OUT=enp0s3 MAC=08:00:27:3e:1e:73:08:00:27:e1:b1:fa:08:00 SRC=192.168.30.20 DST=13.216.200.40 LEN=60 TOS=0x00 PREC=0x00 TTL=63 ID=10446 DF PROTO=TCP SPT=52294 DPT=445 WINDOW=32120 RES=0x00 SYN URGP=0 
+nov 22 22:20:11 debian-nft-AlexSoler kernel: NFT-BLOQ IN=enp0s8 OUT=enp0s3 MAC=08:00:27:3e:1e:73:08:00:27:e1:b1:fa:08:00 SRC=192.168.30.20 DST=13.216.200.40 LEN=60 TOS=0x00 PREC=0x00 TTL=63 ID=10447 DF PROTO=TCP SPT=52294 DPT=445 WINDOW=32120 RES=0x00 SYN URGP=0 
+table inet filter {
+	chain forward {
+		type filter hook forward priority filter; policy drop;
+		ct state established,related accept
+		iifname "enp0s8" oifname "enp0s3" tcp dport { 23, 445 } log prefix "NFT-BLOQ " drop
+		iifname "enp0s8" oifname "enp0s3" accept
+	}
+}

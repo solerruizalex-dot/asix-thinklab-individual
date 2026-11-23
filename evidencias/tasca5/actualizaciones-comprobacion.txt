@@ -1,0 +1,26 @@
+### Comprobación de actualizaciones - 2026-11-23 01:54:06
+--- MikroTik
+            channel: long-term                    
+               mode: https                        
+  check-certificate: yes                          
+         ip-version: auto                         
+  installed-version: 7.24.6                       
+             status: finding out latest version...
+
+            channel: long-term                   
+               mode: https                       
+  check-certificate: yes                         
+         ip-version: auto                        
+  installed-version: 7.24.6                      
+     latest-version: 7.24.6                      
+             status: System is already up to date
+
+--- router Debian
+/bin/sh: 0: cannot open sh: No such file
+paquetes actualizables: 1
+linux-image-amd64/stable-security 6.12.118-1 amd64 [actualizable desde: 6.12.117-1]
+13.8
+6.12.118+deb13-amd64
+active
+active
+1 packets transmitted, 1 received, 0% packet loss, time 0ms

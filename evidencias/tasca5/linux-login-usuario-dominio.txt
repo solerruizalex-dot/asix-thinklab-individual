@@ -1,0 +1,14 @@
+$ ssh a.soler@pc-informatica   (usuario del dominio, grupo G_Informatica)
+a.soler
+uid=1179801117(a.soler) gid=1179800513(usuarios del dominio) grupos=1179800513(usuarios del dominio),1179801108(g_informatica)
+home: /home/a.soler
+pc-informatica.alexsoler.lan
+Ticket cache: FILE:/tmp/krb5cc_1179801117_6dqFjw
+Default principal: a.soler@ALEXSOLER.LAN
+
+Valid starting     Expires            Service principal
+22/11/26 22:45:58  23/11/26 08:45:58  krbtgt/ALEXSOLER.LAN@ALEXSOLER.LAN
+
+$ ssh p.ferrer@pc-informatica   (usuario del dominio de Comercial: no permitido)
+nov 22 22:46:05 pc-informatica sshd-session[5042]: Failed password for p.ferrer from 192.168.30.3 port 32894 ssh2
+nov 22 22:46:05 pc-informatica sshd-session[5042]: fatal: Access denied for user p.ferrer by PAM account configuration [preauth]
