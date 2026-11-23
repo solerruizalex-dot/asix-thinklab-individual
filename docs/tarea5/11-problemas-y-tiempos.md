@@ -33,7 +33,8 @@ Son las que, si se pierden o se tocan mal, dejan a la empresa sin servicio. Toda
 | Proxmox | Thin pool lleno → VM en `io-error` | ~3 min (mover 7 discos al NFS, 5–7 s cada uno) |
 | serveis/dades | cloud-init en error (consecuencia de lo anterior) | ~3 min |
 | Anfitrión | El PC se colgó entero con DC copiando + TrueNAS + routers + Proxmox arrancando | Reinicio del PC y reconstrucción de la sesión: ~20 min |
-| DC | Copia de estado del sistema bloqueada en "enumerar ficheros" | Sin resolver del todo (ver [07-windows-server](07-windows-server.md)) |
+| DC | La copia de estado del sistema parecía colgada en "enumerar ficheros" | No estaba colgada: Defender la frena. Tarda 41 min y termina bien ([07-windows-server](07-windows-server.md)) |
+| DC | Mi script daba por buena una copia cancelada | Comprobar el código de salida de wbadmin, no el texto (~10 min) |
 
 \* Medido aproximadamente con la hora de los registros y de las evidencias; incluye diagnóstico.
 
@@ -48,4 +49,4 @@ Lo que tardaría hoy, con los procedimientos y las copias que tengo:
 | Nodo Proxmox caído | Arrancar sus VMs en otro nodo desde la copia `vzdump` del NAS | Copia de 747 MB: restauración de pocos minutos (estimado) |
 | Servidor de datos caído | Promocionar el otro lado del espejo DRBD | **21 s** medido |
 | Disco de un RAID roto | Sustituir y reconstruir | 0 s de corte; 5–11 s de reconstrucción con discos de 1 GB |
-| DC caído | Restaurar estado del sistema o reinstalar y recuperar con las exportaciones | Es el punto débil: ver [07-windows-server](07-windows-server.md). En la empresa pondría un segundo DC |
+| DC caído | Arrancar desde la ISO en modo recuperación y restaurar el estado del sistema desde E: o desde la copia del NAS | Sin probar: la copia tardó 41 min en hacerse, la restauración sería del mismo orden. Es el punto débil; en la empresa pondría un segundo DC |

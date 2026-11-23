@@ -3,14 +3,17 @@
 import markdown, re, subprocess, sys, pathlib, html
 BASE = pathlib.Path(__file__).resolve().parent.parent
 OUT = pathlib.Path(sys.argv[1])
+REPO = "https://github.com/solerruizalex-dot/asix-thinklab-individual/blob/main"
 OUT.mkdir(parents=True, exist_ok=True)
 TAREAS = [
  ("Tarea0_Entorno", "Tarea 0", "Entorno de pruebas", ["docs/tarea0-entorno.md"]),
  ("Tarea2_Equipos", "Tarea 2", "Equipos y periféricos", ["docs/tarea2-equipos.md"]),
  ("Tarea4_Red", "Tarea 4", "Diseño físico y lógico de la red", ["docs/tarea4-red.md"]),
  ("Tarea5_Instalacion", "Tarea 5", "Instalación y comunicaciones",
-  ["docs/tarea5/01-imagenes-y-requisitos.md", "docs/tarea5/02-mikrotik.md", "docs/tarea5/03-opnsense.md",
-   "docs/tarea5/04-debian-nftables.md", "docs/tarea5/05-servidores-y-clientes.md"]),
+  ["docs/tarea5/README.md", "docs/tarea5/01-imagenes-y-requisitos.md", "docs/tarea5/02-mikrotik.md",
+   "docs/tarea5/03-opnsense.md", "docs/tarea5/04-debian-nftables.md", "docs/tarea5/05-truenas.md",
+   "docs/tarea5/06-proxmox.md", "docs/tarea5/07-windows-server.md", "docs/tarea5/08-servidores-linux.md",
+   "docs/tarea5/09-clientes.md", "docs/tarea5/10-copias-automatizadas.md", "docs/tarea5/11-problemas-y-tiempos.md"]),
  ("Tarea6_RAID", "Tarea 6", "Almacenamiento: RAID y espejo entre equipos", ["docs/tarea6-raid.md"]),
  ("Tarea7_Rendimiento", "Tarea 7", "Rendimiento y diagnóstico", ["docs/tarea7-rendimiento.md"]),
 ]
@@ -19,14 +22,16 @@ CSS = """
 body { font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 10.5pt; line-height: 1.45; color:#222; }
 h1 { font-size: 18pt; border-bottom: 2px solid #2b5797; padding-bottom: 4px; color:#2b5797; page-break-before: always; }
 h2 { font-size: 13.5pt; color:#2b5797; margin-top: 18px; } h3 { font-size: 11.5pt; }
-table { border-collapse: collapse; width: 100%; margin: 8px 0; font-size: 9.3pt; page-break-inside: avoid; }
+table { border-collapse: collapse; width: 100%; margin: 8px 0; font-size: 9.3pt; }
+tr { break-inside: avoid; } thead { display: table-header-group; }
+h2, h3 { break-after: avoid; page-break-after: avoid; }
 th, td { border: 1px solid #bbb; padding: 4px 6px; vertical-align: top; } th { background: #e8eef7; }
 code { background:#f2f2f2; padding: 1px 3px; font-size: 9pt; }
 pre { background:#f5f5f5; border:1px solid #ddd; padding: 8px; font-size: 8.5pt; white-space: pre-wrap; page-break-inside: avoid; }
 img { max-width: 100%; } a { color:#2b5797; text-decoration:none; }
 .portada { height: 250mm; display:flex; flex-direction:column; justify-content:center; text-align:center; }
 .portada .t { font-size: 30pt; color:#2b5797; font-weight:bold; margin: 10px 0; }
-.portada .s { font-size: 20pt; margin-bottom: 40px; } .portada .n { font-size: 16pt; }
+.portada .s { font-size: 20pt; margin-bottom: 40px; } .portada .n { font-size: 16pt; } .portada .r { font-size: 10pt; color:#666; margin-top: 60px; }
 """
 for fich, num, nombre, docs in TAREAS:
     cuerpo = ""
@@ -36,10 +41,19 @@ for fich, num, nombre, docs in TAREAS:
         h = markdown.markdown(md, extensions=["tables", "fenced_code"])
         # rutas relativas de imágenes -> absolutas
         h = re.sub(r'src="(?!http)([^"]+)"', lambda m: 'src="%s"' % (p.parent / m.group(1)).resolve().as_uri(), h)
+        # los enlaces a otros ficheros del repositorio apuntan a GitHub, donde están las evidencias
+        def enlace(m):
+            destino = (p.parent / m.group(1)).resolve()
+            try:
+                rel = destino.relative_to(BASE).as_posix()
+            except ValueError:
+                return m.group(0)
+            return 'href="%s/%s"' % (REPO, rel)
+        h = re.sub(r'href="(?!http|#|mailto)([^"#]+)"', enlace, h)
         cuerpo += h
     portada = f"""<div class="portada"><div class="n">Álex Soler Ruiz · 1º ASIX</div>
 <div class="t">ASIX ThinkLab (parte individual)</div><div class="s">{num} · {nombre}</div>
-<div class="n">Noviembre de 2026</div></div>"""
+<div class="n">Noviembre de 2026</div><div class="r">Repositorio: github.com/solerruizalex-dot/asix-thinklab-individual</div></div>"""
     doc = f"<!DOCTYPE html><html lang='es'><head><meta charset='utf-8'><title>{num} - Álex Soler Ruiz</title><style>{CSS}</style></head><body>{portada}{cuerpo}</body></html>"
     tmp = OUT / f".{fich}.html"; tmp.write_text(doc, encoding="utf-8")
     pdf = OUT / f"{fich}_AlexSolerRuiz.pdf"

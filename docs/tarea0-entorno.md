@@ -86,3 +86,23 @@ Si sumo la RAM que tenían asignada las máquinas al principio (DC 8 GB, TrueNAS
 ## Punto de retorno
 
 Antes de tocar nada hice un snapshot de todas las máquinas (`estado-inicial-22nov`). Si un cambio sale mal, vuelvo a ese estado en segundos. Más adelante, en la [Tarea 5](tarea5/README.md), explico las copias de verdad, que están en el NAS y no dependen de VirtualBox.
+
+Ojo con una cosa que aprendí por las malas: con un snapshot hecho, la VM escribe en una **imagen diferencial**. Si amplías el disco base, la VM no ve el cambio (me pasó con TrueNAS), y los discos clonados o con snapshot cambian de número de serie (me pasó con GRUB en Proxmox).
+
+## Documentación en Markdown y Git
+
+Todo este trabajo está en un repositorio Git local (`asix-thinklab-individual`), que se sube a GitHub:
+
+```
+README.md       portada y mapa del repositorio
+docs/           un Markdown por tarea (la Tarea 5, uno por sistema)
+scripts/        todo lo que he automatizado: PowerShell (DC, Windows 11) y bash (Proxmox, NAS, RAID, DRBD, medidas)
+configs/        configuraciones exportadas de los routers, sin contraseñas
+evidencias/     salidas de comandos y capturas, una carpeta por tarea
+diagramas/      el esquema en Graphviz (.dot) y su imagen
+pdf/            el script que genera los PDF de entrega a partir de los Markdown
+```
+
+- Los PDF de entrega no se escriben aparte: se generan desde estos mismos Markdown ([generar-pdf.py](../pdf/generar-pdf.py)), así nunca hay dos versiones distintas.
+- **Las contraseñas no están en el repositorio.** Los scripts las leen de variables de entorno (`CLAVE`, `CLAVE_INICIAL`, `CLAVE_NAS`) y el `.gitignore` bloquea ficheros de credenciales y claves privadas. Antes de cada commit lo compruebo buscando las contraseñas reales con `grep`.
+- El esquema está en texto (`.dot`), así que en Git se ve qué cambió de una versión a otra, cosa que con una imagen no pasa.

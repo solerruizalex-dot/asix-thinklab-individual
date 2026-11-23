@@ -1,0 +1,27 @@
+### Copia del estado del sistema del DC - 23/11/2026
+--- registro de eventos Microsoft-Windows-Backup
+01:30:36  ID 1   Se inició la operación de copia de seguridad.
+01:30:45  ID 24  Se inició una nueva copia de seguridad para el volumen '{00000000-0000-0000-0000-000000000000}' ('Esp'): [motivo: 'Tamaño de volumen cambiado']. Esto puede hacer que se pierdan las versiones anteriores de las copias de seguridad cuando se complete la copia de seguridad.
+01:47:10  ID 8   Se canceló la operación de copia de seguridad.
+01:47:10  ID 14  Se completó la operación de copia de seguridad.
+01:48:32  ID 1   Se inició la operación de copia de seguridad.
+01:48:50  ID 24  Se inició una nueva copia de seguridad para el volumen '{00000000-0000-0000-0000-000000000000}' ('Esp'): [motivo: 'Tamaño de volumen cambiado']. Esto puede hacer que se pierdan las versiones anteriores de las copias de seguridad cuando se complete la copia de seguridad.
+02:29:29  ID 4   La operación de copia de seguridad finalizó correctamente.
+02:29:29  ID 14  Se completó la operación de copia de seguridad.
+--- wbadmin get versions
+Hora de copia de seguridad: 23/11/2026 1:48 
+Destino de copia de seguridad: Disco duro etiquetado E:
+Identificador de versión: 11/23/2026-00:48
+Se puede recuperar: Volúmenes, Archivos, Aplicaciones, Estado del sistema
+--- ficheros en E:
+a8554a08-a35f-4c69-8bc0-d5b77bfefb9b.vhdx  13218 MB
+Esp.vhdx  46 MB
+--- registro del script (C:\scripts\copias.log)
+2026-11-23T01:47:18  robocopy al NAS terminado (codigo 1; 0-7 es correcto)
+2026-11-23T01:48:13  exportaciones copiadas a \\192.168.30.20\copias-windows\DC01-export\2026-11-23_0147
+2026-11-23T02:29:38  wbadmin: Registro de archivos cuya copia de seguridad se completó correctamente:
+2026-11-23T02:30:51  robocopy al NAS terminado (codigo 3; 0-7 es correcto)
+--- en el NAS (dataset copias/windows, compresión LZ4)
+13G	/mnt/copias/windows/DC01-systemstate
+8.0G	/mnt/copias/windows/DC01-systemstate
+1.61x

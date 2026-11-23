@@ -9,13 +9,24 @@ El enunciado pide los cinco departamentos; con uno de cada sistema unido al domi
 | VM | `administracion-AlexSoler`: 2 vCPU, 4 GB, 80 GB, `lan_grupo3` |
 | SO | Windows 11 Pro 23H2, compilación **22631.2861** (de diciembre de 2023) |
 | Origen | `w11.iso` (SHA-256 calculado; integridad N/C, ver [01-imagenes](01-imagenes-y-requisitos.md)) |
-| Requisitos | TPM 2.0, arranque seguro, 4 GB, 64 GB: la VM los cumple con el TPM virtual y EFI de VirtualBox 7 |
+| Requisitos | TPM 2.0, arranque seguro, 4 GB, 64 GB: la VM los cumple con el TPM virtual y EFI de VirtualBox 7 (`Get-Tpm` → presente y listo; `Confirm-SecureBootUEFI` → True) |
 
 ### Usuarios
 
-- `Administracion-AlexS`: la cuenta local que se creó al instalar, **sin contraseña**. La dejé deshabilitada para que nadie entre al equipo sin autenticarse en el dominio.
-- `Administrador` local: habilitado y con contraseña, para emergencias si se pierde la relación con el dominio.
-- Usuarios del dominio: `ALEXSOLER\administracion` (grupo `G_Administracion`) es el usuario de trabajo. `adm.alex` es administrador del equipo porque está en "Admins. del dominio".
+Comprobado con `Get-LocalUser` y `Get-LocalGroupMember Administradores`:
+
+| Cuenta | Estado | Administrador del equipo |
+|---|---|---|
+| `Administracion-AlexS` (local, la de la instalación) | Habilitada, **sin contraseña** | Sí |
+| `Administrador` (local integrada) | Habilitada, con contraseña. La activé para administrar el equipo desde el anfitrión | Sí |
+| `ALEXSOLER\Admins. del dominio` (grupo, incluye `adm.alex`) | Del dominio | Sí: es lo que se usa para administrar |
+| `ALEXSOLER\administracion` (G_Administracion) | Del dominio | No: es el usuario de trabajo |
+
+**Riesgo que queda pendiente**: `Administracion-AlexS` es administradora y no tiene contraseña. Cualquiera con acceso físico entra como administrador sin pasar por el dominio. No la he tocado porque es la cuenta con la que se instaló el equipo; lo correcto, ahora que el equipo está en el dominio, es ponerle contraseña o deshabilitarla:
+
+```
+Disable-LocalUser -Name 'Administracion-AlexS'
+```
 
 ### Red
 

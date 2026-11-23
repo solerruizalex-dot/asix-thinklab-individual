@@ -1,0 +1,13 @@
+### pc-informatica - comprobación final - 2026-11-23 02:08:30
+$ ssh a.soler@pc-informatica   (usuario del dominio, grupo G_Informatica)
+uid=1179801117(a.soler) gid=1179800513(usuarios del dominio) grupos=1179800513(usuarios del dominio),1179801108(g_informatica)
+Default principal: a.soler@ALEXSOLER.LAN
+Debian 13.8 · kernel 6.12.118+deb13-amd64
+paquetes pendientes de actualizar: 0
+  realm-name: ALEXSOLER.LAN
+  login-policy: allow-permitted-logins
+  permitted-logins: adm.alex
+  permitted-groups: G_Informatica
+
+$ ssh p.ferrer@pc-informatica   (Comercial: no está permitido)
+→ código de salida 255 (acceso denegado)

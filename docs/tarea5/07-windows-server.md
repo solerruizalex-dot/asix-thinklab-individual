@@ -69,12 +69,28 @@ Lo comprobé con los dos clientes: el Windows 11 inicia sesión con un usuario d
 
 Tarea programada `Copia DC al NAS` todas las noches a las 21:30 como SYSTEM ([dc-03-copias.ps1](../../scripts/dc-03-copias.ps1), [dc-04-tarea-programada.ps1](../../scripts/dc-04-tarea-programada.ps1)).
 
-### El problema de la copia de estado del sistema
+### La copia de estado del sistema: lenta, pero funciona
 
-Directamente contra el recurso SMB del NAS no avanzaba (1,6 MB en 30 minutos). Le añadí un disco local `E:` solo para copias ([dc-05-disco-copias.ps1](../../scripts/dc-05-disco-copias.ps1)), y aun así la fase de **enumerar los ficheros** del estado del sistema es muy lenta en este equipo. Lo medí:
+Directamente contra el recurso SMB del NAS no avanzaba (1,6 MB en 30 minutos). Le añadí un disco local `E:` de 25 GB solo para copias ([dc-05-disco-copias.ps1](../../scripts/dc-05-disco-copias.ps1)), y la copia se hace ahí y luego se replica al NAS.
 
-- wbengine no lee ni escribe datos durante esa fase (contadores de E/S a 0 MB).
-- El disco del anfitrión está casi ocioso (13 % de ocupación media).
-- Dentro del DC, el proceso que más CPU gasta es **MsMpEng (Defender)**, más que el propio wbengine: analiza cada fichero que la copia enumera.
+Resultado de la ejecución del 23/11 ([dc-copia-estado-sistema.txt](../../evidencias/tasca5/dc-copia-estado-sistema.txt)):
 
-La solución que propondría es una exclusión de Defender para el proceso de copia, pero cambia la protección del servidor y no la he aplicado sin consultarlo. Las exportaciones de GPO, usuarios y DNS sí se copian bien cada noche (evidencia en el NAS: `DC01-export\2026-11-23_0130`).
+| Hora | Qué pasa |
+|---|---|
+| 01:48:32 | Empieza (evento 1). Primero copia la partición EFI (46 MB, en 1 minuto) y hace la instantánea VSS de C: |
+| 01:49 → 02:15 | **Enumera los ficheros** del estado del sistema: unos 184.000, a ~25 ficheros por segundo. No escribe nada |
+| 02:15 → 02:29 | Copia: imagen de C: de **13,2 GB** |
+| 02:29:29 | **Evento 4: "La operación de copia de seguridad finalizó correctamente"** |
+| 02:30:51 | robocopy al NAS terminado: 13 GB que en el NAS ocupan 8 GB (compresión LZ4, 1,61×) |
+
+`wbadmin get versions` → *Se puede recuperar: Volúmenes, Archivos, Aplicaciones, Estado del sistema*. **41 minutos en total.**
+
+Por qué es tan lenta la enumeración (lo medí durante la copia):
+
+- El disco del anfitrión está casi ocioso (13 % de ocupación media) y wbengine apenas usa CPU.
+- El proceso que más CPU gasta en el DC es **MsMpEng (Defender)**: 1.311 s de CPU frente a 240 s de wbengine. Analiza cada fichero que la copia toca.
+- La solución sería una exclusión de Defender para el proceso de copia, pero eso reduce la protección del servidor y es una decisión que no tomo yo solo: la dejo propuesta. Como la copia es de noche, 41 minutos son aceptables.
+
+### Un error en mi script que encontré gracias a esto
+
+Al cancelar una copia a medias, mi log decía *"wbadmin: La operación se completó correctamente"*: el visor de eventos, en cambio, decía **evento 8, cancelada**. Mi script buscaba la palabra "correctamente" en la salida de wbadmin, y esa frase la escribe también cuando la orden termina aunque la copia no se haya hecho. Lo corregí: ahora se fía del **código de salida** de wbadmin y, si no es 0, lo apunta como fallo y **no** replica al NAS una copia incompleta. Lección: comprobar una copia mirando el resultado real (versiones y eventos), no el texto del log.

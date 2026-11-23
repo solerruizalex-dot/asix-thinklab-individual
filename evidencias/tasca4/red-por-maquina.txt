@@ -216,3 +216,50 @@ LAN: IP 192.168.30.21/24  puerta 192.168.30.1  DNS 127.0.0.1,192.168.30.1  DHCP 
 --- resolución del dominio
 alexsoler.lan -> 192.168.30.21
 
+### pc-informatica - 2026-11-23 02:07:56
+--- interfaces (ip -br a)
+lo               UNKNOWN        127.0.0.1/8 
+enp0s3           UP             192.168.30.150/24 
+--- rutas (ip r)
+default via 192.168.30.1 dev enp0s3 proto dhcp src 192.168.30.150 metric 100 
+192.168.30.0/24 dev enp0s3 proto kernel scope link src 192.168.30.150 metric 100 
+--- DNS
+search alexsoler.lan
+nameserver 192.168.30.21
+nameserver 192.168.30.1
+--- ping 192.168.30.1: 2 packets transmitted, 2 received, 0% packet loss, time 1012ms
+--- ping 192.168.30.20: 2 packets transmitted, 2 received, 0% packet loss, time 1022ms
+--- ping 192.168.30.21: 2 packets transmitted, 2 received, 0% packet loss, time 1022ms
+--- ping 1.1.1.1: 2 packets transmitted, 2 received, 0% packet loss, time 1002ms
+--- traceroute -n -m 4 1.1.1.1
+traceroute to 1.1.1.1 (1.1.1.1), 4 hops max, 60 byte packets
+ 1  192.168.30.1  0.262 ms  0.242 ms  0.231 ms
+ 2  10.0.2.2  0.356 ms  0.345 ms  0.338 ms
+ 3  * * *
+ 4  10.0.1.119  1.535 ms  2.065 ms  1.504 ms
+
+### PC-ADMIN01 - 2026-11-23 02:32:34
+--- interfaces
+Ethernet: IP 192.168.30.198/24  puerta 192.168.30.1  DNS 192.168.30.21,192.168.30.1  DHCP Enabled
+--- rutas IPv4 (route print -4)
+0.0.0.0          0.0.0.0     192.168.30.1   192.168.30.198     25
+192.168.30.0    255.255.255.0      En vínculo    192.168.30.198    281
+192.168.30.198  255.255.255.255      En vínculo    192.168.30.198    281
+192.168.30.255  255.255.255.255      En vínculo    192.168.30.198    281
+224.0.0.0        240.0.0.0      En vínculo         127.0.0.1    331
+224.0.0.0        240.0.0.0      En vínculo    192.168.30.198    281
+255.255.255.255  255.255.255.255      En vínculo    192.168.30.198    281
+--- ping 192.168.30.1 : 2/2 respuestas
+--- ping 192.168.30.20 : 0/2 respuestas
+--- ping 192.168.30.21 : 2/2 respuestas
+--- ping 1.1.1.1 : 2/2 respuestas
+--- tracert -d -h 4 1.1.1.1
+1    <1 ms    <1 ms    <1 ms  192.168.30.1
+2    <1 ms    <1 ms    <1 ms  10.0.2.2
+3     *        *        *     Tiempo de espera agotado para esta solicitud.
+4     1 ms     1 ms    <1 ms  10.0.1.119
+--- resolución del dominio
+alexsoler.lan -> 192.168.30.21
+
+(el NAS .20 estaba apagado en este bloque para dejar memoria al Windows 11; el resto responde)
+
