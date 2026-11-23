@@ -5,8 +5,8 @@
 - Imagen `TrueNAS-SCALE-24.04.0.iso`, **SHA-256 verificado** (coincide con el publicado junto a la ISO).
 - La VM estaba creada pero sin configurar: ya tenía el sistema instalado en el disco de 16 GB (`boot-pool`), pero arrancaba siempre el instalador porque la ISO seguía montada y el DVD iba antes en el orden de arranque. La expulsé.
 - Versión inicial comprobada por la API: `TrueNAS-SCALE-24.04.0`, nombre `truenas-alex`, zona horaria Europe/Madrid.
-- **Actualización**: dentro de su tren (*Dragonfish* 24.04) había una actualización, la **24.04.2.5** (1,3 GB). La apliqué por la API: 3 min 36 s de descarga e instalación y 67 s de reinicio. Después el pool sigue `ONLINE`, SMB, NFS y SSH funcionan y ya no hay más actualizaciones en el tren ([truenas-actualizacion.txt](../../evidencias/tasca5/truenas-actualizacion.txt)). TrueNAS guarda el sistema anterior como **entorno de arranque** (`24.04.0`), así que si algo fallara se vuelve a él desde el menú de arranque. No salté a 24.10/25.04: es cambiar de versión mayor y prefiero probarlo antes en otra VM.
-- RAM: tenía 8 GB asignados. Con un único pool pequeño y sin aplicaciones funciona con 2,5 GB (ZFS usa menos caché ARC, pero aquí casi todo son escrituras de copias).
+- **Actualización**: dentro de su tren (*Dragonfish* 24.04) había una actualización, la **24.04.2.5** (1,3 GB según la propia API). La apliqué por la API: 3 min 36 s de descarga e instalación y 67 s de reinicio. Después el pool sigue `ONLINE`, SMB, NFS y SSH funcionan y ya no hay más actualizaciones en el tren ([truenas-actualizacion.txt](../../evidencias/tasca5/truenas-actualizacion.txt)). TrueNAS guarda el sistema anterior como **entorno de arranque** (`24.04.0`), así que si algo fallara se vuelve a él desde el menú de arranque. No salté a 24.10/25.04: es cambiar de versión mayor y prefiero probarlo antes en otra VM.
+- RAM: al empezar tenía 8 GB asignados; el 22/11 la bajé a 4 GB y el 23/11 a 2,5 GB (TrueNAS ve 2.477 MiB). Con un único pool pequeño y sin aplicaciones funciona (ZFS usa menos caché ARC, pero aquí casi todo son escrituras de copias).
 
 ## Usuarios
 

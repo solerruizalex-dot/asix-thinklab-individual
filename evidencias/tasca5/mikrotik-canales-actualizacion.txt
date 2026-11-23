@@ -1,0 +1,13 @@
+### Comprobación de actualizaciones del MikroTik (22/11 22:41): en el canal stable hay 7.25.1; me quedo en long-term
+latest-version: 7.25.1                  
+             status: New version is available
+
+            channel: stable                  
+               mode: https                   
+  check-certificate: yes                     
+         ip-version: auto                    
+  installed-version: 7.24.6                  
+     latest-version: 7.25.1                  
+             status: New version is available
+
+bad command name routerboard (line 1 column 92)

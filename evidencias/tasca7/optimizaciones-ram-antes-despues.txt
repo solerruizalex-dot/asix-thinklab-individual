@@ -1,0 +1,56 @@
+# Optimizaciones 1 y 2 de la Tarea 7: salidas originales de los comandos (22/11/2026, hora local)
+# Las contraseñas de las órdenes no se incluyen; solo la salida.
+
+### ANTES de las optimizaciones (22/11 22:08): RSS de cada VM en el anfitrión, memoria del MikroTik con 4 GB, y en el router Debian: free -m, objetivo de arranque, procesos gráficos y nº de servicios en marcha (última línea)
+8761 RSS=933 MiB uptime=29:57 vm=nftables-AlexSoler
+8986 RSS=159 MiB uptime=28:25 vm=Mikrotik-AlexSoler
+10948 RSS=4430 MiB uptime=16:01 vm=ws-dc-AlexSoler
+14657 RSS=731 MiB uptime=06:18 vm=truenas-AlexSoler
+
+                   uptime: 28m22s                     
+              free-memory: 3746.3MiB                  
+             total-memory: 4096.0MiB                  
+                 cpu-load: 0%                         
+               total       usado       libre  compartido   búf/caché  disponible
+Mem:            1973         646        1000           5         476        1327
+Inter:          1100           0        1100
+graphical.target
+Startup finished in 2.332s (kernel) + 16.925s (userspace) = 19.257s 
+graphical.target reached after 16.924s in userspace.
+  RSS COMMAND
+245700 gnome-shell
+127024 mutter-x11-fram
+66404 ibus-x11
+64584 Xwayland
+40416 xdg-desktop-por
+31020 ibus-extension-
+29584 gjs
+33
+
+### CAMBIO (22/11 22:10): systemctl set-default multi-user.target en el Debian; después, apagado y RAM: Debian 2 GB -> 1 GB, MikroTik 4 GB -> 256 MB
+Created symlink '/etc/systemd/system/default.target' → '/usr/lib/systemd/system/multi-user.target'.
+VBoxManage: error: Code NS_ERROR_ABORT (0x80004004) - Operation aborted (extended info not available)
+VBoxManage: error: Context: "Close()" at line 903 of file VBoxManageGuestCtrl.cpp
+nft=0 mk=1
+
+### DESPUÉS (22/11 22:14): Debian free -m y nº de servicios (20), MikroTik con 256 MB, RSS de los procesos VBoxHeadless
+multi-user.target
+               total       usado       libre  compartido   búf/caché  disponible
+Mem:             967         301         640           1         162         665
+Inter:          1100           0        1100
+Bootup is not yet finished (org.freedesktop.systemd1.Manager.FinishTimestampMonotonic=0).
+Please try again later.
+Hint: Use 'systemctl list-jobs' to see active jobs
+20
+                   uptime: 29s                        
+              free-memory: 53.0MiB                    
+             total-memory: 256.0MiB                   
+135 MiB 139080 /usr/lib/virtualbox/VBoxHeadless --comment Mi
+390 MiB 399868 /usr/lib/virtualbox/VBoxHeadless --comment nf
+3 MiB  4004 /bin/bash -c source /home/batoi/.claude/shell-sn
+2 MiB  2384 /bin/bash -c source /home/batoi/.claude/shell-sn
+2 MiB  2384 /bin/bash -c source /home/batoi/.claude/shell-sn
+
+### Arranque del Debian en modo texto
+Startup finished in 2.931s (kernel) + 13.059s (userspace) = 15.991s
+

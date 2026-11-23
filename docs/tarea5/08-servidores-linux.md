@@ -18,7 +18,7 @@ En lugar de instalar desde la ISO con el asistente, usé la **imagen oficial de 
 2. Cada VM se crea con un script ([pve-04-crear-vm.sh](../../scripts/pve-04-crear-vm.sh)): importa la imagen como disco, lo amplía a 6 GB y le pasa por cloud-init el usuario, la IP, la puerta de enlace, el DNS y el dominio de búsqueda.
 3. Elegí la imagen *generic* y no la *genericcloud*, porque la segunda trae un kernel recortado y no sabía si tendría los módulos de RAID y DRBD.
 
-Tardé 23 s en crear serveis y unos 2 minutos y medio en actualizarla e instalar los paquetes. A mano, con el instalador, serían unos 15 minutos por máquina.
+Tardé 23 s en crear serveis y unos 2 minutos y medio en actualizarla e instalar los paquetes. A mano, con el instalador, calculo unos 15 minutos por máquina (estimado).
 
 ### Problemas en la instalación
 

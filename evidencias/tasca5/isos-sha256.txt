@@ -13,6 +13,16 @@ debian-13.1.0-amd64-netinst.iso   COINCIDE  https://cdimage.debian.org/cdimage/a
 proxmox-ve_9.2-1.iso              COINCIDE  https://www.proxmox.com/en/downloads/proxmox-virtual-environment/iso
 TrueNAS-SCALE-24.04.0.iso         COINCIDE  fichero .sha256 junto a la ISO en download.truenas.com
 ubuntu-26.04.1-desktop-amd64.iso  COINCIDE  https://releases.ubuntu.com/26.04.1/SHA256SUMS
-OPNsense-26.7-dvd-amd64.iso       N/C       el fabricante publica la suma del .iso.bz2 (95cafedd...186bfb), no de la ISO descomprimida
-mikrotik-7.24.6.iso               N/C       no encontré fichero de sumas publicado para la ISO x86
-w11.iso / Server 2025 eval        N/C       Microsoft solo muestra el hash en la página de descarga al generar el enlace; no lo guardé al bajarlas
+OPNsense-26.7-dvd-amd64.iso       COINCIDE  (verificado el 23/11: el .iso.bz2 oficial coincide con su suma y, descomprimido, da esta misma ISO; ver abajo)
+mikrotik-7.24.6.iso               COINCIDE  https://download.mikrotik.com/routeros/7.24.6/mikrotik-7.24.6.iso.sha256 (la encontré el 23/11; el 22/11 la había dado por inexistente)
+w11.iso / Server 2025 eval        N/C       Microsoft solo muestra el hash en la página de descarga, al generar el enlace para un idioma; no lo apunté al bajarlas y no hay un fichero de sumas que consultar después
+
+### Verificación de la ISO de OPNsense 26.7 - 2026-11-23 03:45:44
+Suma oficial publicada (pkg.opnsense.org/releases/26.7/OPNsense-26.7-checksums-amd64.sha256):
+SHA256 (OPNsense-26.7-dvd-amd64.iso.bz2) = 95cafedda6d5b22ce832e249dc2309110fbee19f813ad78cf28bb3d387186bfb
+Suma del .bz2 descargado ahora:
+95cafedda6d5b22ce832e249dc2309110fbee19f813ad78cf28bb3d387186bfb  OPNsense-26.7-dvd-amd64.iso.bz2
+ISO obtenida al descomprimir ese .bz2:
+1efd5dc9fa12a1f93571183fe5e3823e22e332872de8417fafb5e4e4d48d5dcd  -
+ISO que usé para instalar (ISOs/OPNsense-26.7-dvd-amd64.iso):
+1efd5dc9fa12a1f93571183fe5e3823e22e332872de8417fafb5e4e4d48d5dcd  OPNsense-26.7-dvd-amd64.iso

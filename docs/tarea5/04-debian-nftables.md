@@ -80,7 +80,7 @@ Entra por la LAN (`IN=enp0s8`), iba a salir por la WAN (`OUT=enp0s3`), es un SYN
 
 ## Copia de seguridad
 
-No tiene sentido guardar el disco entero (20 GB) para un router que se reinstala en 15 minutos. Lo que vale es lo que lo hace distinto de un Debian recién instalado:
+No tiene sentido guardar el disco entero (20 GB) para un router que se reinstala en unos 15 minutos (estimado). Lo que vale es lo que lo hace distinto de un Debian recién instalado:
 
 - `/etc/nftables.conf`, `/etc/network/`, `/etc/dnsmasq*`, `/etc/sysctl.d/`, `/etc/ssh/sshd_config`, `/etc/hostname`, `/etc/hosts`
 - la lista de paquetes (`dpkg --get-selections`) para reinstalar lo mismo.
@@ -99,4 +99,4 @@ Simulé un error de edición: alguien borra por error la línea del *masquerade*
 | 22:21:08 | Desde el NAS: se extrae `etc/nftables.conf` de la última copia, `nft -c -f` y `systemctl restart nftables` |
 | 22:21:09 | Prueba final: HTTP 200 |
 
-**Tiempo sin servicio: 8 s.** Registro: [recuperacion-debian-nft.txt](../../evidencias/tasca5/recuperacion-debian-nft.txt).
+**Tiempo sin servicio: 8 s**, con una copia del NAS hecha minutos antes (22:18). Registro: [recuperacion-debian-nft.txt](../../evidencias/tasca5/recuperacion-debian-nft.txt).

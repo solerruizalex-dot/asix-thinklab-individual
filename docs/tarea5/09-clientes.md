@@ -9,7 +9,7 @@ El enunciado pide los cinco departamentos; con uno de cada sistema unido al domi
 | VM | `administracion-AlexSoler`: 2 vCPU, 4 GB, 80 GB, `lan_grupo3` |
 | SO | Windows 11 Pro 23H2: estaba en la compilación 22631.2861 (diciembre de 2023), **actualizado a 22631.6199** |
 | Origen | `w11.iso` (SHA-256 calculado; integridad N/C, ver [01-imagenes](01-imagenes-y-requisitos.md)) |
-| Requisitos | TPM 2.0, arranque seguro, 4 GB, 64 GB: la VM los cumple con el TPM virtual y EFI de VirtualBox 7 (`Get-Tpm` → presente y listo; `Confirm-SecureBootUEFI` → True) |
+| Requisitos | TPM 2.0, arranque seguro, 4 GB, 64 GB: la VM los cumple con el TPM virtual y EFI de VirtualBox 7 (`Get-Tpm` → presente y listo; `Confirm-SecureBootUEFI` → True; [w11-usuarios-requisitos.txt](../../evidencias/tasca5/w11-usuarios-requisitos.txt)) |
 
 ### Actualización
 
@@ -17,7 +17,7 @@ Estaba casi dos años sin parches. Lo actualicé con [windows-actualizar.ps1](..
 
 | Pasada | Qué instaló | Tiempo |
 |---|---|---|
-| 1 | Acumulativa **KB5068865** (2025-11, la última de 23H2), plataforma de seguridad, firmas de Defender y la herramienta de software malintencionado | 12 min + reinicio (4 min 43 s) |
+| 1 | Acumulativa **KB5068865** (2025-11, la última de 23H2), plataforma de seguridad, firmas de Defender y la herramienta de software malintencionado | 12 min + reinicio (unos 5 minutos hasta volver a responder) |
 | 2 | Acumulativa de .NET Framework **KB5066133** | 1 min + reinicio |
 
 Resultado: **22631.2861 → 22631.6199**, y el equipo sigue en el dominio (`Test-ComputerSecureChannel` → True; `nltest /sc_query` → `NERR_Success`).
@@ -63,7 +63,8 @@ Desde el DC el equipo aparece en `OU=Equipos,OU=Empresa` (gracias a `redircmp`).
 
 ### Copias: qué sí y qué no
 
-- **Sí**: Escritorio, Documentos y Descargas de cada perfil, con `robocopy /MIR` al recurso SMB del NAS (`\\truenas\copias-windows\PC-ADMIN01`) cada día ([w11-copias.ps1](../../scripts/w11-copias.ps1)).
+- **Sí**: Escritorio, Documentos y Descargas de cada perfil, con `robocopy /MIR` al recurso SMB del NAS (`\\truenas\copias-windows\PC-ADMIN01`) todos los días a las 21:00 con la tarea programada `Copia datos al NAS` como SYSTEM ([w11-copias.ps1](../../scripts/w11-copias.ps1)).
+- Lo probé el 23/11 ([windows-tareas-copia.txt](../../evidencias/tasca5/windows-tareas-copia.txt)): creé un documento en Documentos del usuario de dominio `administracion`, lancé la tarea (7 s, resultado 0) y apareció en el NAS. Después **lo borré del equipo y lo recuperé** desde el NAS en 0,1 s, con el mismo SHA-256 que el original. El usuario conserva control total sobre él por herencia de la carpeta, aunque el propietario pasa a ser *Administradores* porque lo restauré como administrador.
 - **No**: Windows ni los programas. Un puesto se reinstala o se clona en menos tiempo del que se tarda en restaurar 80 GB, y la configuración le llega del dominio. Lo único irrecuperable son los ficheros del usuario.
 
 ## Debian 13 · pc-informatica
@@ -98,5 +99,5 @@ Un fallo que tuve: `sssd` se quedó en *start-limit-hit* porque cada `realm perm
 
 ### Copias: qué sí y qué no
 
-- **Sí**: `/etc` y la lista de paquetes, que se lleva el NAS cada noche (2047 ficheros en la primera copia).
+- **Sí**: `/etc` y la lista de paquetes, que se lleva el NAS cada noche (2047 ficheros en la primera copia, [linux-cliente-primera-copia.txt](../../evidencias/tasca5/linux-cliente-primera-copia.txt)).
 - **No**: el `/home` de los usuarios del dominio en local. En la empresa iría en una carpeta de red del servidor de datos, que es la que se copia.

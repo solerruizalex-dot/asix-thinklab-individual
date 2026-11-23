@@ -47,9 +47,9 @@ Si sumo la RAM que tenían asignada las máquinas al principio (DC 8 GB, TrueNAS
 
 | Bloque de trabajo | Máquinas encendidas |
 |---|---|
-| Comunicaciones | MikroTik + OPNsense + Debian + TrueNAS |
-| Dominio | MikroTik + DC + TrueNAS + un cliente |
-| Virtualización | MikroTik + Debian (salto SSH) + pve1-3 + TrueNAS |
+| Comunicaciones | MikroTik + OPNsense + Debian + TrueNAS (5,8 GB asignados) |
+| Dominio | MikroTik + Debian + DC + TrueNAS, o DC + Windows 11 apagando TrueNAS: el DC y el Windows 11 (4 GB cada uno) no caben con todo lo demás |
+| Virtualización | MikroTik + Debian (salto SSH) + TrueNAS + pve1-3, con serveis, dades y el contenedor dentro (10,25 GB asignados) |
 
 ## Cómo administro las máquinas
 
@@ -80,7 +80,7 @@ Si sumo la RAM que tenían asignada las máquinas al principio (DC 8 GB, TrueNAS
 | Las VMs dentro de Proxmox no salían de su nodo | VirtualBox no entrega tramas a MAC que no son la de la tarjeta | `--nicpromisc1 allow-all` en los tres nodos |
 | La VM dades se quedó en `io-error` y una migración en vivo falló | Thin pool `local-lvm` de 6,8 GB lleno: había asignado más de lo que existe | Mover los discos de RAID al NFS; migrar en frío ([Tarea 5](tarea5/06-proxmox.md)) |
 | Las VMs iban a 1,4–4 MB/s por el MikroTik | Su VM tenía tarjetas AMD PCnet emuladas | Cambiarlas a Intel PRO/1000: ×9 ([Tarea 7](tarea7-rendimiento.md)) |
-| El PC se colgó entero | Demasiadas escrituras a la vez sobre el SSD USB | Trabajar por bloques, una sola carga de disco pesada a la vez ([Tarea 7](tarea7-rendimiento.md)) |
+| El PC se colgó entero | No quedó ningún error en el registro; mi hipótesis es el SSD USB atascado con varias VMs escribiendo a la vez | Trabajar por bloques, con una sola carga de disco pesada a la vez ([Tarea 7](tarea7-rendimiento.md)) |
 | El MikroTik avisa de licencia | Es la ISO x86 sin licencia (modo demo 24 h) | Para el laboratorio basta; para algo estable usaría CHR (licencia gratuita limitada a 1 Mbit/s) o una licencia nivel 4 |
 
 ## Punto de retorno
@@ -91,7 +91,7 @@ Ojo con una cosa que aprendí por las malas: con un snapshot hecho, la VM escrib
 
 ## Documentación en Markdown y Git
 
-Todo este trabajo está en un repositorio Git local (`asix-thinklab-individual`), que se sube a GitHub:
+Todo este trabajo está en un repositorio Git (`asix-thinklab-individual`), con un commit por cada bloque de trabajo, preparado para publicarlo en GitHub (`git remote add origin …` + `git push`):
 
 ```
 README.md       portada y mapa del repositorio

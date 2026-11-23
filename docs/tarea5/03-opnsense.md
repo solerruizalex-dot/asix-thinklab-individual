@@ -2,10 +2,10 @@
 
 ## Instalación y versión
 
-- Imagen: `OPNsense-26.7-dvd-amd64.iso`. OPNsense publica el SHA-256 del fichero **comprimido** (`.iso.bz2`), no de la ISO ya descomprimida, y yo solo conservo la ISO. Queda como **N/C**; para comprobarlo habría que bajar el `.bz2`, verificar su suma (`95cafedd…186bfb`) y descomprimirlo.
+- Imagen: `OPNsense-26.7-dvd-amd64.iso`. OPNsense publica el SHA-256 del fichero **comprimido** (`.iso.bz2`), no de la ISO. Para verificarla bajé el `.bz2` oficial, comprobé que su suma coincide con la publicada (`95cafedd…186bfb`) y que, al descomprimirlo, sale exactamente mi ISO (`1efd5dc9…`): **integridad verificada** ([isos-sha256.txt](../../evidencias/tasca5/isos-sha256.txt)).
 - VM: FreeBSD 64 bits, 2 vCPU, disco de 10 GB con UFS (en el arranque monta `/dev/gpt/rootfs`), `em0` en NAT (WAN) y `em1` en `lan_grupo3` (LAN).
 - Versión de partida: `opnsense-version` → **OPNsense 26.7 (amd64)** sobre FreeBSD 15.1-RELEASE-p1.
-- **Actualización**: tenía 95 paquetes pendientes. Guardé antes `config.xml` en `/conf/backup/` y lancé `configctl firmware update` (lo mismo que el botón de la web): 83 s y reinicio automático. Queda en **OPNsense 26.7.9_3** con FreeBSD 15.1-RELEASE-p6 y sin nada pendiente. Después comprobé que la regla de bloqueo sigue cargada, que HTTP sale (200) y que el 445 sigue bloqueado ([opnsense-actualizacion.txt](../../evidencias/tasca5/opnsense-actualizacion.txt)).
+- **Actualización**: tenía unos 90 paquetes pendientes. Guardé antes `config.xml` en `/conf/backup/` y lancé `configctl firmware update` (lo mismo que el botón de la web): algo menos de minuto y medio y reinicio automático. Queda en **OPNsense 26.7.9_3** con FreeBSD 15.1-RELEASE-p6 y, contándolo bien, 0 paquetes pendientes (al principio conté mal: ver la aclaración en la evidencia). Después comprobé que la regla de bloqueo sigue cargada, que HTTP sale (200) y que el 445 sigue bloqueado ([opnsense-actualizacion.txt](../../evidencias/tasca5/opnsense-actualizacion.txt)).
 - La RAM la bajé de 4 GB a 2 GB: sin plugins (ni IDS ni proxy) no necesita más para enrutar y filtrar una LAN pequeña.
 
 Al revisarla vi que el **asistente inicial nunca se había completado** (`<trigger_initial_wizard/>` seguía en `config.xml`), el nombre era el de fábrica (`OPNsense.internal`) y la zona horaria UTC.
@@ -72,9 +72,9 @@ Se lee por campos separados por comas: identificador de la regla (`b10c0b10…`,
 
 ## Copia de seguridad
 
-Todo OPNsense está en un único fichero: `/conf/config.xml`. Es lo único que hay que guardar; el sistema se reinstala en 10 minutos desde la ISO y, al importar ese fichero (opción 13 de la consola o *System › Configuration › Backups*), queda igual. El NAS lo copia cada noche por SSH con su clave (ver [10-copias-automatizadas](10-copias-automatizadas.md)). La clave está en el usuario `root` limitada con `from="192.168.30.20"`.
+Todo OPNsense está en un único fichero: `/conf/config.xml`. Es lo único que hay que guardar; el sistema se reinstala desde la ISO en unos 10 minutos (estimado, no lo he cronometrado) y, al importar ese fichero (opción 13 de la consola o *System › Configuration › Backups*), queda igual. El NAS lo copia cada noche por SSH con su clave (ver [10-copias-automatizadas](10-copias-automatizadas.md)). La clave está en el usuario `root` limitada con `from="192.168.30.20"`.
 
-Además OPNsense guarda solo sus versiones anteriores en `/conf/backup/` (había 17).
+Además OPNsense guarda solo sus versiones anteriores en `/conf/backup/` (el 23/11 había 20, ver [opnsense-actualizacion.txt](../../evidencias/tasca5/opnsense-actualizacion.txt)).
 
 ## Prueba de fallo y recuperación
 
@@ -87,4 +87,4 @@ Simulé un error típico desde la web: borrar sin querer la regla que deja salir
 | 22:21:36 | Desde el NAS: `scp` de la última copia a `/conf/config.xml` + `configctl filter reload` |
 | 22:21:37 | Prueba final: HTTP 200, y la regla de bloqueo sigue cargada |
 
-**Tiempo sin servicio: 8 s** con el procedimiento ya preparado. Haciéndolo a mano (darse cuenta, entrar, buscar la copia) serían unos minutos. Registro: [recuperacion-opnsense.txt](../../evidencias/tasca5/recuperacion-opnsense.txt).
+**Tiempo sin servicio: 8 s** con el procedimiento ya preparado y una copia del NAS hecha 3 minutos antes (la de las 22:18), así que no se perdió ningún cambio. Con la copia de la noche anterior se perderían los cambios del día. Haciéndolo a mano (darse cuenta, entrar, buscar la copia) serían unos minutos. Registro: [recuperacion-opnsense.txt](../../evidencias/tasca5/recuperacion-opnsense.txt).

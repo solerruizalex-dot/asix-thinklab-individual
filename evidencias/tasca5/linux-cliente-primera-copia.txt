@@ -1,0 +1,7 @@
+### Primera copia del cliente Linux en el NAS (22/11 22:48): nº de ficheros dentro de etc.tgz
+total 1062
+drwxr-xr-x 2 root root       4 Nov 22 22:48 .
+drwxr-xr-x 3 root root       3 Nov 22 22:48 ..
+-rw-r--r-- 1 root root 1053626 Nov 22 22:48 etc.tgz
+-rw-r--r-- 1 root root   48975 Nov 22 22:48 paquetes.txt
+2047

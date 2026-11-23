@@ -1,6 +1,6 @@
 # Tarea 6 · RAID y espejo entre dos equipos
 
-Todo con discos virtuales y datos ficticios, en las VMs `dades` (pve3) y `serveis` (pve1) del clúster Proxmox.
+Todo con discos virtuales y datos ficticios, en las VMs `dades` (en pve3) y `serveis` (en pve2 durante estas pruebas; después la migré a pve1) del clúster Proxmox.
 
 ## 1. Qué aporta cada RAID
 
@@ -71,7 +71,7 @@ Un RAID 1 normal protege de que se rompa un **disco**, pero no de que se caiga e
 
 ### Montaje
 
-- `serveis` (en pve1): disco `scsi1` de 1 GB · `dades` (en pve3): disco `scsi8` de 1 GB. Son discos de **nodos físicos (VMs) distintos**.
+- `serveis` (en pve2 durante la prueba): disco `scsi1` de 1 GB · `dades` (en pve3): disco `scsi8` de 1 GB. Cada disco está en el almacenamiento local de un **nodo distinto**: si cae un nodo entero, el otro disco sigue vivo.
 - Protocolo **C** (síncrono): una escritura no se da por terminada hasta que está en los dos discos.
 - Configuración [drbd-espejo.sh](../scripts/drbd-espejo.sh): recurso `espejo`, `/dev/drbd0`, puerto 7789. Uso las rutas `/dev/disk/by-id/...drive-scsiN` porque los nombres `sdX` cambian de orden (me pasó, ver arriba).
 - Versión: módulo DRBD 8.4.11 del kernel de Debian con `drbd-utils` 9.22.
@@ -101,4 +101,6 @@ Cosas que vi y que no esperaba:
 - `drbd.service` viene deshabilitado: el nodo que vuelve **no se conecta solo**. Lo dejé así a propósito: si los dos arrancaran solos como primarios, tendría un *split-brain* (dos versiones distintas de los datos). Prefiero que volver a conectar sea un paso consciente del procedimiento.
 - El cambio de primario es manual. Para hacerlo automático haría falta un gestor de clúster (Pacemaker/Corosync) y un tercer voto para evitar el *split-brain*.
 
-También probé el **cambio planificado** (mantenimiento): antes de migrar serveis entre nodos pasé el primario a dades, migré y lo devolví. La resincronización tardó 1 s porque esta vez el apagado fue limpio ([Tarea 5 · Proxmox](tarea5/06-proxmox.md)).
+También probé el **cambio planificado** (mantenimiento): antes de migrar serveis de pve2 a pve1 pasé el primario a dades, migré y lo devolví. La resincronización tardó 1 s porque esta vez el apagado fue limpio ([Tarea 5 · Proxmox](tarea5/06-proxmox.md)).
+
+Y una comprobación final a las 03:30, tras apagar y volver a arrancar todo el clúster: los tres RAID se montan solos con los datos intactos (SHA-256 OK) aunque los discos han vuelto a cambiar de nombre (`sdg` está ahora en md0), y el espejo vuelve a `Connected Primary/Secondary UpToDate/UpToDate` al levantarlo ([proxmox-actualizacion-final.txt](../evidencias/tasca5/proxmox-actualizacion-final.txt)).

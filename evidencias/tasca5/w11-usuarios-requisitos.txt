@@ -1,0 +1,29 @@
+### Windows 11: versión, TPM, arranque seguro y parches antes de actualizar · 2026-11-23T01:32:23Z (UTC)
+Version: 23H2 build 22631.2861
+TPM presente: True listo: True
+Secure Boot: True
+RAM GB: 4
+KB5041655 11/17/2026 00:00:00
+KB5033375 12/04/2023 00:00:00
+KB5032393 12/04/2023 00:00:00
+
+### Windows 11: cuentas locales y grupo Administradores · 2026-11-23T01:31:47Z (UTC)
+W11 listo en 19s
+Name                 Enabled PasswordRequired LastLogon          
+----                 ------- ---------------- ---------          
+Administracion-AlexS    True            False 22/11/2026 22:49:27
+Administrador           True             True 23/11/2026 2:32:05 
+DefaultAccount         False            False                    
+Invitado               False            False                    
+WDAGUtilityAccount     False             True                    
+Name                            PrincipalSource
+----                            ---------------
+ALEXSOLER\Admins. del dominio   ActiveDirectory
+PC-ADMIN01\Administracion-AlexS           Local
+PC-ADMIN01\Administrador                  Local
+Caption                  Version    BuildNumber
+-------                  -------    -----------
+Microsoft Windows 11 Pro 10.0.22631 22631      
+True
+Mem:           15907       12860         268          71        3190        3046
+

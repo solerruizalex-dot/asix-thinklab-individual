@@ -1,4 +1,5 @@
 ### Actualización de TrueNAS - 23/11/2026
+(antes de aplicarla, /update/check_available devolvió: version 24.04.2.5, filename TrueNAS-SCALE-24.04.2.5.update, filesize 1320603648 bytes = 1,3 GB, checksum dfee3b50…92f3be)
 entornos de arranque antes: [('24.04.0', 'NR')]
 estado: SUCCESS None en 216 s
 entornos de arranque después: [('24.04.0', 'N'), ('24.04.2.5', 'R')]
@@ -8,3 +9,9 @@ entornos de arranque: [('24.04.0', ''), ('24.04.2.5', 'NR')]
 pool: [('copias', 'ONLINE', True)]
 servicios: [('cifs', 'RUNNING'), ('nfs', 'RUNNING'), ('ssh', 'RUNNING')]
 comprobación de nuevo: UNAVAILABLE
+
+### RAM asignada a la VM y la que ve TrueNAS - 2026-11-23 03:48:44
+memory=2560
+TrueNAS ve 2477 MiB; versión TrueNAS-SCALE-24.04.2.5
+               total        used        free      shared  buff/cache   available
+Mem:            2477        1953         555           6          94         524

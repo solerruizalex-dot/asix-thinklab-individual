@@ -1,0 +1,27 @@
+# RAM asignada a cada VM del grupo individual
+## Al empezar (22/11/2026 21:36, VBoxManage showvminfo --machinereadable)
+  ws-dc-AlexSoler 8192 MB
+  truenas-AlexSoler 8192 MB
+  Mikrotik-AlexSoler 4096 MB
+  OPNsense-AlexSoler 4096 MB
+  administracion-AlexSoler 4096 MB
+  nftables-AlexSoler 2048 MB
+  clusterProxMox-pve1-AlexSoler 2048 MB
+  clusterProxMox-pve2-AlexSoler 2048 MB
+  clusterProxMox-pve3-AlexSoler 2048 MB
+  (informatica-linux-AlexSoler aún no existía)
+  total: 36864 MB = 36 GB
+
+## Pasos intermedios del 22/11: TrueNAS 8192 -> 4096 (antes de configurarlo; la API veía 3925 MiB), DC 8192 -> 4096, Debian 2048 -> 1024, MikroTik 4096 -> 256, OPNsense 4096 -> 2048
+
+## Ahora (2026-11-23 04:00:12)
+  ws-dc-AlexSoler 4096 MB
+  nftables-AlexSoler 1024 MB
+  OPNsense-AlexSoler 2048 MB
+  administracion-AlexSoler 4096 MB
+  Mikrotik-AlexSoler 256 MB
+  clusterProxMox-pve1-AlexSoler 2048 MB
+  clusterProxMox-pve2-AlexSoler 2048 MB
+  clusterProxMox-pve3-AlexSoler 2560 MB
+  truenas-AlexSoler 2560 MB
+  informatica-linux-AlexSoler 2048 MB

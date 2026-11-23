@@ -1,0 +1,143 @@
+# Diagnóstico de la lentitud de la copia del estado del sistema del DC (23/11/2026)
+# Salidas de los comandos tal cual; la hora es UTC (+1 h = hora local)
+
+### Procesos con más CPU en el DC durante la copia · 2026-11-23T00:35:29Z
+Name        CPU10s
+----        ------
+MsMpEng        5,7
+VBoxService    3,1
+wbengine       2,5
+System         0,1
+svchost          0
+svchost          0
+Get-Counter : El objeto especificado no se encontr� en el equipo.
+En l�nea: 1 Car�cter: 259
++ ...  ft -auto; (Get-Counter "\Processor(_Total)\% Processor Time","\Physi ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidResult: (:) [Get-Counter], Exception
+    + FullyQualifiedErrorId : CounterApiError,Microsoft.PowerShell.Commands.GetCounterCommand
+Get-Counter : El objeto especificado no se encontr� en el equipo.
+En l�nea: 1 Car�cter: 259
++ ...  ft -auto; (Get-Counter "\Processor(_Total)\% Processor Time","\Physi ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidResult: (:) [Get-Counter], Exception
+    + FullyQualifiedErrorId : CounterApiError,Microsoft.PowerShell.Commands.GetCounterCommand
+Get-Counter : El objeto especificado no se encontr� en el equipo.
+En l�nea: 1 Car�cter: 259
++ ...  ft -auto; (Get-Counter "\Processor(_Total)\% Processor Time","\Physi ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidResult: (:) [Get-Counter], Exception
+    + FullyQualifiedErrorId : CounterApiError,Microsoft.PowerShell.Commands.GetCounterCommand
+
+### Procesos con más CPU en el DC durante la copia · 2026-11-23T01:11:15Z
+wbadmin 1.0: herramienta l�nea de comandos de copia de seguridad
+(C) Copyright Microsoft Corporation. Todos los derechos reservados.
+Se encontraron (182820) archivos.
+Se encontraron (183436) archivos.
+TimeCreated        ProviderName                      Id LevelDisplayName
+-----------        ------------                      -- ----------------
+23/11/2026 2:03:19 Microsoft-Windows-Security-SPP 16384 Información     
+23/11/2026 2:02:49 Microsoft-Windows-Security-SPP 16394 Información     
+23/11/2026 1:58:37 Microsoft-Windows-Security-SPP 16384 Información     
+23/11/2026 1:58:07 Microsoft-Windows-Security-SPP 16394 Información     
+23/11/2026 1:48:41 ESENT                            326 Información     
+23/11/2026 1:48:41 ESENT                            105 Información     
+23/11/2026 1:48:41 ESENT                            102 Información     
+23/11/2026 1:48:40 ESENT                            103 Información     
+23/11/2026 1:48:40 ESENT                            105 Información     
+Name             CPU
+----             ---
+MsMpEng  1311,609375
+svchost   268,515625
+wbengine  240,359375
+System     63,734375
+svchost    14,671875
+
+### wbadmin get status durante la enumeración · 2026-11-23T01:11:15Z
+wbadmin 1.0: herramienta l�nea de comandos de copia de seguridad
+(C) Copyright Microsoft Corporation. Todos los derechos reservados.
+Se encontraron (182820) archivos.
+Se encontraron (183436) archivos.
+TimeCreated        ProviderName                      Id LevelDisplayName
+-----------        ------------                      -- ----------------
+23/11/2026 2:03:19 Microsoft-Windows-Security-SPP 16384 Información     
+23/11/2026 2:02:49 Microsoft-Windows-Security-SPP 16394 Información     
+23/11/2026 1:58:37 Microsoft-Windows-Security-SPP 16384 Información     
+23/11/2026 1:58:07 Microsoft-Windows-Security-SPP 16394 Información     
+23/11/2026 1:48:41 ESENT                            326 Información     
+23/11/2026 1:48:41 ESENT                            105 Información     
+23/11/2026 1:48:41 ESENT                            102 Información     
+23/11/2026 1:48:40 ESENT                            103 Información     
+23/11/2026 1:48:40 ESENT                            105 Información     
+Name             CPU
+----             ---
+MsMpEng  1311,609375
+svchost   268,515625
+wbengine  240,359375
+System     63,734375
+svchost    14,671875
+
+### Ritmo de enumeración de wbadmin (nº de ficheros en ~65 s) · 2026-11-23T01:11:44Z
+Exit code 143
+184791 ->  en 65 s
+Terminado
+
+### Contadores de E/S del proceso wbengine · 2026-11-23T00:40:36Z
+FullName                                                                                                                                                Length LastWriteTime      
+--------                                                                                                                                                ------ -------------      
+E:\$RECYCLE.BIN\S-1-5-21-1828627610-3231743466-65801904-1000\desktop.ini                                                                                   129 23/11/2026 1:28:47 
+E:\WindowsImageBackup\DC01-ALEX\MediaId                                                                                                                     16 22/11/2026 23:05:26
+E:\WindowsImageBackup\DC01-ALEX\Backup 2026-11-23 003036\BackupSpecs.xml                                                                                  1130 23/11/2026 1:31:15 
+E:\WindowsImageBackup\DC01-ALEX\Backup 2026-11-23 003036\cf32ba5f-fbd0-4df1-8bab-ee844b4b8148_AdditionalFilesc3b9f3c7-5e52-4d5e-8b20-19adc95a34c7.xml      776 23/11/2026 1:31:15 
+E:\WindowsImageBackup\DC01-ALEX\Backup 2026-11-23 003036\cf32ba5f-fbd0-4df1-8bab-ee844b4b8148_RegistryExcludes.xml                                        6218 23/11/2026 1:31:15 
+E:\WindowsImageBackup\DC01-ALEX\Backup 2026-11-23 003036\cf32ba5f-fbd0-4df1-8bab-ee844b4b8148_Writer0bada1de-01a9-4625-8278-69e735f39dd2.xml              3138 23/11/2026 1:31:15 
+E:\WindowsImageBackup\DC01-ALEX\Backup 2026-11-23 003036\cf32ba5f-fb
+
+### Contadores de E/S del proceso wbengine · 2026-11-23T00:55:45Z
+1
+    CPU ReadMB WriteMB
+    --- ------ -------
+178,375      0       0
+01:55:49
+
+### Contadores de E/S del proceso wbengine · 2026-11-23T00:59:31Z
+50:| MikroTik | — | — | — | ✔ (`/ping`, 11 ms) | — |
+       CPU ReadMB WriteMB
+       --- ------ -------
+202,640625      0       0
+01:59:33
+[This command modified 1 file you've previously read: docs/tarea4-red.md. Call Read before editing.]
+
+### Ficheros en E:, instantáneas VSS o progreso · 2026-11-23T01:00:52Z
+Name                                                                                MB LastWriteTime     
+----                                                                                -- -------------     
+0d5c3c91-ab10-478c-9688-ad8f4a1b8d83_Writere8132975-6f93-4464-a53e-1050253ae220.xml  7 23/11/2026 1:49:21
+Esp.vhdx                                                                            46 23/11/2026 1:49:20
+E usado MB: 118
+02:00:55
+
+### Ficheros en E:, instantáneas VSS o progreso · 2026-11-23T01:09:27Z
+Name                                 Length LastWriteTime     
+----                                 ------ -------------     
+WBEngine.1.etl                        51200 23/11/2026 1:28:59
+Backup-23-11-2026_00-30-36.log          198 23/11/2026 1:31:15
+Backup_Error-23-11-2026_00-30-36.log      2 23/11/2026 1:31:15
+WBEngine.0.etl                            0 23/11/2026 1:48:13
+Backup_Error-23-11-2026_00-48-32.log      2 23/11/2026 1:49:20
+Backup-23-11-2026_00-48-32.log          198 23/11/2026 1:49:20
+Backup-23-11-2026_00-48-32.log
+Copia de seguridad del volumen \\?\GLOBALROOT\Device\HarddiskVolume2\ realizada correctamente.
+   Contenía 1 instantáneas en el momento de su creación: 22/11/2026 23:05:23
+       Volumen original: (C:)\\?\Volume{a8554a08-a35f-4c69-8bc0-d5b77bfefb9b}\
+   Contenía 1 instantáneas en el momento de su creación: 23/11/2026 1:48:39
+       Volumen original: (C:)\\?\Volume{a8554a08-a35f-4c69-8bc0-d5b77bfefb9b}\
+
+### Ficheros en E:, instantáneas VSS o progreso · 2026-11-23T01:25:34Z
+Progreso general: 85%. 
+Actualmente haciendo copia de seguridad de los archivos notificados por 'System Writer'...
+Name                                         MB
+----                                         --
+a8554a08-a35f-4c69-8bc0-d5b77bfefb9b.vhdx 11332
+Esp.vhdx                                     46
+02:25:53
+

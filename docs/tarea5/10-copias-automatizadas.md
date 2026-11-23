@@ -6,12 +6,12 @@ Todas las copias acaban en el pool `copias` de TrueNAS (disco propio de 60 GB, d
 
 | Hora | Quién | Qué |
 |---|---|---|
-| 21:30 | DC (tarea programada como SYSTEM) | Exportaciones (GPO, usuarios, OUs, DNS) al NAS + estado del sistema a E: y réplica al NAS |
+| 21:30 | DC (tarea programada `Copia DC al NAS`, SYSTEM) | Exportaciones (GPO, usuarios, OUs, DNS) al NAS + estado del sistema a E: y réplica al NAS |
 | 22:00 | Clúster Proxmox (`copia-diaria`) | `vzdump` de todas las VMs y contenedores, modo *snapshot*, zstd, se guardan 3 |
 | 22:30 | MikroTik (*scheduler*) | Genera `mikrotik-diario.backup` (binario) y `mikrotik-diario.rsc` (texto) en su disco |
 | 23:00 | TrueNAS (cron, [copias-config.sh](../../scripts/copias-config.sh)) | Va a buscar por SSH la configuración de cada equipo |
 | 23:00 | TrueNAS (tarea de snapshots) | Snapshot recursivo del pool, retención 14 días |
-| diaria | Windows 11 | Perfiles de usuario al SMB del NAS |
+| 21:00 | Windows 11 (tarea programada `Copia datos al NAS`, SYSTEM) | Escritorio, Documentos y Descargas de cada perfil al SMB del NAS |
 
 El orden importa: el MikroTik genera su copia a las 22:30 para que el NAS se la lleve fresca a las 23:00.
 
@@ -38,7 +38,7 @@ OK    mikrotik · FALLO opnsense · OK debian-nft · OK proxmox-pve1/2/3 · OK s
 ---- fin: 7 correctas, 2 con fallo ----
 ```
 
-Los dos fallos son los equipos apagados, y quedan registrados: es justo lo que quiero ver por la mañana.
+Los dos fallos son los equipos apagados, y quedan registrados: es justo lo que quiero ver por la mañana. En la tercera ejecución, con OPNsense encendido, su `config.xml` también se copia bien (`OK opnsense`). Las tareas programadas de los dos Windows, con su hora y su último resultado (0), están en [windows-tareas-copia.txt](../../evidencias/tasca5/windows-tareas-copia.txt).
 
 ## Lo que no se copia y por qué
 
@@ -58,3 +58,4 @@ Los dos fallos son los equipos apagados, y quedan registrados: es justo lo que q
 | Router Debian | Borrar el *masquerade* de `nftables.conf` | Restaurar el fichero desde TrueNAS | **8 s** ([04-debian-nftables](04-debian-nftables.md)) |
 | serveis (servidor entero) | Apagado brusco (`qm stop`) | Los datos del espejo DRBD se levantan en dades | **21 s** hasta tener los datos ([Tarea 6](../tarea6-raid.md)) |
 | Disco de RAID 1 / RAID 5 | Disco marcado como fallado | Cambio de disco y reconstrucción | 0 s de corte; reconstrucción en 5 s / 11 s |
+| Windows 11 | Documento del usuario borrado | Copiarlo desde la copia del NAS | 0,1 s, mismo SHA-256 |

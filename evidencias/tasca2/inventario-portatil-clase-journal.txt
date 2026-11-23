@@ -64,3 +64,7 @@ sd 0:0:0:0: [sda] Write Protect is off
 sd 0:0:0:0: [sda] Mode Sense: 53 00 00 08
 
 ### Discos vistos en ese arranque
+
+### Virtualización y núcleos (mismo arranque -2)
+smpboot: Allowing 18 CPUs, 0 hotplug CPUs
+i915 0000:00:02.0: [drm] VT-d active for gfx access

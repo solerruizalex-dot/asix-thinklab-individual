@@ -90,7 +90,7 @@ Evidencia completa: [proxmox-migraciones.txt](../../evidencias/tasca5/proxmox-mi
 |---|---|---|---|
 | Imágenes de VMs y contenedores (`vzdump`) | `truenas-nfs` | Tarea del clúster `copia-diaria`, todos los días a las 22:00, modo *snapshot* (sin parar las máquinas), zstd, se guardan 3 | Restaurar una máquina entera en minutos |
 | `/etc/pve`, `/etc/network/interfaces`, corosync, `config.db` de cada nodo | `copias/configs` del NAS | El NAS se lo lleva por SSH cada noche ([copias-config.sh](../../scripts/copias-config.sh)) | Con eso se reconstruye un nodo: instalar Proxmox y volver a ponerlo |
-| **No** copio el sistema de los nodos | — | — | Proxmox se reinstala desde la ISO en 10 minutos; lo que vale es la configuración y las VMs |
+| **No** copio el sistema de los nodos | — | — | Proxmox se reinstala desde la ISO en unos 10 minutos (estimado); lo que vale es la configuración y las VMs |
 
 Copia manual de prueba ([proxmox-copias-vzdump.txt](../../evidencias/tasca5/proxmox-copias-vzdump.txt)):
 

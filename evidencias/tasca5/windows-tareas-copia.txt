@@ -1,0 +1,23 @@
+### Tareas programadas de copia en los Windows - 2026-11-23 03:50:56
+--- DC01-ALEX
+Tarea: Copia DC al NAS | usuario: SYSTEM | disparador: DailyTrigger 21:30 | última ejecución: 23/11/2026 1:47:49 (resultado 0) | próxima: 23/11/2026 21:30:00
+Acción: powershell.exe -NoProfile -ExecutionPolicy Bypass -File C:\scripts\dc-03-copias.ps1
+--- PC-ADMIN01
+Tarea: Copia datos al NAS | usuario: SYSTEM | disparador: DailyTrigger 21:00 | última ejecución: 22/11/2026 22:53:53 (resultado 0) | próxima: 23/11/2026 21:00:00
+Acción: powershell.exe -NoProfile -ExecutionPolicy Bypass -File C:\scripts\w11-copias.ps1
+
+### Ejecución manual de 'Copia datos al NAS' en PC-ADMIN01 - 2026-11-23 03:51:24
+perfil del usuario de dominio: C:\Users\administracion@alexsoler.lan
+fichero de prueba creado: C:\Users\administracion@alexsoler.lan\Documents\factura-prueba-23nov.txt
+tarea terminada en 7 s, resultado 0
+2026-11-23T03:51:32 copia de perfiles en \\truenas.alexsoler.lan\copias-windows\PC-ADMIN01 (codigo robocopy 0)
+--- en el NAS:
+\\truenas.alexsoler.lan\copias-windows\PC-ADMIN01\Administracion-AlexS\Documents\factura-prueba.txt  47 bytes  22/11/2026 22:53:45
+\\truenas.alexsoler.lan\copias-windows\PC-ADMIN01\administracion@alexsoler.lan\Documents\factura-prueba-23nov.txt  50 bytes  23/11/2026 3:51:28
+carpetas de perfiles copiadas: Administracion-AlexS, administracion@alexsoler.lan, Administrador
+
+### Recuperación de un fichero borrado desde la copia del NAS - 2026-11-23 03:51:44
+SHA-256 original: 49C0DFB9C22EDD1E7A208BF42FEF4F09CD3CEDA105B8E75A12B3D2291B8E884E
+borrado: existe = False
+recuperado en 0.1 s: existe = True, SHA-256 = 49C0DFB9C22EDD1E7A208BF42FEF4F09CD3CEDA105B8E75A12B3D2291B8E884E, igual al original: True
+permisos (propietario y acceso del usuario): BUILTIN\Administradores / FullControl

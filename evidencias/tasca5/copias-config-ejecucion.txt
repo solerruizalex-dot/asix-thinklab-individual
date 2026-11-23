@@ -56,3 +56,20 @@ total 525
 total 1
 -rw-r--r-- 1 root root 1053890 Nov 23 02:09 etc.tgz
 -rw-r--r-- 1 root root   48975 Nov 23 02:09 paquetes.txt
+
+### Tercera ejecución, bloque de comunicaciones (OPNsense encendido) - 2026-11-23 03:48:22
+2026-11-23 03:48:22 ---- inicio de copias ----
+2026-11-23 03:48:23 OK    mikrotik
+2026-11-23 03:48:23 OK    opnsense
+2026-11-23 03:48:24 OK    debian-nft
+2026-11-23 03:48:27 FALLO proxmox-pve1 (codigo 255)
+2026-11-23 03:48:30 FALLO proxmox-pve2 (codigo 255)
+2026-11-23 03:48:33 FALLO proxmox-pve3 (codigo 255)
+2026-11-23 03:48:36 FALLO serveis (codigo 255)
+2026-11-23 03:48:39 FALLO dades (codigo 255)
+2026-11-23 03:48:42 FALLO cliente-linux (codigo 255)
+2026-11-23 03:48:42 ---- fin: 3 correctas, 6 con fallo ----
+total 21
+-rw-r----- 1 root root 42737 Nov 23 03:48 config.xml
+reglas <rule> en el config.xml copiado: 6
+<version>v9</version>

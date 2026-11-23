@@ -1,0 +1,11 @@
+### RAM usada por cada nodo recién reiniciado, sin VMs dentro · 2026-11-22T23:12:14Z (UTC)
+VM "clusterProxMox-pve1-AlexSoler" has been successfully started.
+.33 arriba 00:12:56
+.34 arriba 00:13:37
+pve1: pve-manager/9.2.32/60a22e26e411402f (running kernel: 7.0.14-30-pve) | 7.0.14-30-pve | 1103/1462 MB
+pve2: pve-manager/9.2.32/60a22e26e411402f (running kernel: 7.0.14-30-pve) | 7.0.14-30-pve | 1522/1966 MB
+pve3: pve-manager/9.2.32/60a22e26e411402f (running kernel: 7.0.14-30-pve) | 7.0.14-30-pve | 1558/2467 MB
+Quorate:          Yes
+Total votes:      3
+Flags:            Quorate 
+Mem:           15907       12893         600          53        2802        3014

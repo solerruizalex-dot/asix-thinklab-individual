@@ -68,7 +68,7 @@ Lo comprobé con los dos clientes: el Windows 11 inicia sesión con un usuario d
 | Exportaciones legibles: todas las GPO (`Backup-GPO`), usuarios y OUs (CSV), zona DNS | Directamente al recurso SMB del NAS | Para recuperar un objeto suelto sin restaurar el DC entero |
 | **No** hago imagen completa de C: | — | 24 GB que se tarda más en restaurar por USB que en reinstalar Windows; lo valioso es el estado del sistema |
 
-Tarea programada `Copia DC al NAS` todas las noches a las 21:30 como SYSTEM ([dc-03-copias.ps1](../../scripts/dc-03-copias.ps1), [dc-04-tarea-programada.ps1](../../scripts/dc-04-tarea-programada.ps1)).
+Tarea programada `Copia DC al NAS` todas las noches a las 21:30 como SYSTEM, con último resultado 0 ([windows-tareas-copia.txt](../../evidencias/tasca5/windows-tareas-copia.txt)) ([dc-03-copias.ps1](../../scripts/dc-03-copias.ps1), [dc-04-tarea-programada.ps1](../../scripts/dc-04-tarea-programada.ps1)).
 
 ### La copia de estado del sistema: lenta, pero funciona
 
@@ -79,16 +79,16 @@ Resultado de la ejecución del 23/11 ([dc-copia-estado-sistema.txt](../../eviden
 | Hora | Qué pasa |
 |---|---|
 | 01:48:32 | Empieza (evento 1). Primero copia la partición EFI (46 MB, en 1 minuto) y hace la instantánea VSS de C: |
-| 01:49 → 02:15 | **Enumera los ficheros** del estado del sistema: unos 184.000, a ~25 ficheros por segundo. No escribe nada |
-| 02:15 → 02:29 | Copia: imagen de C: de **13,2 GB** |
+| 01:49 → ~02:15 | **Enumera los ficheros** del estado del sistema: `wbadmin get status` iba por 182.820 a las 02:11 y por 184.791 un minuto después (unos 25–30 por segundo). No escribe nada |
+| ~02:15 → 02:29 | Copia (`wbadmin get status`: *haciendo copia de los archivos notificados por 'System Writer'*, 85 % a las 02:25): imagen de C: de **13,2 GB** |
 | 02:29:29 | **Evento 4: "La operación de copia de seguridad finalizó correctamente"** |
 | 02:30:51 | robocopy al NAS terminado: 13 GB que en el NAS ocupan 8 GB (compresión LZ4, 1,61×) |
 
 `wbadmin get versions` → *Se puede recuperar: Volúmenes, Archivos, Aplicaciones, Estado del sistema*. **41 minutos en total.**
 
-Por qué es tan lenta la enumeración (lo medí durante la copia):
+Por qué es tan lenta la enumeración ([dc-copia-diagnostico-lentitud.txt](../../evidencias/tasca5/dc-copia-diagnostico-lentitud.txt)):
 
-- El disco del anfitrión está casi ocioso (13 % de ocupación media) y wbengine apenas usa CPU.
+- El disco del anfitrión estaba casi ocioso: 13 % de ocupación media, medido en el primer intento (que cancelé), en esta misma fase. En el intento bueno, wbengine tenía 0 MB leídos y escritos en sus contadores, y casi no gastaba CPU (de 235 a 239 s en dos minutos).
 - El proceso que más CPU gasta en el DC es **MsMpEng (Defender)**: 1.311 s de CPU frente a 240 s de wbengine. Analiza cada fichero que la copia toca.
 - La solución sería una exclusión de Defender para el proceso de copia, pero eso reduce la protección del servidor y es una decisión que no tomo yo solo: la dejo propuesta. Como la copia es de noche, 41 minutos son aceptables.
 
